@@ -1,15 +1,17 @@
 # GA Exporter
 
-Εργαλείο εξαγωγής δεδομένων Google Analytics — VILABS.
+Εργαλείο αυτόματης παραγωγής εγγράφων (INFO/Gantt/KPI) από Grant Agreement PDF — VILABS.
+
+Δες το [Implementation Plan](docs/implementation-plan.md) για πλήρη αρχιτεκτονική, τεχνολογική στοίβα και tasks ανά άτομο.
 
 ## Ομάδα & Branches
 
 | Branch | Ομάδα | Αντικείμενο |
 |---|---|---|
 | `main` | — | Ενοποιημένος, σταθερός κώδικας |
-| `backend-db-mcp` | pipgreek, Γιώργος | Backend, βάση δεδομένων, MCP Server & Tools |
+| `backend` | pipgreek, Γιώργος | Backend, queue/worker, PDF parsing, LLM integration, templates |
 | `frontend` | Θεοδώρα | Frontend / UI |
-| `llm` | Αριστείδης | LLM prompts & τεκμηρίωση (.md files) |
+| `llm` | Αριστείδης | LLM prompts & JSON schemas (.md files) |
 
 ## Ροή εργασίας
 
