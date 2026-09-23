@@ -33,3 +33,13 @@ Logo ViLabs (επιστροφή στην αρχική), animated background, toa
 | 2 | Ονόματα status | `scanning`, `extracting`, `analyzing`, `generating`, `done`, `error` | Το docx γράφει `extracting_text`, `analyzing_data`, `generating_preview` | Ακολουθούμε το plan (§6) |
 | 3 | Result page | Ξεχωριστό route `/result` | Το mockup είναι single-page (hide/show) | Ξεχωριστό route, με το design του mockup |
 | 4 | Logo | — | Το mockup ζητά `vilabs-logo.png`, το αρχείο είναι `ViLabs-logo.png` | Ενιαίο όνομα σε lowercase (case-sensitive στο Vercel) |
+
+## Ημερολόγιο προόδου
+
+Νεότερα πάνω. Ενημερώνεται μετά από κάθε ολοκληρωμένο βήμα.
+
+### 2026-09-23
+- Clone του repo στο `C:\dev\GA Exporter` (εκτός OneDrive), branch `frontend`, σύνδεση με GitHub.
+- Commit του στατικού mockup (`docs/frontend UI UX/index.html` + logo).
+- Μελέτη plan / docx / wireframes / mockup → δημιουργία αυτού του αρχείου.
+- **Επόμενο βήμα:** scaffold Next.js + TypeScript + Tailwind στο `frontend/`, routes `/` και `/result`. Αναμένεται απόφαση για τις ασυμφωνίες 1–3.
