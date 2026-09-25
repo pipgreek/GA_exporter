@@ -74,9 +74,9 @@ Upload PDF
 - [ ] Env vars / secrets management (Anthropic API key κ.λπ.)
 
 #### B. Upload & queue
-- [ ] `POST /upload` — δέχεται PDF (multipart/form-data), validation τύπου αρχείου, αποθήκευση στο Supabase Storage, δημιουργία `requestId`, βάζει job στην ουρά (BullMQ)
+- [x] `POST /upload` — δέχεται PDF (multipart/form-data), ελέγχει το PDF signature, αποθήκευση στο Supabase Storage, δημιουργία `requestId`, βάζει job στην ουρά (BullMQ)
 - [ ] Worker process — καταναλώνει jobs από την ουρά, εκτελεί το pipeline, ενημερώνει status στο Redis σε κάθε βήμα
-- [ ] `GET /status/{requestId}` — επιστρέφει `{ status, progress, message }`
+- [x] `GET /status/{requestId}` — επιστρέφει `{ status, progress, message }`
 
 #### C. PDF → Markdown
 - [ ] Ενσωμάτωση pdfplumber/Unstructured.io
