@@ -69,13 +69,27 @@ Logo ViLabs (επιστροφή στην αρχική), animated background, toa
 - ~~Μορφή Excel previews~~ → **συμφωνήθηκε** (απόφαση 5).
 - Ονόματα αρχείων για τις κάρτες/downloads (π.χ. `files: [{ type, fileName }]` στο `done`, ή σταθερά ονόματα).
 - Downloads: `Content-Disposition: attachment; filename="..."` (το `<a download>` αγνοείται σε άλλο domain).
-- Διάρκεια διατήρησης αρχείων: η σελίδα Privacy Policy γράφει «deleted automatically within 24 hours» — πρέπει να ταιριάζει με το cleanup job / Redis TTL του backend.
+- Διάρκεια διατήρησης αρχείων: η σελίδα Privacy Policy γράφει «deleted automatically within 24 hours» (`RETENTION_HOURS` στο `src/app/privacy/page.tsx`) — πρέπει να ταιριάζει με το cleanup job / Redis TTL του backend.
+
+## Privacy Policy — προς επιβεβαίωση πριν τη δημοσίευση
+
+Το κείμενο (`src/app/privacy/page.tsx`) γράφτηκε με βάση τη ροή δεδομένων του plan (§1–§3). Πριν πάει live χρειάζεται επιβεβαίωση:
+
+- **Διάρκεια διατήρησης** (24 ώρες) = cleanup job / Redis TTL του backend.
+- **Περιοχές (regions) των παρόχων** (Vercel, Render, Supabase, Upstash, Anthropic) και αν υπάρχουν συμβάσεις επεξεργασίας (DPA) / Standard Contractual Clauses — η ενότητα 5 λέει ότι οι μεταφορές εκτός ΕΟΧ καλύπτονται από SCCs.
+- **Όροι του Anthropic API** για χρήση/διατήρηση των δεδομένων που στέλνονται.
+- **Νομικός έλεγχος** από υπεύθυνο της VILABS (δεν είναι νομικό κείμενο εγκεκριμένο από νομικό).
+- Αν στο μέλλον προστεθούν cookies/analytics (π.χ. Vercel Analytics), να ενημερωθεί η ενότητα 8.
 - Σφάλματα: HTTP 4xx/5xx με σώμα `{ message }`.
 - CORS: το backend πρέπει να επιτρέπει το origin του frontend (Vercel + `localhost:3000`).
 
 ## Ημερολόγιο προόδου
 
 Νεότερα πάνω. Ενημερώνεται μετά από κάθε ολοκληρωμένο βήμα.
+
+### 2026-09-25 — Privacy Policy με βάση το plan ✅
+- Το κείμενο του mockup αντικαταστάθηκε με νέο, βασισμένο στη ροή δεδομένων του plan: χωρίς λογαριασμούς/ιστορικό/βάση, τι δεδομένα (PDF, παραγόμενα αρχεία, status, τεχνικά logs), βήματα επεξεργασίας (εξαγωγή κειμένου → Claude/Anthropic → templates), πάροχοι (Vercel, Render, Supabase, Upstash, Anthropic), νομική βάση (άρθρο 6(1)(b)/(f) GDPR), διατήρηση 24 ωρών, καμία χρήση cookies/analytics (ελέγχθηκε στον κώδικα), δικαιώματα + Αρχή Προστασίας Δεδομένων (dpa.gr).
+- Τα σημεία που θέλουν επιβεβαίωση πριν τη δημοσίευση: ενότητα «Privacy Policy — προς επιβεβαίωση».
 
 ### 2026-09-25 — Βήμα F: Logo & Privacy Policy ✅
 - `NavigationGuard` (στο layout): η αρχική δηλώνει αν υπάρχει εργασία (ανεβασμένο αρχείο / παραγόμενα αρχεία)· logo και link Privacy ρωτούν πριν τη χάσουν.
