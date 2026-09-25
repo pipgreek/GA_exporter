@@ -41,7 +41,7 @@ FIELD-SPECIFIC GUIDANCE:
 - reportingPeriods come from the Data Sheet §4.2 reporting schedule table.
 - workPackages, and each WP's tasks (with their own month ranges and leaders where stated), come from Annex 1 Part A "List of work packages" plus the per-WP "Description" sections.
 - deliverables come from Annex 1 Part A "List of deliverables" — copy id, title, WP, lead beneficiary short name, type code and dissemination level code verbatim, and dueDate as a plain month number.
-- milestones come from Annex 1 Part A "List of milestones" — copy id, name, WP, lead beneficiary, "Means of Verification" and due month verbatim.
+- milestones come from Annex 1 Part A "List of milestones" — copy name, WP, lead beneficiary, "Means of Verification" and due month verbatim. The source table's "Milestone No" column is usually a bare number (e.g. "1", "2", "3") — normalize it to the "MS"-prefixed id form used everywhere else in the document (e.g. "MS1", "MS2", "MS3") to match id pattern ^MS[0-9]+$.
 - workPackages[].milestoneIds: for each milestone, note which WP its "Work Package No" column points to, and add that milestone's id to that WP's milestoneIds array.
 - This is a project-wide document, not tied to any single beneficiary — do not filter work packages/tasks/deliverables/milestones by who leads them.
 """
