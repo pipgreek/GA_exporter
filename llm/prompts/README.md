@@ -81,11 +81,39 @@ invalid enum, truncated response) — not "the GA didn't mention X". The backend
 1-2 retries should re-send the *same* request package unchanged; if it still fails,
 surface the error rather than retrying indefinitely.
 
+## Real parser output is now available — use it instead of the hand-built examples
+
+`docs/Παραδείγματα/Grant Agreement - GAP-101158152.md` (added by the backend's
+`extract_to_markdown.py` / pdfplumber pipeline, see `backend/src/pdf-parsing/`) is the
+**actual** markdown the backend will hand to these prompts — 5955 lines, page-by-page.
+It is a much better `{{grant_agreement_markdown}}` test value than the trimmed excerpts
+in `llm/examples/*.example.md` (which were hand-typed before this file existed).
+
+Reading it surfaced real page-based table extraction artifacts that the rules above
+(rule 6) were written to handle — confirmed present in this exact file:
+
+- `docs/Παραδείγματα/Grant Agreement - GAP-101158152.md:306-349` — the Data Sheet
+  "List of participants" table is split across pages 8→9, and the page-9 continuation
+  has **no header row at all** (its own `### Table 1` on page 9 is a *different*,
+  unrelated table — the participants continuation is `### Table 1` further down,
+  immediately followed by the real data rows with no header).
+- `:2535-2558` — the "List of work packages" table has a placeholder header row
+  (`Column 2`, `Column 3`, ...) with the real header (`Work Package No | Work Package
+  name | ...`) as the first body row instead; and a page-break continuation row
+  (`:2555`) with blank leading cells carrying only overflow deliverable text.
+- `:2537-2558` and `:3459-3461` — `Lead Beneficiary` cells read `"1 - AUTH"`,
+  `"5 - VILABS"`, `"4 - SPLORO"` (consortium-number prefix), not bare short names.
+- `:2934-2987` — `Type`/`Dissemination Level` cells read `"R — Document, report"`,
+  `"DMP — Data Management Plan"`, `"PU - Public"` (verbose label appended to the code).
+- `:3459-3461` — `Milestone No` is a bare number (`1`, `2`, `3`), confirming the
+  `MS`-prefix normalization instruction is necessary, not hypothetical.
+
 ## Not covered yet / open follow-ups
 
-- Not tested end-to-end against a real parsed Grant Agreement (implementation-plan.md
-  §5.B: "Test prompts πάνω στο δείγμα Grant Agreement (GAP-101158152)"). Needs a live
-  API key and the backend's actual PDF→Markdown output to validate quality.
+- **Still not tested against the live Anthropic API** (implementation-plan.md §5.B).
+  The rules above are informed by manually reading the real parser output, but no model
+  has actually been run over it yet — that's the next concrete step, now that a real
+  `{{grant_agreement_markdown}}` value exists in the repo.
 - `max_tokens: 8192` is a starting guess — the EVOLVE2CARE sample GA has 6 WPs / 27
   deliverables/milestones combined; a larger consortium could need more. Revisit once
   tested against a few real GAs of different sizes.
