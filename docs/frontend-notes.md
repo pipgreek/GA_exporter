@@ -69,6 +69,18 @@ Logo ViLabs (επιστροφή στην αρχική), animated background, toa
 
 Νεότερα πάνω. Ενημερώνεται μετά από κάθε ολοκληρωμένο βήμα.
 
+### 2026-09-25 — Βήμα B: Home page, upload & progress ✅
+- Βιβλιοθήκες: `react-dropzone` 20, `lucide-react` (εικονίδια), `@radix-ui/react-dialog` (modals).
+- `UploadDropzone`: μόνο ένα PDF, κλειδώνει όσο υπάρχει αρχείο (click/πληκτρολόγιο/drop), toast για λάθος τύπο.
+- `FileThumbnail`: όνομα + μέγεθος, «Χ» → `ConfirmDialog` («Remove file?»). Αν τρέχει επεξεργασία, η αφαίρεση την ακυρώνει.
+- Κουμπί **Start** → `POST /upload` (FormData). Disabled μέχρι να υπάρχει αρχείο και κατά την επεξεργασία. Μετά από αποτυχία γίνεται «Try again».
+- `ProgressIndicator` + hook `useProcessingStatus`: polling ανά 2,5", μήνυμα ανά status, εναλλασσόμενα fallback μηνύματα όταν το status δεν αλλάζει, timeout 90", σφάλμα μετά από 3 συνεχόμενες αποτυχίες δικτύου.
+- `HomeIntro` (οδηγός + κάρτες αρχείων από το mockup): φαίνεται μόνο πριν ξεκινήσει η επεξεργασία.
+- Error states (plan §5 E): toast για λάθος αρχείο, κόκκινο πλαίσιο για αποτυχία/timeout επεξεργασίας.
+- Δοκιμασμένα στον browser: λάθος τύπος, κλείδωμα, κανονική ροή ως `done`, αφαίρεση με επιβεβαίωση, σενάριο `error`, σενάριο `slow` (fallback μηνύματα, timeout ακριβώς στα 90", σταματά το polling). Lint + TypeScript καθαρά.
+- Τσεκαρίστηκαν στο plan: B (4/4) και E (2/2).
+- **Επόμενο βήμα:** C — Preview: `PreviewCard` x3, `WordViewer` (DOMPurify), `ExcelViewer`, `PreviewModal` 90%, κουμπί Confirm → `/result`.
+
 ### 2026-09-25 — Βήμα A: Setup ✅
 - Εγκατάσταση Node.js 24 LTS.
 - Scaffold **Next.js 16** (App Router, Turbopack) + TypeScript + Tailwind CSS 4 + ESLint στο `frontend/` (`src/` dir, alias `@/*`).

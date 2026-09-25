@@ -126,10 +126,10 @@ Upload PDF
 - [x] Βασικό routing: `/` και `/result`
 
 #### B. Home page — upload & progress
-- [ ] `UploadDropzone` component (react-dropzone, μόνο PDF, disabled μετά το upload)
-- [ ] Preview μικρογραφίας ανεβασμένου αρχείου + κουμπί διαγραφής (X)
-- [ ] Κουμπί **Start** (disabled μέχρι upload), `POST /upload` μέσω FormData
-- [ ] `ProgressIndicator` component — polling `GET /status/{requestId}` (setInterval 2-3s), μηνύματα ανά status, fallback rotation μηνυμάτων, timeout 90s
+- [x] `UploadDropzone` component (react-dropzone, μόνο PDF, disabled μετά το upload)
+- [x] Preview μικρογραφίας ανεβασμένου αρχείου + κουμπί διαγραφής (X)
+- [x] Κουμπί **Start** (disabled μέχρι upload), `POST /upload` μέσω FormData
+- [x] `ProgressIndicator` component — polling `GET /status/{requestId}` (setInterval 2-3s), μηνύματα ανά status, fallback rotation μηνυμάτων, timeout 90s
 
 #### C. Preview (read-only)
 - [ ] `PreviewCard` component (x3, ένα ανά τύπο αρχείου)
@@ -144,8 +144,8 @@ Upload PDF
 - [ ] Κουμπί **Return to Home Page**
 
 #### E. Error states
-- [ ] UI για σφάλμα upload (λάθος τύπος αρχείου)
-- [ ] UI για σφάλμα processing (timeout/αποτυχία LLM μετά τα retries)
+- [x] UI για σφάλμα upload (λάθος τύπος αρχείου)
+- [x] UI για σφάλμα processing (timeout/αποτυχία LLM μετά τα retries)
 
 **Dependency:** χρειάζεται το API contract (§6 παρακάτω) νωρίς για να δουλέψει με mock data πριν είναι έτοιμο το πραγματικό backend.
 
