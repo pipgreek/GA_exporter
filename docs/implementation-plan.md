@@ -147,6 +147,11 @@ Upload PDF
 - [x] UI για σφάλμα upload (λάθος τύπος αρχείου)
 - [x] UI για σφάλμα processing (timeout/αποτυχία LLM μετά τα retries)
 
+#### F. Στοιχεία από το UI/UX mockup (προστέθηκε μετά το αρχικό plan)
+- [ ] Logo ViLabs → επιστροφή στην αρχική σελίδα (με confirm modal «Return to Home?» όταν υπάρχει ανεβασμένο αρχείο ή από το `/result`)
+- [ ] Σελίδα **Privacy Policy** (περιεχόμενο από το mockup `docs/frontend UI UX/index.html`)
+- [ ] Link «Privacy Policy» στο footer (με confirm modal όταν υπάρχει εργασία σε εξέλιξη)
+
 **Dependency:** χρειάζεται το API contract (§6 παρακάτω) νωρίς για να δουλέψει με mock data πριν είναι έτοιμο το πραγματικό backend.
 
 ---
