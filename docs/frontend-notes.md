@@ -32,7 +32,7 @@ Logo ViLabs (επιστροφή στην αρχική), animated background, toa
 | # | Θέμα | Απόφαση |
 |---|---|---|
 | 1 | Edit mode (μολυβάκι) | **Αφαιρείται.** Τα previews είναι αυστηρά read-only, όπως ορίζει το plan. Κανένα εικονίδιο/λειτουργία επεξεργασίας. (Αφαιρέθηκε και από το docx / `3.png` στη V1.) |
-| 2 | Ονόματα status | **Όπως το plan (§6):** `scanning` → `extracting` → `analyzing` → `generating` → `done` \| `error`. (Το docx V1 γράφει ακόμα `extracting_text` κ.λπ. — ισχύει το plan.) |
+| 2 | Ονόματα status | **Όπως το plan (§6):** `scanning` → `extracting` → `analyzing` → `generating` → `done` \| `error`. (Διορθώθηκε και στο docx.) |
 | 3 | Result page | **Ξεχωριστό route `/result?requestId=...`**, με το design του mockup. |
 | 4 | Logo | **Μετονομάστηκε σε `vilabs-logo.png`** (lowercase, ταιριάζει με το mockup, ασφαλές σε case-sensitive hosting όπως το Vercel). |
 
@@ -55,6 +55,7 @@ Logo ViLabs (επιστροφή στην αρχική), animated background, toa
 - Κλείδωσαν οι αποφάσεις 1–4 (βλ. «Αποφάσεις»): χωρίς edit mode, status όπως το plan, ξεχωριστό `/result`.
 - Μετονομασία logo `ViLabs-logo.png` → `vilabs-logo.png`.
 - Αντικατάσταση `Frontend Description.docx` και `1.png`–`4.png` με τη **V1** (χωρίς edit mode).
+- Στο docx τα status έγιναν όπως το plan: `scanning, extracting, analyzing, generating, done, error`.
 - **Επόμενο βήμα:** scaffold Next.js + TypeScript + Tailwind στο `frontend/`, routes `/` και `/result`.
 
 ### 2026-09-23
