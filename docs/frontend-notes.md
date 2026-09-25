@@ -47,9 +47,37 @@ Logo ViLabs (επιστροφή στην αρχική), animated background, toa
 | `done` | Previews generated successfully. |
 | `error` | Error state (βλ. Error states) |
 
+## Mock backend (μέχρι να στηθεί το πραγματικό)
+
+Το frontend δεν έχει ακόμα πρόσβαση σε API. Γι' αυτό υπάρχει **mock backend μέσα στο Next.js** (`frontend/src/app/api/mock`), με τα ίδια endpoints/σχήματα με το contract §6. Όλες οι κλήσεις περνούν από το `frontend/src/lib/api/client.ts`:
+
+- `NEXT_PUBLIC_API_URL` κενό → mock (`/api/mock/*`)
+- `NEXT_PUBLIC_API_URL=<url backend>` → πραγματικό backend, **χωρίς αλλαγή κώδικα**
+
+Σενάρια (από το όνομα του PDF): κανονικό (~15"), `error` (αποτυχία στο `analyzing`), `slow` (κολλάει στο `analyzing` → έλεγχος timeout 90"). Λεπτομέρειες στο `frontend/README.md`.
+
+## Προς επιβεβαίωση με το backend
+
+Υποθέσεις που κάναμε στο `frontend/src/lib/api/types.ts` επειδή το §6 δεν τις ορίζει:
+
+- Όνομα πεδίου του PDF στο `POST /upload`: `file`.
+- `rows` των Excel previews: πίνακας γραμμών με τιμές `string | number | null`.
+- Σφάλματα: HTTP 4xx/5xx με σώμα `{ message }`.
+- CORS: το backend πρέπει να επιτρέπει το origin του frontend (Vercel + `localhost:3000`).
+
 ## Ημερολόγιο προόδου
 
 Νεότερα πάνω. Ενημερώνεται μετά από κάθε ολοκληρωμένο βήμα.
+
+### 2026-09-25 — Βήμα A: Setup ✅
+- Εγκατάσταση Node.js 24 LTS.
+- Scaffold **Next.js 16** (App Router, Turbopack) + TypeScript + Tailwind CSS 4 + ESLint στο `frontend/` (`src/` dir, alias `@/*`).
+- Layout από το mockup: logo (`public/vilabs-logo.png`, link στην αρχική), animated background, footer, γραμματοσειρά Inter (`next/font`).
+- Routes: `/` (placeholder) και `/result?requestId=...` (placeholder).
+- API layer: `lib/api/types.ts` (contract §6) + `lib/api/client.ts` (upload/status/preview/download URLs).
+- Mock backend: `POST /upload`, `GET /status/{id}`, `GET /preview/{id}`, με σενάρια ok / error / slow. Download endpoints θα μπουν στο βήμα D.
+- Έλεγχοι: `npm run lint` καθαρό, `npm run build` επιτυχές, όλα τα σενάρια του mock δοκιμασμένα στον browser, έλεγχος σε desktop και mobile.
+- **Επόμενο βήμα:** B — Home page: `UploadDropzone` (react-dropzone), μικρογραφία αρχείου με «Χ», κουμπί Start.
 
 ### 2026-09-25
 - Κλείδωσαν οι αποφάσεις 1–4 (βλ. «Αποφάσεις»): χωρίς edit mode, status όπως το plan, ξεχωριστό `/result`.

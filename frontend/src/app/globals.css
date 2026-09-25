@@ -1,0 +1,46 @@
+@import "tailwindcss";
+
+@theme inline {
+  --font-sans: var(--font-inter);
+}
+
+body {
+  font-family: var(--font-inter), ui-sans-serif, system-ui, sans-serif;
+}
+
+/* Fade-in used when sections appear (progress, previews, pages). */
+@keyframes fade-in {
+  from {
+    opacity: 0;
+    transform: translateY(4px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+.fade-in {
+  animation: fade-in 0.5s ease-in-out;
+}
+
+/* Animated background blobs (from the UI/UX mockup). */
+@keyframes blob-1 {
+  0%, 100% { transform: translate(0, 0) scale(1); }
+  33% { transform: translate(260px, 190px) scale(1.25); }
+  66% { transform: translate(-170px, 230px) scale(0.85); }
+}
+@keyframes blob-2 {
+  0%, 100% { transform: translate(0, 0) scale(1); }
+  50% { transform: translate(-280px, -210px) scale(1.35); }
+}
+@keyframes blob-3 {
+  0%, 100% { transform: translate(0, 0) scale(1); }
+  50% { transform: translate(220px, -260px) scale(1.2); }
+}
+.blob-1 { animation: blob-1 5s ease-in-out infinite; }
+.blob-2 { animation: blob-2 4.5s ease-in-out infinite; }
+.blob-3 { animation: blob-3 5.5s ease-in-out infinite; }
+
+@media (prefers-reduced-motion: reduce) {
+  .blob-1, .blob-2, .blob-3, .fade-in { animation: none; }
+}
