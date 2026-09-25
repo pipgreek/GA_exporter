@@ -83,7 +83,8 @@ Logo ViLabs (επιστροφή στην αρχική), animated background, toa
 - Τσεκαρίστηκαν στο plan: C (5/5). Σύνολο frontend: 14/17.
 - **Εκκρεμεί από το API contract:** τα previews Excel δείχνουν έναν πίνακα ανά αρχείο (όπως το §6). Αν το backend στείλει πολλά sheets (π.χ. Gantt: Overview / Deliverables / Milestones), το `ExcelViewer` θα χρειαστεί καρτέλες.
 - **Επόμενο βήμα:** D — Result page: 3 `DownloadCard`, Download all (.zip), Return to Home Page (+ mock download endpoints).
-- **Μετά το D — βήμα F (από το mockup, εκτός plan):** logo που επιστρέφει στην αρχική με επιβεβαίωση όταν υπάρχει αρχείο (τώρα στο `/` δεν κάνει τίποτα) και σελίδα Privacy Policy + link στο footer.
+- Προστέθηκε στο `implementation-plan.md` η ενότητα **F** (3 κουτάκια) για τα παρακάτω.
+- **Μετά το D — βήμα F (από το mockup):** logo που επιστρέφει στην αρχική με επιβεβαίωση όταν υπάρχει αρχείο (τώρα στο `/` δεν κάνει τίποτα) και σελίδα Privacy Policy + link στο footer.
 
 ### 2026-09-25 — Βήμα B: Home page, upload & progress ✅
 - Βιβλιοθήκες: `react-dropzone` 20, `lucide-react` (εικονίδια), `@radix-ui/react-dialog` (modals).
