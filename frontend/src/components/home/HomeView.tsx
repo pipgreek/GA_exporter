@@ -3,6 +3,7 @@
 import { LoaderCircle, RefreshCw, TriangleAlert } from "lucide-react";
 import { useRef, useState } from "react";
 import { HomeIntro } from "@/components/home/HomeIntro";
+import { useRegisterWorkGuard } from "@/components/layout/NavigationGuard";
 import { ResultsSection } from "@/components/results/ResultsSection";
 import { ProgressIndicator } from "@/components/progress/ProgressIndicator";
 import { ConfirmDialog } from "@/components/ui/ConfirmDialog";
@@ -29,6 +30,9 @@ export function HomeView() {
   const { toasts, showError } = useToasts();
   // Ignores an upload response that arrives after the file was removed.
   const attempt = useRef(0);
+
+  // Logo / Privacy Policy link ask before discarding an uploaded file or generated files.
+  useRegisterWorkGuard({ hasWork: () => file !== null, reset });
 
   const busy = phase === "uploading" || phase === "processing";
   const canStart = file !== null && (phase === "idle" || phase === "failed");

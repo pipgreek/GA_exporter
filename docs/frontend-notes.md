@@ -69,12 +69,23 @@ Logo ViLabs (επιστροφή στην αρχική), animated background, toa
 - ~~Μορφή Excel previews~~ → **συμφωνήθηκε** (απόφαση 5).
 - Ονόματα αρχείων για τις κάρτες/downloads (π.χ. `files: [{ type, fileName }]` στο `done`, ή σταθερά ονόματα).
 - Downloads: `Content-Disposition: attachment; filename="..."` (το `<a download>` αγνοείται σε άλλο domain).
+- Διάρκεια διατήρησης αρχείων: η σελίδα Privacy Policy γράφει «deleted automatically within 24 hours» — πρέπει να ταιριάζει με το cleanup job / Redis TTL του backend.
 - Σφάλματα: HTTP 4xx/5xx με σώμα `{ message }`.
 - CORS: το backend πρέπει να επιτρέπει το origin του frontend (Vercel + `localhost:3000`).
 
 ## Ημερολόγιο προόδου
 
 Νεότερα πάνω. Ενημερώνεται μετά από κάθε ολοκληρωμένο βήμα.
+
+### 2026-09-25 — Βήμα F: Logo & Privacy Policy ✅
+- `NavigationGuard` (στο layout): η αρχική δηλώνει αν υπάρχει εργασία (ανεβασμένο αρχείο / παραγόμενα αρχεία)· logo και link Privacy ρωτούν πριν τη χάσουν.
+- **Logo:** στην αρχική χωρίς αρχείο → scroll στην κορυφή· με αρχείο → «Return to Home?» → επαναφορά· από άλλη σελίδα → μετάβαση στο `/`.
+- **Privacy Policy:** νέα σελίδα `/privacy` με το κείμενο του mockup (11 ενότητες, στοιχεία VILABS OE, «Back to Application»). Link στο footer· με αρχείο → «View Privacy Policy?»· ήδη στη σελίδα → scroll στην κορυφή.
+- Footer: link Privacy Policy + κουμπί «Back to top» (όπως το mockup).
+- Δοκιμασμένα: όλοι οι συνδυασμοί (με/χωρίς αρχείο, από `/` και `/privacy`, No/Yes στα modals), desktop + mobile. Lint, TypeScript, production build καθαρά.
+- Νέο σημείο προς backend: η διάρκεια διατήρησης (24 ώρες) στο Privacy Policy.
+- Τσεκαρίστηκαν στο plan: F (3/3). **Σύνολο frontend: 20/20 ✅**
+- **Επόμενο βήμα:** σύνδεση με το πραγματικό backend μόλις είναι διαθέσιμο (`NEXT_PUBLIC_API_URL`) + κλείσιμο των σημείων «Προς επιβεβαίωση με το backend». Προαιρετικά: deploy του frontend στο Vercel (με mock) για επίδειξη.
 
 ### 2026-09-25 — Βήμα D: Downloads ✅
 - `FileCard`: όνομα αρχείου + **Download** (`<a href download>` προς `GET /download/{id}/{type}`) + Preview.

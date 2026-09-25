@@ -48,6 +48,7 @@ npm run dev
 src/
   app/
     page.tsx            # / — όλη η ροή: upload → progress → αρχεία (download + προαιρετικό preview)
+    privacy/page.tsx    # /privacy — Privacy Policy
     api/mock/...        # mock backend (ίδια endpoints με το contract)
   components/
     home/               # HomeView (ροή της αρχικής), HomeIntro
@@ -56,7 +57,7 @@ src/
     results/            # ResultsSection, FileCard
     preview/            # PreviewModal, WordViewer, ExcelViewer (καρτέλες sheets)
     ui/                 # ConfirmDialog, Toaster
-    layout/             # header, footer, background
+    layout/             # header, footer, background, NavigationGuard (confirm πριν χαθεί δουλειά)
   hooks/                # useProcessingStatus (polling)
   lib/api/              # API client + types (contract)
   lib/files.ts          # ορισμός των 3 παραγόμενων αρχείων
