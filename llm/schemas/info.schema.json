@@ -1,0 +1,169 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "ga-exporter/info.schema.json",
+  "title": "GA Exporter — INFO Document Schema",
+  "description": "Structured data extracted from a Grant Agreement (Preamble, Data Sheet, Annex 1 Part A) used to fill the INFO Word document and to feed the frontend preview.",
+  "type": "object",
+  "required": [
+    "gaNumber",
+    "projectAcronym",
+    "projectName",
+    "callTopic",
+    "typeOfAction",
+    "duration",
+    "reportingPeriods",
+    "workPackages",
+    "roles"
+  ],
+  "properties": {
+    "gaNumber": {
+      "type": "string",
+      "description": "Project/Grant Agreement number, e.g. '101158152'.",
+      "pattern": "^[0-9]{5,10}$"
+    },
+    "projectAcronym": { "type": "string" },
+    "projectName": {
+      "type": "string",
+      "description": "Full project title (Data Sheet §1)."
+    },
+    "coordinator": {
+      "type": "object",
+      "description": "The 'coordinator' (COO) participant from the Data Sheet participants list.",
+      "properties": {
+        "shortName": { "type": "string", "default": "tbd" },
+        "legalName": { "type": "string", "default": "tbd" },
+        "country": { "type": "string", "description": "ISO 3166-1 alpha-2 code, e.g. 'EL'.", "default": "tbd" }
+      },
+      "required": ["shortName", "legalName", "country"]
+    },
+    "ownEntity": {
+      "type": "object",
+      "description": "The VILABS participant entry from the GA's own participants list, identified by the LLM itself — not supplied externally. VILABS legal form/country varies per grant (e.g. 'VILABS (CY) LTD', 'VILABS OE', a Bulgarian entity, etc.), so the prompt must scan the Preamble/Data Sheet §2 participants list for a legal or short name containing 'VILABS' (case-insensitive) and use that row. Drives the 'Contract' block and 'VIL Efforts' section.",
+      "properties": {
+        "shortName": { "type": "string", "default": "tbd" },
+        "legalName": { "type": "string", "default": "tbd" },
+        "pic": { "type": "string", "default": "tbd" },
+        "role": { "type": "string", "enum": ["COO", "BEN", "AE", "AP", "tbd"], "default": "tbd" },
+        "country": { "type": "string", "default": "tbd" }
+      },
+      "required": ["shortName", "legalName", "pic", "role", "country"]
+    },
+    "callTopic": {
+      "type": "string",
+      "default": "tbd",
+      "description": "Concatenation of Call + Topic, e.g. 'HORIZON-EIE-2023-CONNECT-02 / HORIZON-EIE-2023-CONNECT-02-01'."
+    },
+    "typeOfAction": {
+      "type": "string",
+      "default": "tbd",
+      "description": "e.g. 'HORIZON Coordination and Support Actions' / 'CSA'."
+    },
+    "projectSummary": {
+      "type": "string",
+      "default": "tbd",
+      "description": "Verbatim or lightly trimmed project summary from the Data Sheet."
+    },
+    "duration": {
+      "type": "object",
+      "required": ["startDate", "endDate", "totalMonths"],
+      "properties": {
+        "startDate": { "type": "string", "format": "date" },
+        "endDate": { "type": "string", "format": "date" },
+        "totalMonths": { "type": "integer", "minimum": 1 }
+      }
+    },
+    "reportingPeriods": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "required": ["id", "monthFrom", "monthTo"],
+        "properties": {
+          "id": { "type": "string", "description": "e.g. 'RP1'." },
+          "monthFrom": { "type": "integer", "minimum": 1 },
+          "monthTo": { "type": "integer", "minimum": 1 }
+        }
+      }
+    },
+    "website": {
+      "type": "string",
+      "default": "tbd",
+      "description": "Not present in the Grant Agreement text. Always 'tbd' unless supplied from another source."
+    },
+    "socialMedia": {
+      "type": "object",
+      "description": "Not present in the Grant Agreement text. Every sub-field defaults to 'tbd' unless supplied from another source.",
+      "properties": {
+        "facebook": { "type": "string", "default": "tbd" },
+        "linkedin": { "type": "string", "default": "tbd" },
+        "youtube": { "type": "string", "default": "tbd" },
+        "twitter": { "type": "string", "default": "tbd" },
+        "instagram": { "type": "string", "default": "tbd" }
+      },
+      "required": ["facebook", "linkedin", "youtube"],
+      "additionalProperties": false
+    },
+    "repository": { "type": "string", "default": "tbd" },
+    "mailingLists": { "type": "string", "default": "tbd" },
+    "ownEffortSummary": {
+      "type": "string",
+      "default": "tbd",
+      "description": "Free-text summary of which WPs/tasks ownEntity is assigned to (source: 'VIL Efforts' block). 'tbd' if the GA text gives no WP-level detail for ownEntity."
+    },
+    "workPackages": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "required": ["id", "name", "leadBeneficiary", "monthFrom", "monthTo", "tasks"],
+        "properties": {
+          "id": { "type": "string", "pattern": "^WP[0-9]+$" },
+          "name": { "type": "string" },
+          "leadBeneficiary": { "type": "string", "description": "Short name, e.g. 'AUTH'." },
+          "monthFrom": { "type": "integer", "minimum": 1 },
+          "monthTo": { "type": "integer", "minimum": 1 },
+          "personMonths": { "type": "number", "minimum": 0 },
+          "tasks": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "required": ["id", "name"],
+              "properties": {
+                "id": { "type": "string", "pattern": "^T[0-9]+\\.[0-9]+$" },
+                "name": { "type": "string" },
+                "leader": { "type": "string", "default": "tbd" },
+                "monthFrom": { "type": "integer", "minimum": 1 },
+                "monthTo": { "type": "integer", "minimum": 1 }
+              },
+              "required": ["id", "name"]
+            }
+          }
+        }
+      }
+    },
+    "roles": {
+      "type": "array",
+      "description": "Named personnel of ownEntity and their responsibilities. Only extractable when the GA's DoA §3.2 consortium description names individuals for ownEntity specifically (common for the coordinator, not guaranteed for other beneficiaries) — return an empty array rather than inventing names.",
+      "items": {
+        "type": "object",
+        "required": ["name", "title", "periodFrom"],
+        "properties": {
+          "name": { "type": "string", "default": "tbd" },
+          "title": { "type": "string", "description": "e.g. 'Project Manager', 'Financial Manager'.", "default": "tbd" },
+          "periodFrom": { "type": "string", "description": "e.g. 'M1'.", "default": "tbd" },
+          "periodTo": { "type": "string", "description": "e.g. 'Present' or 'M24'.", "default": "Present" },
+          "responsibilities": {
+            "type": "array",
+            "items": { "type": "string" }
+          },
+          "deliverableAuthorship": {
+            "type": "array",
+            "description": "Deliverable IDs + titles this person leads, e.g. 'D4.1 - ... (M4)'.",
+            "items": { "type": "string" }
+          }
+        }
+      }
+    }
+  },
+  "additionalProperties": false
+}

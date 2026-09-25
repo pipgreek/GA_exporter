@@ -1,0 +1,112 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "ga-exporter/gantt.schema.json",
+  "title": "GA Exporter — Gantt Chart Schema",
+  "description": "Structured data extracted from Annex 1 Part A (work packages, deliverables, milestones) used to fill the Gantt Excel template ('Overview' / 'Deliverables List' / 'Milestones List' sheets) and to feed the frontend preview table.",
+  "type": "object",
+  "required": ["projectAcronym", "totalMonths", "reportingPeriods", "workPackages", "deliverables", "milestones"],
+  "properties": {
+    "projectAcronym": { "type": "string" },
+    "projectStartDate": {
+      "type": "string",
+      "format": "date",
+      "description": "Used to compute calendar-month labels for the Overview sheet header (e.g. 'M1 - OCT'). Optional: if absent, generic 'M1'..'Mn' labels are used."
+    },
+    "totalMonths": {
+      "type": "integer",
+      "minimum": 1,
+      "description": "Project duration in months. Drives the number of month columns rendered (the current template is hand-built for 24; the render engine must expand/duplicate columns for other durations — see open point in implementation-plan.md §7)."
+    },
+    "reportingPeriods": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "required": ["id", "monthFrom", "monthTo"],
+        "properties": {
+          "id": { "type": "string" },
+          "monthFrom": { "type": "integer", "minimum": 1 },
+          "monthTo": { "type": "integer", "minimum": 1 }
+        }
+      }
+    },
+    "workPackages": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "required": ["id", "name", "lead", "monthFrom", "monthTo", "tasks"],
+        "properties": {
+          "id": { "type": "string", "pattern": "^WP[0-9]+$" },
+          "name": { "type": "string" },
+          "lead": { "type": "string", "description": "Short name of lead beneficiary.", "default": "tbd" },
+          "monthFrom": { "type": "integer", "minimum": 1 },
+          "monthTo": { "type": "integer", "minimum": 1 },
+          "milestoneIds": {
+            "type": "array",
+            "description": "Milestone IDs whose marker is drawn on this WP's row (e.g. ['MS1']).",
+            "items": { "type": "string" }
+          },
+          "tasks": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "required": ["id", "name", "monthFrom", "monthTo"],
+              "properties": {
+                "id": { "type": "string", "pattern": "^T[0-9]+\\.[0-9]+$" },
+                "name": { "type": "string" },
+                "monthFrom": { "type": "integer", "minimum": 1 },
+                "monthTo": { "type": "integer", "minimum": 1 }
+              }
+            }
+          }
+        }
+      }
+    },
+    "deliverables": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["id", "title", "wp", "leadBeneficiary", "type", "disseminationLevel", "dueMonth"],
+        "properties": {
+          "id": { "type": "string", "pattern": "^D[0-9]+\\.[0-9]+$" },
+          "title": { "type": "string" },
+          "wp": { "type": "string", "pattern": "^WP[0-9]+$" },
+          "leadBeneficiary": { "type": "string", "default": "tbd" },
+          "type": {
+            "type": "string",
+            "description": "Deliverable type code as used on the EU Portal.",
+            "enum": ["R", "DEC", "DMP", "ETHICS", "OTHER", "tbd"],
+            "default": "tbd"
+          },
+          "disseminationLevel": {
+            "type": "string",
+            "enum": ["PU", "SEN", "EU-R", "EU-C", "EU-S", "tbd"],
+            "default": "tbd"
+          },
+          "dueMonth": { "type": "integer", "minimum": 1 }
+        }
+      }
+    },
+    "milestones": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["id", "name", "wp", "leadBeneficiary", "dueMonth"],
+        "properties": {
+          "id": { "type": "string", "pattern": "^MS[0-9]+$" },
+          "name": { "type": "string" },
+          "wp": { "type": "string", "pattern": "^WP[0-9]+$" },
+          "leadBeneficiary": { "type": "string", "default": "tbd" },
+          "meansOfVerification": {
+            "type": "string",
+            "description": "e.g. 'D2.1(v1)' — usually points to a deliverable version.",
+            "default": "tbd"
+          },
+          "dueMonth": { "type": "integer", "minimum": 1 }
+        }
+      }
+    }
+  },
+  "additionalProperties": false
+}

@@ -1,0 +1,71 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "ga-exporter/kpi.schema.json",
+  "title": "GA Exporter — KPI Monitoring Schema",
+  "description": "Structured data extracted from Annex 1 Part B (Impact / Communication & Dissemination measures, expected outcomes with scale/significance) used to fill the KPI Excel template. The GA is a planning document, so 'achieved' and 'monthlyValues' are extracted as empty/zero placeholders — they exist only so the generated workbook has the right shape for the project team to fill in during execution.",
+  "type": "object",
+  "required": ["projectAcronym", "totalMonths", "categories"],
+  "properties": {
+    "projectAcronym": { "type": "string" },
+    "projectStartDate": { "type": "string", "format": "date" },
+    "totalMonths": {
+      "type": "integer",
+      "minimum": 1,
+      "description": "Drives the number of monthly tracking columns per KPI (grouped visually into YEAR 1 / YEAR 2 / ... blocks of 12)."
+    },
+    "categories": {
+      "type": "array",
+      "minItems": 1,
+      "description": "One category per KPI Excel sheet/tab, e.g. 'Online Channels', 'Events Count', 'Media and Videos', 'Stakeholder Engagement'.",
+      "items": {
+        "type": "object",
+        "required": ["name", "kpis"],
+        "properties": {
+          "name": { "type": "string" },
+          "kpis": {
+            "type": "array",
+            "minItems": 1,
+            "items": {
+              "type": "object",
+              "required": ["label", "target"],
+              "properties": {
+                "code": {
+                  "type": "string",
+                  "description": "GA impact-indicator bracket code this KPI traces back to, e.g. '[C6.1]', '[D1]'. Optional — not every KPI row has one in the GA."
+                },
+                "groupLabel": {
+                  "type": "string",
+                  "description": "The bracketed group heading this KPI is nested under in the sheet (e.g. '[C6.1]Twitter'), used to render the merged section header cell. Omit for ungrouped KPIs."
+                },
+                "label": {
+                  "type": "string",
+                  "description": "The metric name, e.g. 'Followers', 'Pageviews', '1 Rollup'."
+                },
+                "target": {
+                  "type": "string",
+                  "default": "tbd",
+                  "description": "Target as stated in the GA — kept as free text since targets are often qualitative/compound (e.g. '>1000 followers', 'Y1: >1500 entries'). 'tbd' if this indicator is named but no numeric/qualitative target is stated."
+                },
+                "unit": {
+                  "type": "string",
+                  "description": "Optional normalized unit if the target is a plain count, e.g. 'count', 'minutes'."
+                },
+                "achieved": {
+                  "type": "number",
+                  "default": 0,
+                  "description": "Running total; always 0 at generation time, computed later from monthlyValues."
+                },
+                "monthlyValues": {
+                  "type": "array",
+                  "description": "One entry per month of totalMonths, initialized to null; filled in by the project team during monitoring.",
+                  "items": { "type": ["number", "null"] }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "additionalProperties": false
+}

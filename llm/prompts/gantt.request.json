@@ -1,0 +1,247 @@
+{
+  "$comment": "Ready-to-send Anthropic Messages API request pieces for generateGanttJson(). Backend substitutes {{grant_agreement_markdown}} in user_message.content with the parsed GA markdown, then sends: {model, system, tools: [tool], tool_choice: {type:'tool', name: tool.name}, messages: [user_message]}. Regenerate with build_requests.py after editing the schema.",
+  "model": "claude-haiku-4-5-20251001",
+  "max_tokens": 8192,
+  "system": "You are the extraction engine for VILABS' GA Exporter tool. You receive the full text of an EU Horizon Europe/Euratom Grant Agreement (Preamble, Terms & Conditions, Data Sheet, Annex 1 Part A), already converted from PDF to Markdown, and must extract the project's full work plan (work packages, tasks, deliverables, milestones, reporting periods) to fill a Gantt chart Excel workbook.\n\nRULES (apply to every field):\n1. Use only information explicitly present in the Grant Agreement text below. Never infer, guess, or use outside/general knowledge about this project.\n2. Any field you cannot find a value for in the text must be set to the literal string \"tbd\" (for arrays with nothing found, return an empty array [] — not an array containing \"tbd\"). Do not fabricate a plausible-looking value under any circumstance.\n3. Express all schedules/durations as month numbers relative to project start (M1, M2, ...) exactly as the Grant Agreement does. Never invent or convert to calendar dates yourself.\n4. Copy IDs, codes and enum values (WP1, T1.1, D2.3, MS1, PU, SEN, R, DEC, [C6.1], ...) verbatim as they appear in the source text.\n5. Respond ONLY by calling the provided tool with arguments matching its input_schema. Do not add any prose before or after the tool call.\n\nFIELD-SPECIFIC GUIDANCE:\n- totalMonths and projectStartDate come from the Data Sheet §1 (project duration / starting date).\n- reportingPeriods come from the Data Sheet §4.2 reporting schedule table.\n- workPackages, and each WP's tasks (with their own month ranges and leaders where stated), come from Annex 1 Part A \"List of work packages\" plus the per-WP \"Description\" sections.\n- deliverables come from Annex 1 Part A \"List of deliverables\" — copy id, title, WP, lead beneficiary short name, type code and dissemination level code verbatim, and dueDate as a plain month number.\n- milestones come from Annex 1 Part A \"List of milestones\" — copy id, name, WP, lead beneficiary, \"Means of Verification\" and due month verbatim.\n- workPackages[].milestoneIds: for each milestone, note which WP its \"Work Package No\" column points to, and add that milestone's id to that WP's milestoneIds array.\n- This is a project-wide document, not tied to any single beneficiary — do not filter work packages/tasks/deliverables/milestones by who leads them.",
+  "tools": [
+    {
+      "name": "generate_gantt_json",
+      "description": "Return the structured Gantt chart data (work packages, tasks, deliverables, milestones, reporting periods) extracted from the Grant Agreement, matching the given schema exactly.",
+      "input_schema": {
+        "title": "GA Exporter — Gantt Chart Schema",
+        "description": "Structured data extracted from Annex 1 Part A (work packages, deliverables, milestones) used to fill the Gantt Excel template ('Overview' / 'Deliverables List' / 'Milestones List' sheets) and to feed the frontend preview table.",
+        "type": "object",
+        "required": [
+          "projectAcronym",
+          "totalMonths",
+          "reportingPeriods",
+          "workPackages",
+          "deliverables",
+          "milestones"
+        ],
+        "properties": {
+          "projectAcronym": {
+            "type": "string"
+          },
+          "projectStartDate": {
+            "type": "string",
+            "format": "date",
+            "description": "Used to compute calendar-month labels for the Overview sheet header (e.g. 'M1 - OCT'). Optional: if absent, generic 'M1'..'Mn' labels are used."
+          },
+          "totalMonths": {
+            "type": "integer",
+            "minimum": 1,
+            "description": "Project duration in months. Drives the number of month columns rendered (the current template is hand-built for 24; the render engine must expand/duplicate columns for other durations — see open point in implementation-plan.md §7)."
+          },
+          "reportingPeriods": {
+            "type": "array",
+            "minItems": 1,
+            "items": {
+              "type": "object",
+              "required": [
+                "id",
+                "monthFrom",
+                "monthTo"
+              ],
+              "properties": {
+                "id": {
+                  "type": "string"
+                },
+                "monthFrom": {
+                  "type": "integer",
+                  "minimum": 1
+                },
+                "monthTo": {
+                  "type": "integer",
+                  "minimum": 1
+                }
+              }
+            }
+          },
+          "workPackages": {
+            "type": "array",
+            "minItems": 1,
+            "items": {
+              "type": "object",
+              "required": [
+                "id",
+                "name",
+                "lead",
+                "monthFrom",
+                "monthTo",
+                "tasks"
+              ],
+              "properties": {
+                "id": {
+                  "type": "string",
+                  "pattern": "^WP[0-9]+$"
+                },
+                "name": {
+                  "type": "string"
+                },
+                "lead": {
+                  "type": "string",
+                  "description": "Short name of lead beneficiary.",
+                  "default": "tbd"
+                },
+                "monthFrom": {
+                  "type": "integer",
+                  "minimum": 1
+                },
+                "monthTo": {
+                  "type": "integer",
+                  "minimum": 1
+                },
+                "milestoneIds": {
+                  "type": "array",
+                  "description": "Milestone IDs whose marker is drawn on this WP's row (e.g. ['MS1']).",
+                  "items": {
+                    "type": "string"
+                  }
+                },
+                "tasks": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "required": [
+                      "id",
+                      "name",
+                      "monthFrom",
+                      "monthTo"
+                    ],
+                    "properties": {
+                      "id": {
+                        "type": "string",
+                        "pattern": "^T[0-9]+\\.[0-9]+$"
+                      },
+                      "name": {
+                        "type": "string"
+                      },
+                      "monthFrom": {
+                        "type": "integer",
+                        "minimum": 1
+                      },
+                      "monthTo": {
+                        "type": "integer",
+                        "minimum": 1
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "deliverables": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "required": [
+                "id",
+                "title",
+                "wp",
+                "leadBeneficiary",
+                "type",
+                "disseminationLevel",
+                "dueMonth"
+              ],
+              "properties": {
+                "id": {
+                  "type": "string",
+                  "pattern": "^D[0-9]+\\.[0-9]+$"
+                },
+                "title": {
+                  "type": "string"
+                },
+                "wp": {
+                  "type": "string",
+                  "pattern": "^WP[0-9]+$"
+                },
+                "leadBeneficiary": {
+                  "type": "string",
+                  "default": "tbd"
+                },
+                "type": {
+                  "type": "string",
+                  "description": "Deliverable type code as used on the EU Portal.",
+                  "enum": [
+                    "R",
+                    "DEC",
+                    "DMP",
+                    "ETHICS",
+                    "OTHER",
+                    "tbd"
+                  ],
+                  "default": "tbd"
+                },
+                "disseminationLevel": {
+                  "type": "string",
+                  "enum": [
+                    "PU",
+                    "SEN",
+                    "EU-R",
+                    "EU-C",
+                    "EU-S",
+                    "tbd"
+                  ],
+                  "default": "tbd"
+                },
+                "dueMonth": {
+                  "type": "integer",
+                  "minimum": 1
+                }
+              }
+            }
+          },
+          "milestones": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "required": [
+                "id",
+                "name",
+                "wp",
+                "leadBeneficiary",
+                "dueMonth"
+              ],
+              "properties": {
+                "id": {
+                  "type": "string",
+                  "pattern": "^MS[0-9]+$"
+                },
+                "name": {
+                  "type": "string"
+                },
+                "wp": {
+                  "type": "string",
+                  "pattern": "^WP[0-9]+$"
+                },
+                "leadBeneficiary": {
+                  "type": "string",
+                  "default": "tbd"
+                },
+                "meansOfVerification": {
+                  "type": "string",
+                  "description": "e.g. 'D2.1(v1)' — usually points to a deliverable version.",
+                  "default": "tbd"
+                },
+                "dueMonth": {
+                  "type": "integer",
+                  "minimum": 1
+                }
+              }
+            }
+          }
+        },
+        "additionalProperties": false
+      }
+    }
+  ],
+  "tool_choice": {
+    "type": "tool",
+    "name": "generate_gantt_json"
+  },
+  "user_message": {
+    "role": "user",
+    "content": "Grant Agreement (parsed to Markdown):\n\n{{grant_agreement_markdown}}"
+  }
+}
