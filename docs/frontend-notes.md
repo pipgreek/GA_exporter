@@ -77,6 +77,7 @@ Logo ViLabs (επιστροφή στην αρχική), animated background, toa
 - API layer: `lib/api/types.ts` (contract §6) + `lib/api/client.ts` (upload/status/preview/download URLs).
 - Mock backend: `POST /upload`, `GET /status/{id}`, `GET /preview/{id}`, με σενάρια ok / error / slow. Download endpoints θα μπουν στο βήμα D.
 - Έλεγχοι: `npm run lint` καθαρό, `npm run build` επιτυχές, όλα τα σενάρια του mock δοκιμασμένα στον browser, έλεγχος σε desktop και mobile.
+- Τσεκαρίστηκαν στο `implementation-plan.md` (§5 Frontend A) τα 3 κουτάκια του setup. Κανόνας: αλλάζουμε μόνο την ενότητα frontend του plan.
 - **Επόμενο βήμα:** B — Home page: `UploadDropzone` (react-dropzone), μικρογραφία αρχείου με «Χ», κουμπί Start.
 
 ### 2026-09-25

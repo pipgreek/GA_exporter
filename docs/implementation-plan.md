@@ -121,9 +121,9 @@ Upload PDF
 ### 🎨 Θεοδώρα — branch `frontend`
 
 #### A. Setup
-- [ ] Next.js project scaffold (`frontend/`)
-- [ ] Tailwind CSS setup
-- [ ] Βασικό routing: `/` και `/result`
+- [x] Next.js project scaffold (`frontend/`)
+- [x] Tailwind CSS setup
+- [x] Βασικό routing: `/` και `/result`
 
 #### B. Home page — upload & progress
 - [ ] `UploadDropzone` component (react-dropzone, μόνο PDF, disabled μετά το upload)
