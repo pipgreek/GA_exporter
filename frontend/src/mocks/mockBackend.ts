@@ -17,9 +17,11 @@ import type {
  *   - name has "error" → fails during "analyzing"
  *   - name has "slow"  → stalls at "analyzing" forever (tests the 90s timeout
  *                        and the fallback message rotation)
+ *   - name has "preview-error" → completes, but GET /preview fails with 500
+ *                        (tests the preview error message + Retry)
  */
 
-export type MockScenario = "ok" | "error" | "slow";
+export type MockScenario = "ok" | "error" | "slow" | "previewerror";
 
 const STAGES: { status: ProcessingStatus; untilSec: number; progressEnd: number }[] = [
   { status: "scanning", untilSec: 3, progressEnd: 15 },
@@ -39,6 +41,7 @@ const STAGE_MESSAGES: Record<ProcessingStatus, string> = {
 
 export function scenarioFromFileName(fileName: string): MockScenario {
   const name = fileName.toLowerCase();
+  if (name.includes("preview-error")) return "previewerror";
   if (name.includes("error")) return "error";
   if (name.includes("slow")) return "slow";
   return "ok";
@@ -51,7 +54,7 @@ export function createRequestId(scenario: MockScenario, now = Date.now()): strin
 export function parseRequestId(
   requestId: string,
 ): { scenario: MockScenario; startedAt: number } | null {
-  const match = /^mock_(ok|error|slow)_(\d+)$/.exec(requestId);
+  const match = /^mock_(ok|error|slow|previewerror)_(\d+)$/.exec(requestId);
   if (!match) return null;
   return { scenario: match[1] as MockScenario, startedAt: Number(match[2]) };
 }

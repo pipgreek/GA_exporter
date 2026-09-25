@@ -69,6 +69,22 @@ Logo ViLabs (επιστροφή στην αρχική), animated background, toa
 
 Νεότερα πάνω. Ενημερώνεται μετά από κάθε ολοκληρωμένο βήμα.
 
+### 2026-09-25 — Βήμα C: Preview (read-only) ✅
+- `PreviewSection`: φορτώνει `GET /preview/{id}` όταν έρθει `done`, κάτω από το upload (χωρίς να καθαρίζει η οθόνη). Skeleton κατά τη φόρτωση, μήνυμα σφάλματος + **Retry** αν αποτύχει.
+- `PreviewCard` x3 (INFO / Gantt / KPI): εικονίδιο, τίτλος, τύπος αρχείου + πλήθος γραμμών, ζωντανή μικρογραφία του περιεχομένου, κουμπί expand (και κλικ στη μικρογραφία).
+- `WordViewer`: HTML από backend → `DOMPurify.sanitize` → `dangerouslySetInnerHTML`, με στυλ εγγράφου (`.doc-preview` στο `globals.css`).
+- `ExcelViewer`: read-only `<table>` με sticky header, οριζόντιο scroll, αριθμοί δεξιά.
+- `PreviewModal` (Radix Dialog): 90% × 90%, overlay που παγώνει το φόντο, εσωτερικό scroll, «Χ»/Esc κλείνει. Ένα modal για όλα τα previews.
+- `PreviewErrorBoundary`: μήνυμα σφάλματος αντί για σπασμένο container (όπως ζητά το docx).
+- **Confirm & Proceed** → `/result?requestId=...`.
+- Mock: νέο σενάριο `preview-error` (το preview αποτυγχάνει τα πρώτα 20").
+- Bug που βρέθηκε και διορθώθηκε: ίδιο React `key` σε `ProgressIndicator` και `PreviewSection` → διπλή μπάρα προόδου.
+- Δοκιμασμένα στον browser: φόρτωση previews, modal (μέγεθος, scroll, Esc/Χ), σφάλμα + Retry, Confirm, mobile. Lint + TypeScript καθαρά.
+- Τσεκαρίστηκαν στο plan: C (5/5). Σύνολο frontend: 14/17.
+- **Εκκρεμεί από το API contract:** τα previews Excel δείχνουν έναν πίνακα ανά αρχείο (όπως το §6). Αν το backend στείλει πολλά sheets (π.χ. Gantt: Overview / Deliverables / Milestones), το `ExcelViewer` θα χρειαστεί καρτέλες.
+- **Επόμενο βήμα:** D — Result page: 3 `DownloadCard`, Download all (.zip), Return to Home Page (+ mock download endpoints).
+- **Μετά το D — βήμα F (από το mockup, εκτός plan):** logo που επιστρέφει στην αρχική με επιβεβαίωση όταν υπάρχει αρχείο (τώρα στο `/` δεν κάνει τίποτα) και σελίδα Privacy Policy + link στο footer.
+
 ### 2026-09-25 — Βήμα B: Home page, upload & progress ✅
 - Βιβλιοθήκες: `react-dropzone` 20, `lucide-react` (εικονίδια), `@radix-ui/react-dialog` (modals).
 - `UploadDropzone`: μόνο ένα PDF, κλειδώνει όσο υπάρχει αρχείο (click/πληκτρολόγιο/drop), toast για λάθος τύπο.

@@ -3,6 +3,7 @@
 import { LoaderCircle, TriangleAlert } from "lucide-react";
 import { useRef, useState } from "react";
 import { HomeIntro } from "@/components/home/HomeIntro";
+import { PreviewSection } from "@/components/preview/PreviewSection";
 import { ProgressIndicator } from "@/components/progress/ProgressIndicator";
 import { ConfirmDialog } from "@/components/ui/ConfirmDialog";
 import { Toaster, useToasts } from "@/components/ui/Toaster";
@@ -86,11 +87,15 @@ export function HomeView() {
 
       {requestId && (
         <ProgressIndicator
-          key={requestId}
+          key={`progress-${requestId}`}
           requestId={requestId}
           onDone={() => setPhase("done")}
           onError={() => setPhase("failed")}
         />
+      )}
+
+      {requestId && phase === "done" && (
+        <PreviewSection key={`preview-${requestId}`} requestId={requestId} />
       )}
 
       <ConfirmDialog

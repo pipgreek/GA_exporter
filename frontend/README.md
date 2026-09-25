@@ -36,6 +36,7 @@ npm run dev
 | οτιδήποτε άλλο | Ολοκληρώνεται σε ~15" (`scanning` → … → `done`) |
 | περιέχει `error` | Αποτυγχάνει στο `analyzing` (status `error`) |
 | περιέχει `slow` | «Κολλάει» στο `analyzing`, για έλεγχο του timeout 90" και των fallback μηνυμάτων |
+| περιέχει `preview-error` | Ολοκληρώνεται, αλλά το `GET /preview` αποτυγχάνει για τα πρώτα 20" (έλεγχος μηνύματος σφάλματος + Retry) |
 
 Το mock δεν κρατά state: το `requestId` περιέχει σενάριο και ώρα έναρξης (`mock_<scenario>_<ms>`).
 

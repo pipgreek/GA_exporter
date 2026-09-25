@@ -132,11 +132,11 @@ Upload PDF
 - [x] `ProgressIndicator` component — polling `GET /status/{requestId}` (setInterval 2-3s), μηνύματα ανά status, fallback rotation μηνυμάτων, timeout 90s
 
 #### C. Preview (read-only)
-- [ ] `PreviewCard` component (x3, ένα ανά τύπο αρχείου)
-- [ ] `WordViewer` — mammoth HTML (από backend) + DOMPurify.sanitize + dangerouslySetInnerHTML
-- [ ] `ExcelViewer` — read-only πίνακας (react-data-grid ή `<table>`) από JSON headers/rows
-- [ ] `PreviewModal` (radix-ui/headlessui dialog) — expand 90%, internal scroll, close (X) επιστρέφει εκεί που ήταν
-- [ ] Κουμπί **Confirm** → `router.push('/result?requestId=...')`
+- [x] `PreviewCard` component (x3, ένα ανά τύπο αρχείου)
+- [x] `WordViewer` — mammoth HTML (από backend) + DOMPurify.sanitize + dangerouslySetInnerHTML
+- [x] `ExcelViewer` — read-only πίνακας (react-data-grid ή `<table>`) από JSON headers/rows
+- [x] `PreviewModal` (radix-ui/headlessui dialog) — expand 90%, internal scroll, close (X) επιστρέφει εκεί που ήταν
+- [x] Κουμπί **Confirm** → `router.push('/result?requestId=...')`
 
 #### D. Result page
 - [ ] 3 `DownloadCard` components (όνομα αρχείου + Download button)
