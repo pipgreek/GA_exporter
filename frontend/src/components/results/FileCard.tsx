@@ -1,16 +1,18 @@
 "use client";
 
-import { Eye } from "lucide-react";
+import { Download, Eye } from "lucide-react";
 import type { GeneratedFile } from "@/lib/files";
 
 interface FileCardProps {
   file: GeneratedFile;
+  /** GET /download/{requestId}/{type} */
+  downloadUrl: string;
   onPreview: () => void;
 }
 
-/** One generated file: name, format and an optional read-only Preview. */
-export function FileCard({ file, onPreview }: FileCardProps) {
-  const { title, format, icon: Icon, tone } = file;
+/** One generated file: name, Download and an optional read-only Preview. */
+export function FileCard({ file, downloadUrl, onPreview }: FileCardProps) {
+  const { title, fileName, format, icon: Icon, tone } = file;
 
   return (
     <article
@@ -20,10 +22,21 @@ export function FileCard({ file, onPreview }: FileCardProps) {
         <Icon className="size-7" aria-hidden />
       </div>
       <h3 className="font-semibold text-slate-800">{title}</h3>
-      <p className="mb-5 text-xs text-slate-500">{format}</p>
+      <p className="w-full truncate text-sm text-slate-600" title={fileName}>
+        {fileName}
+      </p>
+      <p className="mb-5 text-xs text-slate-400">{format}</p>
 
       <div className="mt-auto flex w-full flex-col gap-2">
-        {/* Download button: step D. */}
+        {/* The backend's Content-Disposition header makes the browser save the file. */}
+        <a
+          href={downloadUrl}
+          download={fileName}
+          aria-label={`Download ${fileName}`}
+          className="flex w-full items-center justify-center gap-2 rounded-xl bg-sky-600 px-4 py-2.5 text-sm font-semibold text-white shadow-md shadow-sky-600/20 transition-all hover:bg-sky-700"
+        >
+          <Download className="size-4" aria-hidden /> Download
+        </a>
         <button
           type="button"
           onClick={onPreview}

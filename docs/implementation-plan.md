@@ -141,9 +141,9 @@ Upload PDF
 - [x] Εμφάνιση των αρχείων κατευθείαν μετά το `done` (χωρίς Confirm)· `GET /preview` μόνο όταν ανοίξει preview
 
 #### D. Downloads (στην αρχική, στις κάρτες αρχείων)
-- [ ] Κουμπί **Download** σε κάθε `FileCard` (όνομα αρχείου + Download)
-- [ ] Κουμπί **Download all (.zip)**
-- [ ] Κουμπί **Process another Grant Agreement** (αντικαθιστά το «Return to Home Page» — επαναφέρει την αρχική)
+- [x] Κουμπί **Download** σε κάθε `FileCard` (όνομα αρχείου + Download)
+- [x] Κουμπί **Download all (.zip)**
+- [x] Κουμπί **Process another Grant Agreement** (αντικαθιστά το «Return to Home Page» — επαναφέρει την αρχική)
 
 #### E. Error states
 - [x] UI για σφάλμα upload (λάθος τύπος αρχείου)

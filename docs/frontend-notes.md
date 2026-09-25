@@ -76,6 +76,16 @@ Logo ViLabs (επιστροφή στην αρχική), animated background, toa
 
 Νεότερα πάνω. Ενημερώνεται μετά από κάθε ολοκληρωμένο βήμα.
 
+### 2026-09-25 — Βήμα D: Downloads ✅
+- `FileCard`: όνομα αρχείου + **Download** (`<a href download>` προς `GET /download/{id}/{type}`) + Preview.
+- **Download all (.zip)** → `GET /download-all/{id}`.
+- **Process another Grant Agreement** → confirm modal («Make sure you have downloaded your files…») → επαναφορά της αρχικής + scroll στην κορυφή.
+- Ονόματα αρχείων: προσωρινά σταθερά στο `src/lib/files.ts` (`INFO_Generation.docx`, `Gantt_Chart.xlsx`, `KPI_Monitoring.xlsx`, `GA_Exporter_files.zip`), μέχρι να οριστούν από το backend (βλ. «Προς επιβεβαίωση»).
+- Mock: `GET /download/{id}/{type}` και `GET /download-all/{id}` επιστρέφουν **πραγματικά** .docx/.xlsx/.zip (βιβλιοθήκη `fflate`), με το ίδιο περιεχόμενο με τα previews (τα .xlsx έχουν τα ίδια sheets). Headers: `Content-Type` + `Content-Disposition: attachment`. 409 αν δεν είναι έτοιμα, 404 για άγνωστο id/τύπο.
+- Δοκιμασμένα: headers και κωδικοί σφάλματος των endpoints, εγκυρότητα των αρχείων (δομή zip + έγκυρο XML, σωστά sheets/περιεχόμενο), links στις κάρτες, confirm (Cancel / Yes) και επαναφορά. Lint + TypeScript καθαρά.
+- Τσεκαρίστηκαν στο plan: D (3/3). Σύνολο frontend: **17/20** — απομένει μόνο το F.
+- **Επόμενο βήμα:** F — logo → αρχική (με confirm), σελίδα Privacy Policy, link στο footer.
+
 ### 2026-09-25 — Αποφάσεις 5 & 6: πολλά sheets + επιλογή B ✅
 - **Πολλά sheets (απόφαση 5):** νέοι τύποι `SheetPreview` / `WorkbookPreview` (`types.ts`), mock με sheets όπως τα δείγματα (Gantt: M1-M36 Overview / Deliverables' List / Milestones' List · KPI: Online Channels / Publications / Events Count), `ExcelViewer` με καρτέλες (κλικ + βελάκια πληκτρολογίου).
 - **Επιλογή B (απόφαση 6):** νέο `ResultsSection` + `FileCard` (αντί για `PreviewSection` + `PreviewCard`). Μετά το `done`: banner «Your analysis is complete…» + 3 κάρτες με **Preview**. Το preview φορτώνεται μόνο στο πρώτο άνοιγμα (1 κλήση για όλα), με loading / σφάλμα + Retry μέσα στο modal.

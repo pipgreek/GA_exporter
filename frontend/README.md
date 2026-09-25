@@ -40,6 +40,8 @@ npm run dev
 
 Το mock δεν κρατά state: το `requestId` περιέχει σενάριο και ώρα έναρξης (`mock_<scenario>_<ms>`).
 
+Τα downloads του mock (`/download/{id}/{type}`, `/download-all/{id}`) είναι πραγματικά αρχεία .docx / .xlsx / .zip που ανοίγουν σε Word/Excel, με το ίδιο περιεχόμενο με τα previews ([`src/mocks/mockFiles.ts`](src/mocks/mockFiles.ts)).
+
 ## Δομή
 
 ```

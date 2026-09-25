@@ -1,14 +1,14 @@
 "use client";
 
-import { CircleAlert, CircleCheck, LoaderCircle, RotateCcw } from "lucide-react";
+import { CircleAlert, CircleCheck, FileArchive, LoaderCircle, RefreshCw, RotateCcw } from "lucide-react";
 import { useEffect, useRef, useState } from "react";
 import { ExcelViewer } from "@/components/preview/ExcelViewer";
 import { PreviewErrorBoundary } from "@/components/preview/PreviewErrorBoundary";
 import { PreviewModal } from "@/components/preview/PreviewModal";
 import { WordViewer } from "@/components/preview/WordViewer";
-import { ApiError, getPreview } from "@/lib/api/client";
+import { ApiError, getDownloadAllUrl, getDownloadUrl, getPreview } from "@/lib/api/client";
 import type { FileType, PreviewResponse } from "@/lib/api/types";
-import { GENERATED_FILES, getGeneratedFile } from "@/lib/files";
+import { GENERATED_FILES, getGeneratedFile, ZIP_FILE_NAME } from "@/lib/files";
 import { FileCard } from "./FileCard";
 
 type PreviewState =
@@ -61,7 +61,14 @@ function PreviewBody({ type, state, onRetry }: { type: FileType; state: PreviewS
  * GET /preview is only called the first time the user opens a preview.
  * Mount with `key={requestId}`.
  */
-export function ResultsSection({ requestId }: { requestId: string }) {
+export function ResultsSection({
+  requestId,
+  onStartOver,
+}: {
+  requestId: string;
+  /** "Process another Grant Agreement" (replaces "Return to Home Page"). */
+  onStartOver: () => void;
+}) {
   const [preview, setPreview] = useState<PreviewState>({ kind: "idle" });
   const [open, setOpen] = useState<FileType | null>(null);
   const mounted = useRef(true);
@@ -98,8 +105,30 @@ export function ResultsSection({ requestId }: { requestId: string }) {
 
       <div className="grid gap-6 sm:grid-cols-3">
         {GENERATED_FILES.map((file) => (
-          <FileCard key={file.type} file={file} onPreview={() => openPreview(file.type)} />
+          <FileCard
+            key={file.type}
+            file={file}
+            downloadUrl={getDownloadUrl(requestId, file.type)}
+            onPreview={() => openPreview(file.type)}
+          />
         ))}
+      </div>
+
+      <div className="mt-8 flex flex-col items-center gap-4">
+        <a
+          href={getDownloadAllUrl(requestId)}
+          download={ZIP_FILE_NAME}
+          className="flex items-center gap-2 rounded-xl bg-sky-600 px-8 py-3 font-semibold text-white shadow-lg shadow-sky-600/20 transition-all hover:bg-sky-700"
+        >
+          <FileArchive className="size-5" aria-hidden /> Download all (.zip)
+        </a>
+        <button
+          type="button"
+          onClick={onStartOver}
+          className="flex cursor-pointer items-center gap-2 font-semibold text-sky-600 transition hover:text-sky-800"
+        >
+          <RefreshCw className="size-4" aria-hidden /> Process another Grant Agreement
+        </button>
       </div>
 
       <PreviewModal

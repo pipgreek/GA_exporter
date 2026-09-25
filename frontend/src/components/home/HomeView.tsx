@@ -1,6 +1,6 @@
 "use client";
 
-import { LoaderCircle, TriangleAlert } from "lucide-react";
+import { LoaderCircle, RefreshCw, TriangleAlert } from "lucide-react";
 import { useRef, useState } from "react";
 import { HomeIntro } from "@/components/home/HomeIntro";
 import { ResultsSection } from "@/components/results/ResultsSection";
@@ -25,6 +25,7 @@ export function HomeView() {
   const [phase, setPhase] = useState<Phase>("idle");
   const [requestId, setRequestId] = useState<string | null>(null);
   const [confirmRemoveOpen, setConfirmRemoveOpen] = useState(false);
+  const [confirmStartOverOpen, setConfirmStartOverOpen] = useState(false);
   const { toasts, showError } = useToasts();
   // Ignores an upload response that arrives after the file was removed.
   const attempt = useRef(0);
@@ -95,8 +96,25 @@ export function HomeView() {
       )}
 
       {requestId && phase === "done" && (
-        <ResultsSection key={`results-${requestId}`} requestId={requestId} />
+        <ResultsSection
+          key={`results-${requestId}`}
+          requestId={requestId}
+          onStartOver={() => setConfirmStartOverOpen(true)}
+        />
       )}
+
+      <ConfirmDialog
+        open={confirmStartOverOpen}
+        onOpenChange={setConfirmStartOverOpen}
+        onConfirm={() => {
+          reset();
+          window.scrollTo({ top: 0, behavior: "smooth" });
+        }}
+        icon={<RefreshCw className="size-5" aria-hidden />}
+        title="Process another Grant Agreement?"
+        description="Make sure you have downloaded your files. They will no longer be available on this page."
+        confirmLabel="Yes, Start Over"
+      />
 
       <ConfirmDialog
         open={confirmRemoveOpen}
