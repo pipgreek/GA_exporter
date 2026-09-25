@@ -45,10 +45,18 @@ npm run dev
 ```
 src/
   app/
-    page.tsx            # / — upload, progress, previews, confirm
-    result/page.tsx     # /result?requestId=... — downloads
+    page.tsx            # / — όλη η ροή: upload → progress → αρχεία (download + προαιρετικό preview)
     api/mock/...        # mock backend (ίδια endpoints με το contract)
-  components/           # UI components
+  components/
+    home/               # HomeView (ροή της αρχικής), HomeIntro
+    upload/             # UploadDropzone, FileThumbnail
+    progress/           # ProgressIndicator
+    results/            # ResultsSection, FileCard
+    preview/            # PreviewModal, WordViewer, ExcelViewer (καρτέλες sheets)
+    ui/                 # ConfirmDialog, Toaster
+    layout/             # header, footer, background
+  hooks/                # useProcessingStatus (polling)
   lib/api/              # API client + types (contract)
+  lib/files.ts          # ορισμός των 3 παραγόμενων αρχείων
   mocks/                # δεδομένα/λογική του mock backend
 ```

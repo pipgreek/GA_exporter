@@ -34,8 +34,8 @@ const STAGE_MESSAGES: Record<ProcessingStatus, string> = {
   scanning: "Scanning Grant Agreement...",
   extracting: "Extracting text and structure...",
   analyzing: "Analyzing Work Packages and KPIs...",
-  generating: "Generating previews...",
-  done: "Previews generated successfully.",
+  generating: "Generating files...",
+  done: "Files generated successfully.",
   error: "Processing failed. Please try again.",
 };
 
@@ -120,32 +120,71 @@ export const MOCK_PREVIEW: PreviewResponse = {
       <p><em>This is placeholder content from the mock backend.</em></p>
     `,
   },
+  // Sheet names follow the example workbooks (EVOLVE2CARE / RE-SPHERE Gantt, VIGILANCE KPIs).
   gantt: {
-    headers: ["ID", "Title", "Lead", "Start", "End", "Type"],
-    rows: [
-      ["WP1", "Project Management and Coordination", "VILABS", "M1", "M36", "WP"],
-      ["T1.1", "Administrative and financial management", "VILABS", "M1", "M36", "Task"],
-      ["WP2", "Requirements and Co-design", "Partner A", "M1", "M9", "WP"],
-      ["T2.1", "User requirements elicitation", "Partner A", "M1", "M6", "Task"],
-      ["WP3", "Platform Development", "Partner B", "M6", "M30", "WP"],
-      ["T3.1", "System architecture", "Partner B", "M6", "M12", "Task"],
-      ["WP4", "Pilots and Validation", "Partner C", "M18", "M34", "WP"],
-      ["WP5", "Dissemination, Communication and Exploitation", "VILABS", "M1", "M36", "WP"],
-      ["D1.1", "Project Management Handbook", "VILABS", "M3", "M3", "Deliverable"],
-      ["D2.1", "User Requirements Report", "Partner A", "M6", "M6", "Deliverable"],
-      ["MS1", "Requirements finalised", "Partner A", "M9", "M9", "Milestone"],
-      ["MS2", "Platform prototype ready", "Partner B", "M18", "M18", "Milestone"],
+    sheets: [
+      {
+        name: "M1-M36 Overview",
+        headers: ["ID", "Title", "Lead", "Start", "End"],
+        rows: [
+          ["WP1", "Project Management and Coordination", "VILABS", "M1", "M36"],
+          ["T1.1", "Administrative and financial management", "VILABS", "M1", "M36"],
+          ["WP2", "Requirements and Co-design", "Partner A", "M1", "M9"],
+          ["T2.1", "User requirements elicitation", "Partner A", "M1", "M6"],
+          ["WP3", "Platform Development", "Partner B", "M6", "M30"],
+          ["T3.1", "System architecture", "Partner B", "M6", "M12"],
+          ["WP4", "Pilots and Validation", "Partner C", "M18", "M34"],
+          ["WP5", "Dissemination, Communication and Exploitation", "VILABS", "M1", "M36"],
+        ],
+      },
+      {
+        name: "Deliverables' List",
+        headers: ["No.", "Title", "WP", "Lead", "Type", "Dissemination", "Due"],
+        rows: [
+          ["D1.1", "Project Management Handbook", "WP1", "VILABS", "R", "SEN", "M3"],
+          ["D2.1", "User Requirements Report", "WP2", "Partner A", "R", "PU", "M6"],
+          ["D3.1", "Platform Prototype", "WP3", "Partner B", "DEM", "PU", "M18"],
+          ["D5.1", "Dissemination and Communication Plan", "WP5", "VILABS", "R", "PU", "M4"],
+        ],
+      },
+      {
+        name: "Milestones' List",
+        headers: ["No.", "Title", "WP", "Lead", "Due", "Means of verification"],
+        rows: [
+          ["MS1", "Requirements finalised", "WP2", "Partner A", "M9", "D2.1 submitted"],
+          ["MS2", "Platform prototype ready", "WP3", "Partner B", "M18", "D3.1 demonstrated"],
+          ["MS3", "Pilots completed", "WP4", "Partner C", "M34", "Pilot reports available"],
+        ],
+      },
     ],
   },
   kpi: {
-    headers: ["Category", "KPI", "Target", "Achieved", "M6", "M12", "M18"],
-    rows: [
-      ["Dissemination", "Scientific publications", 6, 2, 0, 1, 1],
-      ["Dissemination", "Conference presentations", 10, 4, 1, 2, 1],
-      ["Communication", "Website visitors", 5000, 1800, 300, 700, 800],
-      ["Communication", "Newsletter issues", 6, 2, 1, 1, 0],
-      ["Exploitation", "Stakeholder workshops", 4, 1, 0, 0, 1],
-      ["Technical", "Pilot sites operational", 3, 0, 0, 0, 0],
+    sheets: [
+      {
+        name: "Online Channels",
+        headers: ["KPI", "Target", "Achieved", "M6", "M12", "M18"],
+        rows: [
+          ["Website visitors", 5000, 1800, 300, 700, 800],
+          ["Newsletter issues", 6, 2, 1, 1, 0],
+          ["LinkedIn followers", 500, 210, 60, 70, 80],
+        ],
+      },
+      {
+        name: "Publications",
+        headers: ["KPI", "Target", "Achieved", "M6", "M12", "M18"],
+        rows: [
+          ["Scientific publications", 6, 2, 0, 1, 1],
+          ["Conference presentations", 10, 4, 1, 2, 1],
+        ],
+      },
+      {
+        name: "Events Count",
+        headers: ["KPI", "Target", "Achieved", "M6", "M12", "M18"],
+        rows: [
+          ["Stakeholder workshops", 4, 1, 0, 0, 1],
+          ["Webinars", 3, 1, 0, 1, 0],
+        ],
+      },
     ],
   },
 };

@@ -26,17 +26,23 @@ export interface StatusResponse {
 
 export type CellValue = string | number | null;
 
-/** Read-only table for the Excel previews (Gantt, KPI). */
-export interface TablePreview {
+/** One worksheet of an Excel preview. */
+export interface SheetPreview {
+  name: string;
   headers: string[];
   rows: CellValue[][];
+}
+
+/** Read-only preview of an Excel file (Gantt, KPI): one entry per worksheet, in workbook order. */
+export interface WorkbookPreview {
+  sheets: SheetPreview[];
 }
 
 /** GET /preview/{requestId} */
 export interface PreviewResponse {
   info: { html: string };
-  gantt: TablePreview;
-  kpi: TablePreview;
+  gantt: WorkbookPreview;
+  kpi: WorkbookPreview;
 }
 
 /** Error body returned by the API on 4xx/5xx. */

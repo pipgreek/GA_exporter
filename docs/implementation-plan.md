@@ -8,7 +8,7 @@ Web εργαλείο που παίρνει ένα **Grant Agreement PDF**, το 
 2. **Gantt Chart** (Excel) — χρονοδιάγραμμα WPs/Tasks/Deliverables/Milestones
 3. **KPI Monitoring** (Excel) — δείκτες παρακολούθησης ανά κατηγορία/μήνα
 
-Ο χρήστης ανεβάζει το PDF, βλέπει read-only preview των 3 αρχείων, κάνει confirm, και κατεβάζει (μεμονωμένα ή σε .zip). **Χωρίς inline editing, χωρίς login/ιστορικό, χωρίς database.**
+Ο χρήστης ανεβάζει το PDF και, μόλις ολοκληρωθεί η επεξεργασία, βλέπει κατευθείαν τα 3 αρχεία για download (μεμονωμένα ή σε .zip), με **προαιρετικό** read-only preview για το καθένα. **Χωρίς inline editing, χωρίς login/ιστορικό, χωρίς database.**
 
 ## 2. Αρχιτεκτονική ροή
 
@@ -20,9 +20,9 @@ Upload PDF
    → validation (Zod/Pydantic) στο κάθε JSON
    → validated JSON γεμίζει προκαθορισμένο template
         (docxtemplater για Word, exceljs για Excel)
-   → ίδιο JSON τροφοδοτεί frontend preview (μία πηγή αλήθειας)
-   → Preview (read-only, expand modal 90%)
-   → Confirm → σελίδα /result → Download (μεμονωμένα ή .zip)
+   → ίδιο JSON τροφοδοτεί το frontend preview (μία πηγή αλήθειας)
+   → Κάρτες αρχείων στην αρχική σελίδα (χωρίς Confirm, χωρίς ξεχωριστή σελίδα):
+        Download (μεμονωμένα ή .zip) + προαιρετικό Preview (read-only, modal 90%)
 ```
 
 Καμία μόνιμη αποθήκευση: Redis (ephemeral status, TTL) + Supabase Storage (προσωρινά αρχεία, cleanup job).
@@ -35,7 +35,7 @@ Upload PDF
 | Styling | Tailwind CSS |
 | Upload | react-dropzone |
 | Word preview | mammoth.js (docx→HTML) + DOMPurify |
-| Excel preview | react-data-grid ή `<table>` (read-only) |
+| Excel preview | `<table>` (read-only), μία καρτέλα ανά sheet |
 | Modal | @radix-ui/react-dialog ή @headlessui/react |
 | Backend framework | Node.js/TypeScript (NestJS) |
 | Queue | BullMQ (open source) + Redis |
@@ -107,7 +107,7 @@ Upload PDF
 - [ ] Αποθήκευση παραγόμενων αρχείων στο Supabase Storage (`{requestId}/output/*`)
 
 #### H. Preview & Download endpoints
-- [ ] `GET /preview/{requestId}` — επιστρέφει `{ info: {html}, gantt: {headers, rows}, kpi: {headers, rows} }`
+- [ ] `GET /preview/{requestId}` — επιστρέφει `{ info: {html}, gantt: {sheets[]}, kpi: {sheets[]} }` (βλ. §6). Το frontend το καλεί μόνο όταν ο χρήστης ανοίξει preview.
 - [ ] `GET /download/{requestId}/{fileType}` — signed URL ή direct stream από Supabase Storage
 - [ ] `GET /download-all/{requestId}` — δημιουργία .zip (archiver) on-the-fly ή προ-δημιουργημένο
 
@@ -123,7 +123,7 @@ Upload PDF
 #### A. Setup
 - [x] Next.js project scaffold (`frontend/`)
 - [x] Tailwind CSS setup
-- [x] Βασικό routing: `/` και `/result`
+- [x] Βασικό routing: `/` (το `/result` καταργήθηκε στις 2026-09-25 — όλη η ροή γίνεται στην αρχική, βλ. C/D)
 
 #### B. Home page — upload & progress
 - [x] `UploadDropzone` component (react-dropzone, μόνο PDF, disabled μετά το upload)
@@ -131,24 +131,26 @@ Upload PDF
 - [x] Κουμπί **Start** (disabled μέχρι upload), `POST /upload` μέσω FormData
 - [x] `ProgressIndicator` component — polling `GET /status/{requestId}` (setInterval 2-3s), μηνύματα ανά status, fallback rotation μηνυμάτων, timeout 90s
 
-#### C. Preview (read-only)
-- [x] `PreviewCard` component (x3, ένα ανά τύπο αρχείου)
-- [x] `WordViewer` — mammoth HTML (από backend) + DOMPurify.sanitize + dangerouslySetInnerHTML
-- [x] `ExcelViewer` — read-only πίνακας (react-data-grid ή `<table>`) από JSON headers/rows
-- [x] `PreviewModal` (radix-ui/headlessui dialog) — expand 90%, internal scroll, close (X) επιστρέφει εκεί που ήταν
-- [x] Κουμπί **Confirm** → `router.push('/result?requestId=...')`
+> **Απόφαση 2026-09-25 (επιλογή B):** χωρίς edit, το βήμα Confirm δεν προσέφερε κάτι. Μόλις ολοκληρωθεί η επεξεργασία, τα 3 αρχεία εμφανίζονται κατευθείαν στην αρχική ως κάρτες με Download και **προαιρετικό** Preview. Η ξεχωριστή σελίδα `/result` και το Confirm καταργήθηκαν.
 
-#### D. Result page
-- [ ] 3 `DownloadCard` components (όνομα αρχείου + Download button)
+#### C. Αποτελέσματα & προαιρετικό preview (read-only)
+- [x] `FileCard` component (x3, ένα ανά τύπο αρχείου) με κουμπί **Preview**
+- [x] `WordViewer` — mammoth HTML (από backend) + DOMPurify.sanitize + dangerouslySetInnerHTML
+- [x] `ExcelViewer` — read-only `<table>` από JSON `sheets[]`, μία καρτέλα ανά sheet
+- [x] `PreviewModal` (radix-ui dialog) — expand 90%, internal scroll, close (X) επιστρέφει εκεί που ήταν
+- [x] Εμφάνιση των αρχείων κατευθείαν μετά το `done` (χωρίς Confirm)· `GET /preview` μόνο όταν ανοίξει preview
+
+#### D. Downloads (στην αρχική, στις κάρτες αρχείων)
+- [ ] Κουμπί **Download** σε κάθε `FileCard` (όνομα αρχείου + Download)
 - [ ] Κουμπί **Download all (.zip)**
-- [ ] Κουμπί **Return to Home Page**
+- [ ] Κουμπί **Process another Grant Agreement** (αντικαθιστά το «Return to Home Page» — επαναφέρει την αρχική)
 
 #### E. Error states
 - [x] UI για σφάλμα upload (λάθος τύπος αρχείου)
 - [x] UI για σφάλμα processing (timeout/αποτυχία LLM μετά τα retries)
 
 #### F. Στοιχεία από το UI/UX mockup (προστέθηκε μετά το αρχικό plan)
-- [ ] Logo ViLabs → επιστροφή στην αρχική σελίδα (με confirm modal «Return to Home?» όταν υπάρχει ανεβασμένο αρχείο ή από το `/result`)
+- [ ] Logo ViLabs → επιστροφή στην αρχική σελίδα (με confirm modal «Return to Home?» όταν υπάρχει ανεβασμένο αρχείο)
 - [ ] Σελίδα **Privacy Policy** (περιεχόμενο από το mockup `docs/frontend UI UX/index.html`)
 - [ ] Link «Privacy Policy» στο footer (με confirm modal όταν υπάρχει εργασία σε εξέλιξη)
 
@@ -183,12 +185,21 @@ Upload PDF
 ```
 POST   /upload                      multipart/form-data (PDF) → { requestId }
 GET    /status/{requestId}          → { status, progress, message }
-GET    /preview/{requestId}         → { info: {html}, gantt: {headers, rows}, kpi: {headers, rows} }
+GET    /preview/{requestId}         → { info: {html}, gantt: {sheets[]}, kpi: {sheets[]} }
 GET    /download/{requestId}/{type} → file (type: info | gantt | kpi)
 GET    /download-all/{requestId}    → .zip
 ```
 
 `status` values: `scanning` → `extracting` → `analyzing` → `generating` → `done` | `error`
+
+Excel previews — ένα στοιχείο ανά sheet, με τη σειρά του workbook (συμφωνήθηκε με backend 2026-09-25):
+
+```ts
+gantt: { sheets: [{ name: string, headers: string[], rows: (string | number | null)[][] }] }
+kpi:   { sheets: [{ name: string, headers: string[], rows: (string | number | null)[][] }] }
+```
+
+Το `GET /preview` είναι **προαιρετικό** για τον χρήστη: το frontend το καλεί μόνο όταν ανοίξει το πρώτο preview (μία φορά για όλα τα αρχεία).
 
 ## 7. Ανοιχτά σημεία προς απόφαση
 

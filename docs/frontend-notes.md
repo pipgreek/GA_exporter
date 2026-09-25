@@ -7,17 +7,20 @@
 | Αρχείο | Τι περιέχει |
 |---|---|
 | [implementation-plan.md](implementation-plan.md) | Tasks frontend (§5) και το κοινό API contract με το backend (§6) |
-| `Frontend Description.docx` | Αναλυτική περιγραφή UX και τεχνικών επιλογών (hooks, polling, modal) |
-| `1.png` – `4.png` | Wireframes: αρχική, upload/progress, previews, result |
-| [frontend UI UX/index.html](frontend%20UI%20UX/index.html) | Στατικό mockup (Tailwind) — αναφορά για το τελικό design |
+| `Frontend Description.docx` | Αναλυτική περιγραφή UX και τεχνικών επιλογών (hooks, polling, modal). ⚠️ Περιγράφει ακόμα Confirm + ξεχωριστή σελίδα αποτελεσμάτων — ισχύει η απόφαση 6. |
+| `1.png` – `4.png` | Wireframes: αρχική, upload/progress, previews, result. ⚠️ Τα `3.png`/`4.png` δείχνουν τη ροή πριν την απόφαση 6. |
+| [frontend UI UX/index.html](frontend%20UI%20UX/index.html) | Στατικό mockup (Tailwind) — αναφορά για το design. ⚠️ Η ροή Confirm → result page του mockup αντικαταστάθηκε από την απόφαση 6. |
 
 ## Τι πρέπει να υλοποιηθεί
 
-1. **`/` — Upload:** dropzone μόνο για PDF, κλειδώνει μετά το upload· μικρογραφία αρχείου με «Χ» (ξεκλειδώνει)· **Start** disabled μέχρι upload → `POST /upload` (FormData).
+Όλη η ροή γίνεται στην αρχική σελίδα `/` (απόφαση 6):
+
+1. **Upload:** dropzone μόνο για PDF, κλειδώνει μετά το upload· μικρογραφία αρχείου με «Χ» (ξεκλειδώνει)· **Start** disabled μέχρι upload → `POST /upload` (FormData).
 2. **Progress:** polling `GET /status/{requestId}` ανά 2–3", progress bar + μήνυμα ανά status, fallback rotation μηνυμάτων όταν το status δεν αλλάζει, timeout 90".
-3. **Preview:** 3 κάρτες (INFO/Word, Gantt/Excel, KPI/Excel) κάτω από το upload χωρίς να καθαρίζει η οθόνη. Word = HTML από backend + `DOMPurify.sanitize`· Excel = read-only πίνακας από `{headers, rows}`. Modal 90% με εσωτερικό scroll και «Χ».
-4. **Confirm** → `/result?requestId=...`: 3 κάρτες με Download, **Download all (.zip)**, **Return to Home Page**.
-5. **Error states:** λάθος τύπος αρχείου, αποτυχία/timeout επεξεργασίας.
+3. **Αρχεία:** μόλις έρθει `done`, εμφανίζονται κατευθείαν 3 κάρτες (INFO/Word, Gantt/Excel, KPI/Excel) κάτω από το upload, χωρίς να καθαρίζει η οθόνη. Κάθε κάρτα έχει **Download** και **Preview**.
+4. **Preview (προαιρετικό, read-only):** modal 90% με εσωτερικό scroll και «Χ». Word = HTML από backend + `DOMPurify.sanitize`· Excel = read-only πίνακας, μία καρτέλα ανά sheet. Το `GET /preview` καλείται μόνο στο πρώτο άνοιγμα.
+5. **Downloads:** Download ανά αρχείο, **Download all (.zip)**, **Process another Grant Agreement**.
+6. **Error states:** λάθος τύπος αρχείου, αποτυχία/timeout επεξεργασίας, αποτυχία φόρτωσης preview (Retry).
 
 Μέχρι να είναι έτοιμο το backend, το frontend δουλεύει με **mock data** πάνω στο contract του §6.
 
@@ -33,8 +36,10 @@ Logo ViLabs (επιστροφή στην αρχική), animated background, toa
 |---|---|---|
 | 1 | Edit mode (μολυβάκι) | **Αφαιρείται.** Τα previews είναι αυστηρά read-only, όπως ορίζει το plan. Κανένα εικονίδιο/λειτουργία επεξεργασίας. (Αφαιρέθηκε και από το docx / `3.png` στη V1.) |
 | 2 | Ονόματα status | **Όπως το plan (§6):** `scanning` → `extracting` → `analyzing` → `generating` → `done` \| `error`. (Διορθώθηκε και στο docx.) |
-| 3 | Result page | **Ξεχωριστό route `/result?requestId=...`**, με το design του mockup. |
+| 3 | Result page | ~~Ξεχωριστό route `/result?requestId=...`~~ → **αντικαταστάθηκε από την απόφαση 6** (δεν υπάρχει πια `/result`). |
 | 4 | Logo | **Μετονομάστηκε σε `vilabs-logo.png`** (lowercase, ταιριάζει με το mockup, ασφαλές σε case-sensitive hosting όπως το Vercel). |
+| 5 | Excel previews με πολλά sheets | **Συμφωνήθηκε με το backend:** `gantt`/`kpi` = `{ sheets: [{ name, headers, rows }] }`, με τη σειρά του workbook. Το `ExcelViewer` δείχνει μία καρτέλα ανά sheet. |
+| 6 | Ροή αποτελεσμάτων (επιλογή **B**) | Αφού δεν υπάρχει edit, το Confirm δεν προσέφερε κάτι. Μόλις έρθει `done`, τα 3 αρχεία εμφανίζονται **κατευθείαν στην αρχική** ως κάρτες με **Download** + **προαιρετικό Preview**. Καταργήθηκαν το Confirm και η σελίδα `/result`· το «Return to Home Page» γίνεται «Process another Grant Agreement». |
 
 Αντιστοίχιση status → μήνυμα UI:
 
@@ -43,8 +48,8 @@ Logo ViLabs (επιστροφή στην αρχική), animated background, toa
 | `scanning` | Scanning Grant Agreement... |
 | `extracting` | Extracting text and structure... |
 | `analyzing` | Analyzing Work Packages and KPIs... |
-| `generating` | Generating previews... |
-| `done` | Previews generated successfully. |
+| `generating` | Generating files... |
+| `done` | Files generated successfully. |
 | `error` | Error state (βλ. Error states) |
 
 ## Mock backend (μέχρι να στηθεί το πραγματικό)
@@ -54,20 +59,33 @@ Logo ViLabs (επιστροφή στην αρχική), animated background, toa
 - `NEXT_PUBLIC_API_URL` κενό → mock (`/api/mock/*`)
 - `NEXT_PUBLIC_API_URL=<url backend>` → πραγματικό backend, **χωρίς αλλαγή κώδικα**
 
-Σενάρια (από το όνομα του PDF): κανονικό (~15"), `error` (αποτυχία στο `analyzing`), `slow` (κολλάει στο `analyzing` → έλεγχος timeout 90"). Λεπτομέρειες στο `frontend/README.md`.
+Σενάρια (από το όνομα του PDF): κανονικό (~15"), `error` (αποτυχία στο `analyzing`), `slow` (κολλάει στο `analyzing` → έλεγχος timeout 90"), `preview-error` (το preview αποτυγχάνει τα πρώτα 20"). Λεπτομέρειες στο `frontend/README.md`.
 
 ## Προς επιβεβαίωση με το backend
 
 Υποθέσεις που κάναμε στο `frontend/src/lib/api/types.ts` επειδή το §6 δεν τις ορίζει:
 
 - Όνομα πεδίου του PDF στο `POST /upload`: `file`.
-- `rows` των Excel previews: πίνακας γραμμών με τιμές `string | number | null`.
+- ~~Μορφή Excel previews~~ → **συμφωνήθηκε** (απόφαση 5).
+- Ονόματα αρχείων για τις κάρτες/downloads (π.χ. `files: [{ type, fileName }]` στο `done`, ή σταθερά ονόματα).
+- Downloads: `Content-Disposition: attachment; filename="..."` (το `<a download>` αγνοείται σε άλλο domain).
 - Σφάλματα: HTTP 4xx/5xx με σώμα `{ message }`.
 - CORS: το backend πρέπει να επιτρέπει το origin του frontend (Vercel + `localhost:3000`).
 
 ## Ημερολόγιο προόδου
 
 Νεότερα πάνω. Ενημερώνεται μετά από κάθε ολοκληρωμένο βήμα.
+
+### 2026-09-25 — Αποφάσεις 5 & 6: πολλά sheets + επιλογή B ✅
+- **Πολλά sheets (απόφαση 5):** νέοι τύποι `SheetPreview` / `WorkbookPreview` (`types.ts`), mock με sheets όπως τα δείγματα (Gantt: M1-M36 Overview / Deliverables' List / Milestones' List · KPI: Online Channels / Publications / Events Count), `ExcelViewer` με καρτέλες (κλικ + βελάκια πληκτρολογίου).
+- **Επιλογή B (απόφαση 6):** νέο `ResultsSection` + `FileCard` (αντί για `PreviewSection` + `PreviewCard`). Μετά το `done`: banner «Your analysis is complete…» + 3 κάρτες με **Preview**. Το preview φορτώνεται μόνο στο πρώτο άνοιγμα (1 κλήση για όλα), με loading / σφάλμα + Retry μέσα στο modal.
+- Καταργήθηκαν: κουμπί Confirm, σελίδα `src/app/result`, `PreviewCard`, `PreviewSection`.
+- Μηνύματα: «Generating files...» / «Files generated successfully.» (αντί για «previews»). Κείμενο οδηγού βήμα 3 ενημερώθηκε.
+- Κοινός ορισμός των 3 αρχείων: `src/lib/files.ts`.
+- Ενημερώθηκαν: `implementation-plan.md` (§1, §2, §3, backend H, frontend A/C/D/F, §6), αυτό το αρχείο, `frontend/README.md`.
+- Δοκιμασμένα στον browser: κάρτες μετά το `done`, καμία κλήση `/preview` πριν το Preview, καρτέλες sheets (κλικ/βελάκια/wrap), 1 κλήση για όλα τα previews, σφάλμα + Retry στο modal. Lint + build καθαρά.
+- **Δεν άλλαξαν** (αρχικά έγγραφα προδιαγραφών): `Frontend Description.docx`, `3.png`/`4.png`, mockup `index.html` — σημειώθηκαν με ⚠️ στις «Πηγές».
+- **Επόμενο βήμα:** D — Download ανά κάρτα, Download all (.zip), Process another Grant Agreement (+ mock download endpoints).
 
 ### 2026-09-25 — Βήμα C: Preview (read-only) ✅
 - `PreviewSection`: φορτώνει `GET /preview/{id}` όταν έρθει `done`, κάτω από το upload (χωρίς να καθαρίζει η οθόνη). Skeleton κατά τη φόρτωση, μήνυμα σφάλματος + **Retry** αν αποτύχει.

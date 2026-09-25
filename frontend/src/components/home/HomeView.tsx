@@ -3,7 +3,7 @@
 import { LoaderCircle, TriangleAlert } from "lucide-react";
 import { useRef, useState } from "react";
 import { HomeIntro } from "@/components/home/HomeIntro";
-import { PreviewSection } from "@/components/preview/PreviewSection";
+import { ResultsSection } from "@/components/results/ResultsSection";
 import { ProgressIndicator } from "@/components/progress/ProgressIndicator";
 import { ConfirmDialog } from "@/components/ui/ConfirmDialog";
 import { Toaster, useToasts } from "@/components/ui/Toaster";
@@ -15,7 +15,7 @@ import { ApiError, uploadGrantAgreement } from "@/lib/api/client";
  * idle       → no processing started (file may or may not be selected)
  * uploading  → POST /upload in flight
  * processing → polling /status
- * done       → previews ready (step C renders them below)
+ * done       → files ready: ResultsSection (cards + optional preview)
  * failed     → upload or processing failed; Start becomes "Try again"
  */
 type Phase = "idle" | "uploading" | "processing" | "done" | "failed";
@@ -95,7 +95,7 @@ export function HomeView() {
       )}
 
       {requestId && phase === "done" && (
-        <PreviewSection key={`preview-${requestId}`} requestId={requestId} />
+        <ResultsSection key={`results-${requestId}`} requestId={requestId} />
       )}
 
       <ConfirmDialog

@@ -5,8 +5,8 @@ export const STATUS_MESSAGES: Record<ProcessingStatus, string> = {
   scanning: "Scanning Grant Agreement...",
   extracting: "Extracting text and structure...",
   analyzing: "Analyzing Work Packages and KPIs...",
-  generating: "Generating previews...",
-  done: "Previews generated successfully.",
+  generating: "Generating files...",
+  done: "Files generated successfully.",
   error: "Something went wrong while processing your Grant Agreement.",
 };
 

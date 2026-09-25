@@ -11,7 +11,7 @@ const STEPS = [
   },
   {
     title: "Export Results",
-    text: "Review the preview cards and download your ready-to-use files.",
+    text: "Download your ready-to-use files, with an optional quick preview of each one.",
   },
 ];
 
