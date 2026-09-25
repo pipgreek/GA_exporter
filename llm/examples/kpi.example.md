@@ -52,30 +52,42 @@ Table 5 Communication and Dissemination Indicators
   "totalMonths": 24,
   "categories": [
     {
-      "name": "Expected Outcome #1 — Increase knowledge on experimentation frameworks",
-      "kpis": [
-        { "label": "Reports on experimentation findings including regulatory barriers", "target": "10", "achieved": 0, "monthlyValues": [null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null] },
-        { "label": "Innovators benefited from the experimentation services", "target": "10", "achieved": 0, "monthlyValues": [null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null] },
-        { "label": "Tailored Training Programs (1 for LLs and 1 for Innovators)", "target": "2", "achieved": 0, "monthlyValues": [null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null] },
-        { "label": "LLs and innovators benefited from the trainings", "target": "30 LLs and 18 innovators", "achieved": 0, "monthlyValues": [null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null] }
+      "name": "EXPECTED OUTCOME #1",
+      "groups": [
+        {
+          "kpis": [
+            { "label": "Reports on experimentation findings including regulatory barriers", "target": "10", "achieved": 0, "monthlyValues": [null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null] },
+            { "label": "Innovators benefited from the experimentation services", "target": "10", "achieved": 0, "monthlyValues": [null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null] },
+            { "label": "Tailored Training Programs (1 for LLs and 1 for Innovators)", "target": "2", "achieved": 0, "monthlyValues": [null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null] },
+            { "label": "LLs and innovators benefited from the trainings", "target": "30 LLs and 18 innovators", "achieved": 0, "monthlyValues": [null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null] }
+          ]
+        }
       ]
     },
     {
       "name": "Social Media",
-      "kpis": [
-        { "label": "LinkedIn followers", "target": "+600", "achieved": 0, "monthlyValues": [null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null] },
-        { "label": "X followers", "target": "+600", "achieved": 0, "monthlyValues": [null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null] },
-        { "label": "FB followers", "target": "+350", "achieved": 0, "monthlyValues": [null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null] },
-        { "label": "YouTube followers", "target": "+150", "achieved": 0, "monthlyValues": [null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null] },
-        { "label": "Impressions (monthly)", "target": "+3000", "achieved": 0, "monthlyValues": [null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null] }
+      "groups": [
+        {
+          "kpis": [
+            { "label": "LinkedIn followers", "target": "+600", "achieved": 0, "monthlyValues": [null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null] },
+            { "label": "X followers", "target": "+600", "achieved": 0, "monthlyValues": [null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null] },
+            { "label": "FB followers", "target": "+350", "achieved": 0, "monthlyValues": [null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null] },
+            { "label": "YouTube followers", "target": "+150", "achieved": 0, "monthlyValues": [null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null] },
+            { "label": "Impressions (monthly)", "target": "+3000", "achieved": 0, "monthlyValues": [null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null] }
+          ]
+        }
       ]
     },
     {
       "name": "Website",
-      "kpis": [
-        { "label": "Monthly unique visitors", "target": "+500", "achieved": 0, "monthlyValues": [null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null] },
-        { "label": "Monthly recurrent visitors", "target": "+600", "achieved": 0, "monthlyValues": [null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null] },
-        { "label": "Monthly pageviews", "target": "+1000", "achieved": 0, "monthlyValues": [null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null] }
+      "groups": [
+        {
+          "kpis": [
+            { "label": "Monthly unique visitors", "target": "+500", "achieved": 0, "monthlyValues": [null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null] },
+            { "label": "Monthly recurrent visitors", "target": "+600", "achieved": 0, "monthlyValues": [null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null] },
+            { "label": "Monthly pageviews", "target": "+1000", "achieved": 0, "monthlyValues": [null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null] }
+          ]
+        }
       ]
     }
   ]
@@ -88,13 +100,17 @@ Table 5 Communication and Dissemination Indicators
   EVOLVE2CARE GA doesn't use bracket codes for indicators at all (that convention was
   observed in the *VIGILANCE* live KPI workbook, a different project). `code` is
   correctly omitted on every KPI above. Confirms `code` must stay optional in the schema.
-- `Expected Outcome #1`'s four scale bullets are **one comma/semicolon-separated
+- `EXPECTED OUTCOME #1`'s four scale bullets are **one comma/semicolon-separated
   sentence** in the source text, not a table — the LLM has to split it into four
   separate KPI rows itself. This is exactly the kind of judgment call worth checking
   once this is run against the live API (does the model split it the same way twice in
   a row? does it split on the right boundaries for a differently-punctuated GA?).
-- Category naming ("Expected Outcome #1 — ...") is a free-text judgment call by the LLM,
-  per the prompt's "group indicators the way the GA groups them" instruction — a second
-  run isn't guaranteed to produce byte-identical category names. If the backend needs
-  stable category identity across regenerations, this needs a stricter rule (e.g. "use
-  the GA's own heading verbatim as the category name").
+- **Category naming is now the GA's own heading, copied verbatim** (`"EXPECTED OUTCOME #1"`,
+  not a paraphrased `"Expected Outcome #1 — Increase knowledge on..."`) — this is required
+  so re-running extraction on the same GA produces identical category names across runs.
+- **`groups[]` is the nesting level for bracket-coded sub-headings** (e.g. a hypothetical
+  `"[C6.1]Twitter"` sub-section under a "Social Media" category, as seen in the *VIGILANCE*
+  workbook). None of the three categories here have that kind of internal sub-heading, so
+  each has exactly one group with no `label` — the flat list of kpis is still reachable at
+  `categories[].groups[0].kpis[]`, just always through a group wrapper for structural
+  consistency with categories that *do* have real sub-headings.

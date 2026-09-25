@@ -56,6 +56,22 @@ on the backend, and the template-filling engine (docxtemplater / exceljs).
    required-field failure, a retry should only ever be triggered by a genuine schema
    violation (wrong type, malformed id pattern, invalid enum) — not by the GA simply
    lacking some piece of info. That distinction is what makes the retry worth doing.
+8. **A Gantt task can be active in disjoint month ranges** (e.g. the real EVOLVE2CARE GA's
+   T1.1: `"[M1-M4, M19-M24]"`). `gantt.schema.json` gives every task a `phases: [{monthFrom,
+   monthTo}, ...]` array instead of a single `monthFrom`/`monthTo` pair, so a gap in the
+   middle is representable as two phases rather than forcing one span that wrongly covers
+   months the task isn't actually active in.
+9. **KPI category (and group) names must be the GA's own heading, copied verbatim**
+   (e.g. `"EXPECTED OUTCOME #1"`, not a paraphrase like `"Increase knowledge on..."`).
+   This is what makes category identity stable across repeated extractions of the same
+   Grant Agreement — required for the backend/frontend to treat two runs' categories as
+   "the same category" rather than re-diffing free text every time.
+10. **KPIs nest under `categories[].groups[].kpis[]`**, not a flat `categories[].kpis[]`.
+    A `group` mirrors a real sub-heading in the source (e.g. a bracket-coded
+    `"[C6.1]Twitter"` block, as seen in the VIGILANCE workbook) and carries an optional
+    `label` for it. A category with no natural sub-grouping (most Expected-Outcome-style
+    blocks) still gets exactly one group, just with no `label` — so the shape is uniform
+    even though real GAs vary in how deep their indicator sections nest.
 
 ## Open points (need decision before backend/frontend lock the contract)
 
@@ -64,11 +80,14 @@ on the backend, and the template-filling engine (docxtemplater / exceljs).
 - Whether `deliverables[].type` / `disseminationLevel` enums need more values than the
   ones observed across the two sample GAs (`R`, `DEC`, `DMP`, `ETHICS`, `OTHER` /
   `PU`, `SEN`, `EU-R`, `EU-C`, `EU-S`).
-- Whether KPI `groupLabel` should instead be a nested `groups[]` array (one level of
-  grouping under each category) rather than a flat `kpis[]` with a repeated label —
-  flat was chosen to stay a 1:1 match with `categories[{name, kpis[]}]` already agreed
-  in `docs/implementation-plan.md`, but nested reads closer to the actual sheets.
-- Whether the frontend's generic preview shape `{ sheets: [{ name, headers, rows }] }`
-  should be produced by a small backend transform on top of `gantt.schema.json` /
-  `kpi.schema.json` (recommended — keeps one source of truth) or whether the LLM should
-  emit both shapes.
+
+## Resolved
+
+- ~~Whether KPI `groupLabel` should instead be a nested `groups[]` array~~ — resolved,
+  see design decision 10 above.
+- ~~Whether category names should be free-text or the GA's verbatim heading~~ — resolved,
+  see design decision 9 above.
+- ~~Non-contiguous task month ranges~~ — resolved, see design decision 8 above.
+- ~~Who produces the frontend's generic preview shape~~ — resolved: a backend transform
+  on top of the already-validated JSON, not the LLM. See [`preview-mapping.md`](preview-mapping.md)
+  for the exact mapping spec.

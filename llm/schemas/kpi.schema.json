@@ -16,49 +16,63 @@
     "categories": {
       "type": "array",
       "minItems": 1,
-      "description": "One category per KPI Excel sheet/tab, e.g. 'Online Channels', 'Events Count', 'Media and Videos', 'Stakeholder Engagement'.",
+      "description": "One category per KPI Excel sheet/tab.",
       "items": {
         "type": "object",
-        "required": ["name", "kpis"],
+        "required": ["name", "groups"],
         "properties": {
-          "name": { "type": "string" },
-          "kpis": {
+          "name": {
+            "type": "string",
+            "description": "Must be the Grant Agreement's own heading/label for this indicator block, copied verbatim (e.g. 'EXPECTED OUTCOME #1', or the 'TOOL' column value from a Communication and Dissemination Indicators table such as 'Social Media', 'Website'). Do not paraphrase, summarize or invent a friendlier name — re-running extraction on the same GA text must produce the same category names, so downstream consumers (backend, frontend, repeated regenerations) can rely on category identity being stable."
+          },
+          "groups": {
             "type": "array",
             "minItems": 1,
+            "description": "One or more sub-groupings of KPIs within this category, mirroring the GA/template's own nesting (e.g. a '[C6.1]Twitter' bracket-coded sub-heading with its own rows below it). When the category has no natural sub-grouping (e.g. a flat list of 'Scale:' bullet points under one Expected Outcome), return a single group with no 'label'.",
             "items": {
               "type": "object",
-              "required": ["label", "target"],
+              "required": ["kpis"],
               "properties": {
-                "code": {
-                  "type": "string",
-                  "description": "GA impact-indicator bracket code this KPI traces back to, e.g. '[C6.1]', '[D1]'. Optional — not every KPI row has one in the GA."
-                },
-                "groupLabel": {
-                  "type": "string",
-                  "description": "The bracketed group heading this KPI is nested under in the sheet (e.g. '[C6.1]Twitter'), used to render the merged section header cell. Omit for ungrouped KPIs."
-                },
                 "label": {
                   "type": "string",
-                  "description": "The metric name, e.g. 'Followers', 'Pageviews', '1 Rollup'."
+                  "description": "The bracketed/verbatim sub-heading this group of KPIs is nested under (e.g. '[C6.1]Twitter'), copied the same way as categories[].name. Omit entirely for an ungrouped category's single implicit group."
                 },
-                "target": {
-                  "type": "string",
-                  "default": "tbd",
-                  "description": "Target as stated in the GA — kept as free text since targets are often qualitative/compound (e.g. '>1000 followers', 'Y1: >1500 entries'). 'tbd' if this indicator is named but no numeric/qualitative target is stated."
-                },
-                "unit": {
-                  "type": "string",
-                  "description": "Optional normalized unit if the target is a plain count, e.g. 'count', 'minutes'."
-                },
-                "achieved": {
-                  "type": "number",
-                  "default": 0,
-                  "description": "Running total; always 0 at generation time, computed later from monthlyValues."
-                },
-                "monthlyValues": {
+                "kpis": {
                   "type": "array",
-                  "description": "One entry per month of totalMonths, initialized to null; filled in by the project team during monitoring.",
-                  "items": { "type": ["number", "null"] }
+                  "minItems": 1,
+                  "items": {
+                    "type": "object",
+                    "required": ["label", "target"],
+                    "properties": {
+                      "code": {
+                        "type": "string",
+                        "description": "GA impact-indicator bracket code this KPI traces back to, e.g. '[C6.1]', '[D1]'. Optional — not every KPI row has one in the GA."
+                      },
+                      "label": {
+                        "type": "string",
+                        "description": "The metric name, e.g. 'Followers', 'Pageviews', '1 Rollup'."
+                      },
+                      "target": {
+                        "type": "string",
+                        "default": "tbd",
+                        "description": "Target as stated in the GA — kept as free text since targets are often qualitative/compound (e.g. '>1000 followers', 'Y1: >1500 entries'). 'tbd' if this indicator is named but no numeric/qualitative target is stated."
+                      },
+                      "unit": {
+                        "type": "string",
+                        "description": "Optional normalized unit if the target is a plain count, e.g. 'count', 'minutes'."
+                      },
+                      "achieved": {
+                        "type": "number",
+                        "default": 0,
+                        "description": "Running total; always 0 at generation time, computed later from monthlyValues."
+                      },
+                      "monthlyValues": {
+                        "type": "array",
+                        "description": "One entry per month of totalMonths, initialized to null; filled in by the project team during monitoring.",
+                        "items": { "type": ["number", "null"] }
+                      }
+                    }
+                  }
                 }
               }
             }

@@ -24,6 +24,9 @@ Project duration: 24 months
 | WP1 | EVOLVE2CARE experimentation space framework | AUTH | 24.50 | 1 | 24 |
 | WP2 | Matching AccelUP Experimentation Space and Services with Innovators and Researchers | AUTH | 66.50 | 2 | 24 |
 
+### Work package WP1
+T1.1. Drivers and Barriers for the development of innovations [M1-M4, M19-M24] | Leader: Sploro
+
 ### Work package WP2
 T2.1. EVOLVE2CARE Experimentation Space infrastructure [M7-M24] Leader: AUTH
 T2.2. LLs, Innovators and Researchers Scouting and selection [M2-M12] Leader: Sploro
@@ -69,17 +72,19 @@ T2.4 Training Program for Innovators and Researchers [M4-M14] Leader: AV
       "id": "WP1", "name": "EVOLVE2CARE experimentation space framework",
       "lead": "AUTH", "monthFrom": 1, "monthTo": 24,
       "milestoneIds": ["MS1"],
-      "tasks": []
+      "tasks": [
+        { "id": "T1.1", "name": "Drivers and Barriers for the development of innovations", "phases": [{ "monthFrom": 1, "monthTo": 4 }, { "monthFrom": 19, "monthTo": 24 }] }
+      ]
     },
     {
       "id": "WP2", "name": "Matching AccelUP Experimentation Space and Services with Innovators and Researchers",
       "lead": "AUTH", "monthFrom": 2, "monthTo": 24,
       "milestoneIds": ["MS2", "MS3"],
       "tasks": [
-        { "id": "T2.1", "name": "EVOLVE2CARE Experimentation Space infrastructure", "monthFrom": 7, "monthTo": 24 },
-        { "id": "T2.2", "name": "LLs, Innovators and Researchers Scouting and selection", "monthFrom": 2, "monthTo": 12 },
-        { "id": "T2.3", "name": "Training Program for Living Labs", "monthFrom": 4, "monthTo": 14 },
-        { "id": "T2.4", "name": "Training Program for Innovators and Researchers", "monthFrom": 4, "monthTo": 14 }
+        { "id": "T2.1", "name": "EVOLVE2CARE Experimentation Space infrastructure", "phases": [{ "monthFrom": 7, "monthTo": 24 }] },
+        { "id": "T2.2", "name": "LLs, Innovators and Researchers Scouting and selection", "phases": [{ "monthFrom": 2, "monthTo": 12 }] },
+        { "id": "T2.3", "name": "Training Program for Living Labs", "phases": [{ "monthFrom": 4, "monthTo": 14 }] },
+        { "id": "T2.4", "name": "Training Program for Innovators and Researchers", "phases": [{ "monthFrom": 4, "monthTo": 14 }] }
       ]
     }
   ],
@@ -107,12 +112,10 @@ T2.4 Training Program for Innovators and Researchers [M4-M14] Leader: AV
 ## Notes / known gap this example exposes
 
 - **T1.1 in the real GA has a non-contiguous month range** ("Drivers and Barriers...
-  [M1-M4, M19-M24]" — two separate phases with a gap). `gantt.schema.json` only supports
-  one `monthFrom`/`monthTo` pair per task, so this task was deliberately left out of the
-  worked example rather than papered over. Either the schema needs a `phases[]` array per
-  task, or the prompt should instruct the LLM to collapse a split range to its overall
-  min/max (losing the gap) — **decision needed before this is genuinely "final"**; see
-  `llm/schemas/README.md` open points.
+  [M1-M4, M19-M24]" — two separate phases with a gap). Resolved: `gantt.schema.json`
+  now gives every task a `phases[]` array (≥1 entries) instead of a single
+  `monthFrom`/`monthTo` pair, so T1.1 is represented as two phases and the render engine
+  draws two separate bar segments rather than one bar spanning the gap it isn't active in.
 - Milestone IDs in the source table are bare numbers (`1`, `2`, `3`); the prompt/schema
   expect the `MS`-prefixed form (`MS1`) to match how they're referenced elsewhere in the
   GA (e.g. `WP1`'s row, `meansOfVerification: "D1.3(v1)"`) and in the Gantt template's own

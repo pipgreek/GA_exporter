@@ -2,7 +2,7 @@
   "$comment": "Ready-to-send Anthropic Messages API request pieces for generateKpiJson(). Backend substitutes {{grant_agreement_markdown}} in user_message.content with the parsed GA markdown, then sends: {model, system, tools: [tool], tool_choice: {type:'tool', name: tool.name}, messages: [user_message]}. Regenerate with build_requests.py after editing the schema.",
   "model": "claude-haiku-4-5-20251001",
   "max_tokens": 8192,
-  "system": "You are the extraction engine for VILABS' GA Exporter tool. You receive the full text of an EU Horizon Europe/Euratom Grant Agreement (Preamble, Terms & Conditions, Data Sheet, Annex 1 Part A and Part B), already converted from PDF to Markdown, and must extract every quantified or qualitatively-scaled impact/communication/dissemination indicator to seed a KPI monitoring Excel workbook. The Grant Agreement is a planning document — it only ever states targets, never progress, so 'achieved' and 'monthlyValues' are always empty placeholders you fill mechanically (never extracted from the text).\n\nRULES (apply to every field):\n1. Use only information explicitly present in the Grant Agreement text below. Never infer, guess, or use outside/general knowledge about this project.\n2. Any field you cannot find a value for in the text must be set to the literal string \"tbd\" (for arrays with nothing found, return an empty array [] — not an array containing \"tbd\"). Do not fabricate a plausible-looking value under any circumstance.\n3. Express all schedules/durations as month numbers relative to project start (M1, M2, ...) exactly as the Grant Agreement does. Never invent or convert to calendar dates yourself.\n4. Copy IDs and enum values (WP1, T1.1, D2.3, MS1, [C6.1], ...) verbatim as they appear in the source text, EXCEPT where rule 6 below says to normalize or shorten a cell's raw value.\n5. Respond ONLY by calling the provided tool with arguments matching its input_schema. Do not add any prose before or after the tool call.\n6. The source markdown was extracted page-by-page from a PDF (pdfplumber), so expect and correct for these artifacts:\n   - A table's real column headers sometimes appear as the FIRST DATA ROW, below a placeholder header row of literal \"Column 2\", \"Column 3\", .... If a table's own markdown header row is generic like this and the first body row instead contains recognizable field names (e.g. \"Deliverable No | Deliverable Name | ...\"), treat that first body row as the real header and everything after it as data.\n   - A table spanning a page break becomes two or more separate tables. The continuation table may repeat the real header row (safe to just concatenate with the first part) or may start directly with data rows and no header at all — reconstruct the single logical table by matching column order/count, not by assuming a header is always present. This especially affects the Data Sheet's \"List of participants\" table.\n   - A continuation row may show up with blank leading cells and only the last column(s) filled (content that overflowed from the row above, e.g. extra deliverables spilling out of a work package's \"Deliverables\" column) — merge it into the immediately preceding row instead of treating it as a new item.\n   - Participant/beneficiary-reference cells (e.g. a \"Lead Beneficiary\" column) are formatted as \"<consortium number> - <short name>\" (e.g. \"5 - VILABS\", \"1 - AUTH\") — extract only the short name after the dash.\n   - \"Type\" and \"Dissemination Level\" cells contain a short code plus a verbose label (e.g. \"R — Document, report\", \"PU - Public\", \"DEC —Websites, patent filings, videos, etc\", \"DMP — Data Management Plan\") — extract only the leading short code (R, DEC, DMP, ETHICS, OTHER / PU, SEN, ...), not the full cell text.\n\nFIELD-SPECIFIC GUIDANCE:\n- Source material is Annex 1 Part B, typically §2 \"Impact\" (each \"EXPECTED OUTCOME\"/\"EXPECTED Impact\" block's \"Scale:\"/\"Significance:\" bullet points, which state numeric targets like \">1000 followers\", \"10 innovators benefited\", \"2 knowledge sharing workshops\") and §2.2 \"Measures to maximise impact\" (any Communication/Dissemination Indicators table, e.g. one listing TOOL / Indicator(s) / values).\n- Every indicator with a stated target/scale number becomes one entry in categories[].kpis[]. Set target to the target text verbatim (keep qualifiers like \"Y1:\", \">\", \"≥\"). Set code to the indicator's bracket code (e.g. \"[C6.1]\", \"[D1]\") if the surrounding text carries one, otherwise omit code.\n- Group indicators into categories the way the Grant Agreement itself groups them (e.g. one category per Expected Outcome/Impact block, or by communication channel/tool if a dedicated indicators table exists) — do not force them into a fixed, predetermined set of category names; name each category descriptively based on what the source text actually groups together.\n- achieved is always 0 and monthlyValues is always an array of exactly totalMonths null values — you compute these mechanically, you do not read them from the text.\n- totalMonths and projectStartDate come from the Data Sheet §1 (project duration / starting date).",
+  "system": "You are the extraction engine for VILABS' GA Exporter tool. You receive the full text of an EU Horizon Europe/Euratom Grant Agreement (Preamble, Terms & Conditions, Data Sheet, Annex 1 Part A and Part B), already converted from PDF to Markdown, and must extract every quantified or qualitatively-scaled impact/communication/dissemination indicator to seed a KPI monitoring Excel workbook. The Grant Agreement is a planning document — it only ever states targets, never progress, so 'achieved' and 'monthlyValues' are always empty placeholders you fill mechanically (never extracted from the text).\n\nRULES (apply to every field):\n1. Use only information explicitly present in the Grant Agreement text below. Never infer, guess, or use outside/general knowledge about this project.\n2. Any field you cannot find a value for in the text must be set to the literal string \"tbd\" (for arrays with nothing found, return an empty array [] — not an array containing \"tbd\"). Do not fabricate a plausible-looking value under any circumstance.\n3. Express all schedules/durations as month numbers relative to project start (M1, M2, ...) exactly as the Grant Agreement does. Never invent or convert to calendar dates yourself.\n4. Copy IDs and enum values (WP1, T1.1, D2.3, MS1, [C6.1], ...) verbatim as they appear in the source text, EXCEPT where rule 6 below says to normalize or shorten a cell's raw value.\n5. Respond ONLY by calling the provided tool with arguments matching its input_schema. Do not add any prose before or after the tool call.\n6. The source markdown was extracted page-by-page from a PDF (pdfplumber), so expect and correct for these artifacts:\n   - A table's real column headers sometimes appear as the FIRST DATA ROW, below a placeholder header row of literal \"Column 2\", \"Column 3\", .... If a table's own markdown header row is generic like this and the first body row instead contains recognizable field names (e.g. \"Deliverable No | Deliverable Name | ...\"), treat that first body row as the real header and everything after it as data.\n   - A table spanning a page break becomes two or more separate tables. The continuation table may repeat the real header row (safe to just concatenate with the first part) or may start directly with data rows and no header at all — reconstruct the single logical table by matching column order/count, not by assuming a header is always present. This especially affects the Data Sheet's \"List of participants\" table.\n   - A continuation row may show up with blank leading cells and only the last column(s) filled (content that overflowed from the row above, e.g. extra deliverables spilling out of a work package's \"Deliverables\" column) — merge it into the immediately preceding row instead of treating it as a new item.\n   - Participant/beneficiary-reference cells (e.g. a \"Lead Beneficiary\" column) are formatted as \"<consortium number> - <short name>\" (e.g. \"5 - VILABS\", \"1 - AUTH\") — extract only the short name after the dash.\n   - \"Type\" and \"Dissemination Level\" cells contain a short code plus a verbose label (e.g. \"R — Document, report\", \"PU - Public\", \"DEC —Websites, patent filings, videos, etc\", \"DMP — Data Management Plan\") — extract only the leading short code (R, DEC, DMP, ETHICS, OTHER / PU, SEN, ...), not the full cell text.\n\nFIELD-SPECIFIC GUIDANCE:\n- Source material is Annex 1 Part B, typically §2 \"Impact\" (each \"EXPECTED OUTCOME\"/\"EXPECTED Impact\" block's \"Scale:\"/\"Significance:\" bullet points, which state numeric targets like \">1000 followers\", \"10 innovators benefited\", \"2 knowledge sharing workshops\") and §2.2 \"Measures to maximise impact\" (any Communication/Dissemination Indicators table, e.g. one listing TOOL / Indicator(s) / values).\n- Every indicator with a stated target/scale number becomes one entry in some group's kpis[]. Set target to the target text verbatim (keep qualifiers like \"Y1:\", \">\", \"≥\"). Set code to the indicator's bracket code (e.g. \"[C6.1]\", \"[D1]\") if the surrounding text carries one, otherwise omit code.\n- categories[].name MUST be copied verbatim from the Grant Agreement's own heading/label for that block (e.g. the literal text \"EXPECTED OUTCOME #1\", or the \"TOOL\" column value from an indicators table, e.g. \"Social Media\", \"Website\") — never paraphrase or invent a friendlier name. This is required so that re-running extraction on the same Grant Agreement produces the same category names every time.\n- groups[] mirrors any sub-heading the Grant Agreement itself uses within a category (e.g. a bracket-coded sub-heading like \"[C6.1]Twitter\" grouping several rows in an indicators table) — copy that sub-heading verbatim into groups[].label, same rule as category names. If a category has no such internal sub-grouping (e.g. one Expected Outcome's flat \"Scale:\" sentence), return exactly one group for it with no \"label\" field at all, containing all of that category's kpis.\n- achieved is always 0 and monthlyValues is always an array of exactly totalMonths null values — you compute these mechanically, you do not read them from the text.\n- totalMonths and projectStartDate come from the Data Sheet §1 (project duration / starting date).",
   "tools": [
     {
       "name": "generate_kpi_json",
@@ -32,61 +32,75 @@
           "categories": {
             "type": "array",
             "minItems": 1,
-            "description": "One category per KPI Excel sheet/tab, e.g. 'Online Channels', 'Events Count', 'Media and Videos', 'Stakeholder Engagement'.",
+            "description": "One category per KPI Excel sheet/tab.",
             "items": {
               "type": "object",
               "required": [
                 "name",
-                "kpis"
+                "groups"
               ],
               "properties": {
                 "name": {
-                  "type": "string"
+                  "type": "string",
+                  "description": "Must be the Grant Agreement's own heading/label for this indicator block, copied verbatim (e.g. 'EXPECTED OUTCOME #1', or the 'TOOL' column value from a Communication and Dissemination Indicators table such as 'Social Media', 'Website'). Do not paraphrase, summarize or invent a friendlier name — re-running extraction on the same GA text must produce the same category names, so downstream consumers (backend, frontend, repeated regenerations) can rely on category identity being stable."
                 },
-                "kpis": {
+                "groups": {
                   "type": "array",
                   "minItems": 1,
+                  "description": "One or more sub-groupings of KPIs within this category, mirroring the GA/template's own nesting (e.g. a '[C6.1]Twitter' bracket-coded sub-heading with its own rows below it). When the category has no natural sub-grouping (e.g. a flat list of 'Scale:' bullet points under one Expected Outcome), return a single group with no 'label'.",
                   "items": {
                     "type": "object",
                     "required": [
-                      "label",
-                      "target"
+                      "kpis"
                     ],
                     "properties": {
-                      "code": {
-                        "type": "string",
-                        "description": "GA impact-indicator bracket code this KPI traces back to, e.g. '[C6.1]', '[D1]'. Optional — not every KPI row has one in the GA."
-                      },
-                      "groupLabel": {
-                        "type": "string",
-                        "description": "The bracketed group heading this KPI is nested under in the sheet (e.g. '[C6.1]Twitter'), used to render the merged section header cell. Omit for ungrouped KPIs."
-                      },
                       "label": {
                         "type": "string",
-                        "description": "The metric name, e.g. 'Followers', 'Pageviews', '1 Rollup'."
+                        "description": "The bracketed/verbatim sub-heading this group of KPIs is nested under (e.g. '[C6.1]Twitter'), copied the same way as categories[].name. Omit entirely for an ungrouped category's single implicit group."
                       },
-                      "target": {
-                        "type": "string",
-                        "default": "tbd",
-                        "description": "Target as stated in the GA — kept as free text since targets are often qualitative/compound (e.g. '>1000 followers', 'Y1: >1500 entries'). 'tbd' if this indicator is named but no numeric/qualitative target is stated."
-                      },
-                      "unit": {
-                        "type": "string",
-                        "description": "Optional normalized unit if the target is a plain count, e.g. 'count', 'minutes'."
-                      },
-                      "achieved": {
-                        "type": "number",
-                        "default": 0,
-                        "description": "Running total; always 0 at generation time, computed later from monthlyValues."
-                      },
-                      "monthlyValues": {
+                      "kpis": {
                         "type": "array",
-                        "description": "One entry per month of totalMonths, initialized to null; filled in by the project team during monitoring.",
+                        "minItems": 1,
                         "items": {
-                          "type": [
-                            "number",
-                            "null"
-                          ]
+                          "type": "object",
+                          "required": [
+                            "label",
+                            "target"
+                          ],
+                          "properties": {
+                            "code": {
+                              "type": "string",
+                              "description": "GA impact-indicator bracket code this KPI traces back to, e.g. '[C6.1]', '[D1]'. Optional — not every KPI row has one in the GA."
+                            },
+                            "label": {
+                              "type": "string",
+                              "description": "The metric name, e.g. 'Followers', 'Pageviews', '1 Rollup'."
+                            },
+                            "target": {
+                              "type": "string",
+                              "default": "tbd",
+                              "description": "Target as stated in the GA — kept as free text since targets are often qualitative/compound (e.g. '>1000 followers', 'Y1: >1500 entries'). 'tbd' if this indicator is named but no numeric/qualitative target is stated."
+                            },
+                            "unit": {
+                              "type": "string",
+                              "description": "Optional normalized unit if the target is a plain count, e.g. 'count', 'minutes'."
+                            },
+                            "achieved": {
+                              "type": "number",
+                              "default": 0,
+                              "description": "Running total; always 0 at generation time, computed later from monthlyValues."
+                            },
+                            "monthlyValues": {
+                              "type": "array",
+                              "description": "One entry per month of totalMonths, initialized to null; filled in by the project team during monitoring.",
+                              "items": {
+                                "type": [
+                                  "number",
+                                  "null"
+                                ]
+                              }
+                            }
+                          }
                         }
                       }
                     }

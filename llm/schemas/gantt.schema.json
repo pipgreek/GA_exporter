@@ -51,12 +51,23 @@
             "type": "array",
             "items": {
               "type": "object",
-              "required": ["id", "name", "monthFrom", "monthTo"],
+              "required": ["id", "name", "phases"],
               "properties": {
                 "id": { "type": "string", "pattern": "^T[0-9]+\\.[0-9]+$" },
                 "name": { "type": "string" },
-                "monthFrom": { "type": "integer", "minimum": 1 },
-                "monthTo": { "type": "integer", "minimum": 1 }
+                "phases": {
+                  "type": "array",
+                  "minItems": 1,
+                  "description": "One or more month ranges for this task. Most tasks have exactly one entry. When the GA states multiple disjoint ranges for the same task (e.g. '[M1-M4, M19-M24]'), each becomes its own entry here — the render engine draws one Gantt bar segment per phase instead of one continuous bar covering the gap.",
+                  "items": {
+                    "type": "object",
+                    "required": ["monthFrom", "monthTo"],
+                    "properties": {
+                      "monthFrom": { "type": "integer", "minimum": 1 },
+                      "monthTo": { "type": "integer", "minimum": 1 }
+                    }
+                  }
+                }
               }
             }
           }
