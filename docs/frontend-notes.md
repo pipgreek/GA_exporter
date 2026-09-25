@@ -7,8 +7,6 @@
 | Αρχείο | Τι περιέχει |
 |---|---|
 | [implementation-plan.md](implementation-plan.md) | Tasks frontend (§5) και το κοινό API contract με το backend (§6) |
-| `Frontend Description.docx` | Αναλυτική περιγραφή UX και τεχνικών επιλογών (hooks, polling, modal). ⚠️ Περιγράφει ακόμα Confirm + ξεχωριστή σελίδα αποτελεσμάτων — ισχύει η απόφαση 6. |
-| `1.png` – `4.png` | Wireframes: αρχική, upload/progress, previews, result. ⚠️ Τα `3.png`/`4.png` δείχνουν τη ροή πριν την απόφαση 6. |
 | [frontend UI UX/index.html](frontend%20UI%20UX/index.html) | Στατικό mockup (Tailwind) — αναφορά για το design. ⚠️ Η ροή Confirm → result page του mockup αντικαταστάθηκε από την απόφαση 6. |
 
 ## Τι πρέπει να υλοποιηθεί
@@ -30,7 +28,7 @@ Logo ViLabs (επιστροφή στην αρχική), animated background, toa
 
 ## Αποφάσεις (2026-09-25)
 
-Όπου το `Frontend Description.docx` / τα wireframes διαφέρουν από το plan, **υπερισχύει το plan**.
+Όπου το mockup διαφέρει από το plan, **υπερισχύει το plan**. (Το `Frontend Description.docx` και τα wireframes `1.png`–`4.png` αφαιρέθηκαν από το repo στις 2026-09-25· υπάρχουν στο ιστορικό του git.)
 
 | # | Θέμα | Απόφαση |
 |---|---|---|
@@ -86,6 +84,9 @@ Logo ViLabs (επιστροφή στην αρχική), animated background, toa
 ## Ημερολόγιο προόδου
 
 Νεότερα πάνω. Ενημερώνεται μετά από κάθε ολοκληρωμένο βήμα.
+
+### 2026-09-25 — Καθαρισμός αρχικών εγγράφων
+- Αφαιρέθηκαν από το `docs/` (κατόπιν αιτήματος): `1.png`–`4.png` (wireframes) και `Frontend Description.docx`, αφού η υλοποίηση και οι αποφάσεις είναι πλέον σε αυτό το αρχείο και στο plan. Ανακτώνται από το ιστορικό του git αν χρειαστούν. Το `Backend Description.docx` (backend) παραμένει.
 
 ### 2026-09-25 — Privacy Policy με βάση το plan ✅
 - Το κείμενο του mockup αντικαταστάθηκε με νέο, βασισμένο στη ροή δεδομένων του plan: χωρίς λογαριασμούς/ιστορικό/βάση, τι δεδομένα (PDF, παραγόμενα αρχεία, status, τεχνικά logs), βήματα επεξεργασίας (εξαγωγή κειμένου → Claude/Anthropic → templates), πάροχοι (Vercel, Render, Supabase, Upstash, Anthropic), νομική βάση (άρθρο 6(1)(b)/(f) GDPR), διατήρηση 24 ωρών, καμία χρήση cookies/analytics (ελέγχθηκε στον κώδικα), δικαιώματα + Αρχή Προστασίας Δεδομένων (dpa.gr).
