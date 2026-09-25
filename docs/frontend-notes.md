@@ -94,6 +94,10 @@ Logo ViLabs (επιστροφή στην αρχική), animated background, toa
 - `done` σημαίνει ότι τα τρία outputs και τα previews είναι διαθέσιμα.
 - Επόμενο: live LLM evaluation και ολοκλήρωση backend pipeline πριν ενεργοποιηθεί το πλήρες πραγματικό API.
 
+### 2026-09-25 — Merge στο `main`
+- Το `frontend` έγινε merge στο `main` (commit `b0b4e4f`). Το `main` είχε ήδη το backend (`8541401 Merge backend into main`), οπότε έγινε κανονικό merge (όχι αντικατάσταση) — χωρίς conflicts· στο `implementation-plan.md` κρατήθηκαν και τα κουτάκια του backend και οι αλλαγές του frontend.
+- Σημείωση: το branch `frontend` δεν περιέχει ακόμα τον κώδικα του backend από το `main`. Όταν χρειαστεί (π.χ. για τοπική σύνδεση με το πραγματικό backend), κάνουμε merge `main` → `frontend`.
+
 ### 2026-09-25 — Καθαρισμός αρχικών εγγράφων
 - Αφαιρέθηκαν από το `docs/` (κατόπιν αιτήματος): `1.png`–`4.png` (wireframes) και `Frontend Description.docx`, αφού η υλοποίηση και οι αποφάσεις είναι πλέον σε αυτό το αρχείο και στο plan. Ανακτώνται από το ιστορικό του git αν χρειαστούν. Το `Backend Description.docx` (backend) παραμένει.
 
