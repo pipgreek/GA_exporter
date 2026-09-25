@@ -25,18 +25,36 @@
 
 Logo ViLabs (επιστροφή στην αρχική), animated background, toast για σφάλματα, confirm modals (διαγραφή αρχείου, επιστροφή στην αρχική, μετάβαση στο Privacy Policy), σελίδα Privacy Policy, footer.
 
-## Ασυμφωνίες — προς απόφαση
+## Αποφάσεις (2026-09-25)
 
-| # | Θέμα | Plan | Description / mockup | Πρόταση |
-|---|---|---|---|---|
-| 1 | Edit mode (μολυβάκι) | «Χωρίς inline editing» | Το docx και το `3.png` το περιλαμβάνουν | Εκτός scope προς το παρόν |
-| 2 | Ονόματα status | `scanning`, `extracting`, `analyzing`, `generating`, `done`, `error` | Το docx γράφει `extracting_text`, `analyzing_data`, `generating_preview` | Ακολουθούμε το plan (§6) |
-| 3 | Result page | Ξεχωριστό route `/result` | Το mockup είναι single-page (hide/show) | Ξεχωριστό route, με το design του mockup |
-| 4 | Logo | — | Το mockup ζητά `vilabs-logo.png`, το αρχείο είναι `ViLabs-logo.png` | Ενιαίο όνομα σε lowercase (case-sensitive στο Vercel) |
+Όπου το `Frontend Description.docx` / τα wireframes διαφέρουν από το plan, **υπερισχύει το plan**.
+
+| # | Θέμα | Απόφαση |
+|---|---|---|
+| 1 | Edit mode (μολυβάκι) | **Αφαιρείται.** Τα previews είναι αυστηρά read-only, όπως ορίζει το plan. Κανένα εικονίδιο/λειτουργία επεξεργασίας. |
+| 2 | Ονόματα status | **Όπως το plan (§6):** `scanning` → `extracting` → `analyzing` → `generating` → `done` \| `error`. |
+| 3 | Result page | **Ξεχωριστό route `/result?requestId=...`**, με το design του mockup. |
+| 4 | Logo | **Μετονομάστηκε σε `vilabs-logo.png`** (lowercase, ταιριάζει με το mockup, ασφαλές σε case-sensitive hosting όπως το Vercel). |
+
+Αντιστοίχιση status → μήνυμα UI:
+
+| status | Μήνυμα |
+|---|---|
+| `scanning` | Scanning Grant Agreement... |
+| `extracting` | Extracting text and structure... |
+| `analyzing` | Analyzing Work Packages and KPIs... |
+| `generating` | Generating previews... |
+| `done` | Previews generated successfully. |
+| `error` | Error state (βλ. Error states) |
 
 ## Ημερολόγιο προόδου
 
 Νεότερα πάνω. Ενημερώνεται μετά από κάθε ολοκληρωμένο βήμα.
+
+### 2026-09-25
+- Κλείδωσαν οι αποφάσεις 1–4 (βλ. «Αποφάσεις»): χωρίς edit mode, status όπως το plan, ξεχωριστό `/result`.
+- Μετονομασία logo `ViLabs-logo.png` → `vilabs-logo.png`.
+- **Επόμενο βήμα:** scaffold Next.js + TypeScript + Tailwind στο `frontend/`, routes `/` και `/result`.
 
 ### 2026-09-23
 - Clone του repo στο `C:\dev\GA Exporter` (εκτός OneDrive), branch `frontend`, σύνδεση με GitHub.
