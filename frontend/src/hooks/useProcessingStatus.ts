@@ -12,7 +12,12 @@ import {
 
 export const POLL_INTERVAL_MS = 2500;
 export const FALLBACK_ROTATION_MS = 2500;
-export const MAX_WAIT_MS = 90_000;
+// 90s was too tight: real backend runs (PDF parse + 3 parallel LLM calls +
+// document generation) measured 2026-09-30 range from ~40s (small GA) to
+// ~90-100s (larger GA / slower system load) - the frontend timed out and
+// showed an error once even though the backend went on to finish
+// successfully seconds later. 150s gives real runs headroom.
+export const MAX_WAIT_MS = 150_000;
 /** Transient network errors tolerated before giving up. */
 const MAX_CONSECUTIVE_POLL_FAILURES = 3;
 
