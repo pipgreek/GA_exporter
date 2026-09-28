@@ -83,17 +83,19 @@ Upload PDF
 - [x] Εξαγωγή κειμένου + πινάκων σε δομημένο `.md`
 - [x] Test με το δείγμα PDF (Grant Agreement GAP-101158152) — βλ. `docs/Παραδείγματα/Grant Agreement - GAP-101158152.md`
 
-> **Κατάσταση 2026-09-28:** ο worker (`pdf-processing.processor.ts`) σταματάει εδώ («analysis and file generation are pending»). Τα βήματα D-H παρακάτω δεν είναι ακόμα καλωδιωμένα στο pipeline.
+> **Κατάσταση 2026-09-28:** ο worker (`pdf-processing.processor.ts`) τρέχει πλέον μέχρι και το LLM extraction (§D/§E) — στέκεται πριν το document generation (§F/§G). Βλ. ενημέρωση παρακάτω.
 
 #### D. LLM integration (χρησιμοποιεί τα schemas/prompts από branch `llm`)
-- [ ] Anthropic SDK setup, Claude Haiku client
-- [ ] 3 service functions: `generateInfoJson()`, `generateGanttJson()`, `generateKpiJson()` — tool-use/structured output calls (τα ready-to-send request packages υπάρχουν ήδη στο `llm/prompts/*.request.json`, εκκρεμεί merge `llm`→`main` και wiring)
-- [ ] Παράλληλη εκτέλεση των 3 calls
-- [ ] Retry logic σε αποτυχία validation (1-2 retries)
+- [x] Anthropic SDK setup, Claude Haiku client (`backend/src/llm/llm.service.ts`)
+- [x] 3 service functions: `generateInfoJson()`, `generateGanttJson()`, `generateKpiJson()` — tool-use/structured output calls, καταναλώνουν απευθείας τα `llm/prompts/*.request.json`
+- [x] Παράλληλη εκτέλεση των 3 calls (`generateAll()`, `Promise.all`)
+- [x] Retry logic σε αποτυχία validation (`LLM_MAX_RETRIES`, default 2)
 
 #### E. Validation
-- [ ] Zod schemas (mirror των `llm/schemas/*.schema.json`)
-- [ ] Error handling / error state στο status αν αποτύχει μετά τα retries
+- [x] Zod schemas (`backend/src/llm/schemas/{info,gantt,kpi}.schema.ts`, mirror των `llm/schemas/*.schema.json`)
+- [x] Error handling / error state στο status αν αποτύχει μετά τα retries — `LlmValidationError` propagates μέσα από τον υπάρχοντα catch-all του processor, το BullMQ job πάει `failed`, το `GET /status` το βλέπει ως `error`
+
+**Κατάσταση 2026-09-28:** ολοκληρωμένο και δοκιμασμένο — `pnpm build` καθαρό, live run του `generateAll()` πάνω στο πραγματικό GA (~31s, ίδια αποτελέσματα με το `llm/testing-notes.md` live test), και mocked test και για τα δύο retry paths (retry-then-succeed, exhaust-retries-then-throw). Τα 3 validated JSON αποθηκεύονται σε `{requestId}/intermediate/{info,gantt,kpi}.json` στο Supabase Storage, έτοιμα για το document generation step (§G) που ακολουθεί.
 
 #### F. Templates (Word/Excel) — **[owner: Γιώργος]**
 - [x] Αρχεία-αφετηρία ανέβηκαν στο repo (`docs/templates/`: Gantt EVOLVE2CARE, KPI VIGILANCE, Info docx)
@@ -216,14 +218,15 @@ kpi:   { sheets: [{ name: string, headers: string[], rows: (string | number | nu
 
 ## 8. Σειρά προτεραιότητας (ενημερωμένη 2026-09-28)
 
-**Κατάσταση:** `llm` ολοκληρωμένο και δοκιμασμένο έναντι live API (εκκρεμεί merge) · `frontend` πλήρες αλλά πάνω σε mocks, ήδη στο `main` · `backend` έχει infra+PDF→Markdown έτοιμα, σταματάει πριν το LLM/rendering στάδιο.
+**Κατάσταση:** `llm` ολοκληρωμένο και δοκιμασμένο έναντι live API (εκκρεμεί merge) · `frontend` πλήρες αλλά πάνω σε mocks, ήδη στο `main` · `backend` έχει infra + PDF→Markdown + LLM integration/validation έτοιμα και δοκιμασμένα (§5.D-E), σταματάει πριν το document generation στάδιο.
 
 1. ~~Templates (Γιώργος) + JSON Schemas (Αριστείδης)~~ — schemas/prompts έτοιμα και δοκιμασμένα· τα templates χρειάζονται ακόμα μετατροπή σε placeholder-ready (βλ. §5.F)
 2. ~~API contract (§6)~~ — κλειδωμένο στο `docs/api-contract.md`
-3. **Τώρα:**
+3. ~~Backend: LLM integration (§5.D) + validation (§5.E)~~ — ολοκληρωμένο, δοκιμασμένο live
+4. **Τώρα:**
    - Merge `llm` → `main`
-   - Backend: μετατροπή templates σε placeholder-ready + LLM integration (§5.D, χρησιμοποιώντας τα ήδη δοκιμασμένα `llm/prompts/*.request.json`) + validation (§5.E) + document generation (§5.G) + preview/download endpoints (§5.H)
+   - Backend: μετατροπή templates σε placeholder-ready (§5.F) + document generation (§5.G) + preview/download endpoints (§5.H)
    - Frontend: switch από mock API routes στο πραγματικό backend, μόλις τα endpoints είναι έτοιμα
-4. Integration testing end-to-end (πραγματικό PDF → download αρχεία)
-5. Ops: deploy Render/Vercel, cleanup job, Redis TTL, budget cap (§5.A, §5.I)
-6. Merge backend/frontend σε `main`
+5. Integration testing end-to-end (πραγματικό PDF → download αρχεία)
+6. Ops: deploy Render/Vercel, cleanup job, Redis TTL, budget cap (§5.A, §5.I)
+7. Merge backend/frontend σε `main`
