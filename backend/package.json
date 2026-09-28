@@ -21,6 +21,7 @@
     "@nestjs/core": "^11.1.28",
     "@nestjs/platform-express": "^11.1.28",
     "@supabase/supabase-js": "^2.117.1",
+    "archiver": "^7.0.1",
     "bullmq": "^6.3.8",
     "docxtemplater": "^3.66.3",
     "exceljs": "^4.4.0",
@@ -35,6 +36,7 @@
   "devDependencies": {
     "@nestjs/cli": "^11.0.24",
     "@nestjs/schematics": "^11.1.0",
+    "@types/archiver": "^6.0.3",
     "@types/express": "^5.0.6",
     "@types/multer": "^2.2.0",
     "@types/node": "^22.18.9",

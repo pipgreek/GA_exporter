@@ -5,6 +5,7 @@ import { SupabaseStorageService } from '../infrastructure/storage/storage.servic
 import { PdfParserService } from '../pdf-parsing/pdf-parser.service';
 import { LlmService } from '../llm/llm.service';
 import { DocumentGenerationService } from '../document-generation/document-generation.service';
+import { OUTPUT_FILES, outputStoragePath, previewStoragePath as previewPath } from './output-files';
 import { PdfProcessingJobData, PdfProcessingResult, ProcessingProgress } from './processing.types';
 
 @Processor(GA_EXPORT_QUEUE, { concurrency: 1 })
@@ -46,22 +47,22 @@ export class PdfProcessingProcessor extends WorkerHost {
 
       const [infoStoragePath, ganttStoragePath, kpiStoragePath, previewStoragePath] = await Promise.all([
         this.storage.upload(
-          `${job.data.requestId}/output/INFO_Generation.docx`,
+          outputStoragePath(job.data.requestId, 'info'),
           generated.infoDocx,
-          'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
+          OUTPUT_FILES.info.contentType,
         ),
         this.storage.upload(
-          `${job.data.requestId}/output/Gantt_Chart.xlsx`,
+          outputStoragePath(job.data.requestId, 'gantt'),
           generated.ganttXlsx,
-          'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
+          OUTPUT_FILES.gantt.contentType,
         ),
         this.storage.upload(
-          `${job.data.requestId}/output/KPI_Monitoring.xlsx`,
+          outputStoragePath(job.data.requestId, 'kpi'),
           generated.kpiXlsx,
-          'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
+          OUTPUT_FILES.kpi.contentType,
         ),
         this.storage.upload(
-          `${job.data.requestId}/output/preview.json`,
+          previewPath(job.data.requestId),
           Buffer.from(JSON.stringify(generated.preview), 'utf8'),
           'application/json',
         ),

@@ -1,10 +1,13 @@
 import { InjectQueue } from '@nestjs/bullmq';
-import { BadRequestException, Injectable, NotFoundException } from '@nestjs/common';
+import { BadRequestException, ConflictException, Injectable, NotFoundException } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
+import archiver = require('archiver');
 import { Queue } from 'bullmq';
 import { randomUUID } from 'node:crypto';
 import { GA_EXPORT_QUEUE } from '../infrastructure/queue/queue.constants';
 import { SupabaseStorageService } from '../infrastructure/storage/storage.service';
+import { PreviewResponse } from '../document-generation/preview.types';
+import { DownloadFileType, OUTPUT_FILES, isDownloadFileType, outputStoragePath, previewStoragePath } from './output-files';
 import { PROCESSING_STATUSES, PdfProcessingJobData, ProcessingStatus } from './processing.types';
 
 @Injectable()
@@ -66,6 +69,58 @@ export class ProcessingService {
 
   private async storageUpload(requestId: string, pdf: Buffer): Promise<string> {
     return this.storage.upload(`${requestId}/input/original.pdf`, pdf, 'application/pdf');
+  }
+
+  /** GET /preview/{requestId} (docs/api-contract.md) — 200 only once status is `done`. */
+  async getPreview(requestId: string): Promise<PreviewResponse> {
+    await this.assertDone(requestId);
+    const buffer = await this.storage.download(previewStoragePath(requestId));
+    return JSON.parse(buffer.toString('utf8')) as PreviewResponse;
+  }
+
+  /** GET /download/{requestId}/{fileType} — 404 for an unsupported fileType, 409 if not ready yet. */
+  async getDownloadFile(
+    requestId: string,
+    fileType: string,
+  ): Promise<{ buffer: Buffer; filename: string; contentType: string }> {
+    if (!isDownloadFileType(fileType)) {
+      throw new NotFoundException('Unsupported file type.');
+    }
+    await this.assertDone(requestId);
+    const buffer = await this.storage.download(outputStoragePath(requestId, fileType));
+    return { buffer, filename: OUTPUT_FILES[fileType].storageFilename, contentType: OUTPUT_FILES[fileType].contentType };
+  }
+
+  /** GET /download-all/{requestId} — zips the same three files download/{type} would each serve. */
+  async getDownloadAllZip(requestId: string): Promise<Buffer> {
+    await this.assertDone(requestId);
+    const fileTypes: DownloadFileType[] = ['info', 'gantt', 'kpi'];
+    const buffers = await Promise.all(
+      fileTypes.map((type) => this.storage.download(outputStoragePath(requestId, type))),
+    );
+    return this.zipFiles(fileTypes.map((type, i) => ({ name: OUTPUT_FILES[type].storageFilename, buffer: buffers[i] })));
+  }
+
+  private async assertDone(requestId: string): Promise<void> {
+    const status = await this.getStatus(requestId); // throws NotFoundException if the job is unknown/expired
+    if (status.status !== 'done') {
+      throw new ConflictException('Processing is not done yet.');
+    }
+  }
+
+  private zipFiles(files: { name: string; buffer: Buffer }[]): Promise<Buffer> {
+    return new Promise((resolve, reject) => {
+      const archive = archiver('zip', { zlib: { level: 9 } });
+      const chunks: Buffer[] = [];
+      archive.on('data', (chunk: Buffer) => chunks.push(chunk));
+      archive.on('warning', (warning) => {
+        if (warning.code !== 'ENOENT') reject(warning);
+      });
+      archive.on('error', reject);
+      archive.on('end', () => resolve(Buffer.concat(chunks)));
+      for (const file of files) archive.append(file.buffer, { name: file.name });
+      void archive.finalize();
+    });
   }
 
   private isProcessingStatus(value: unknown): value is ProcessingStatus {
