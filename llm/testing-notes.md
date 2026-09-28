@@ -182,3 +182,44 @@ sheet — the first test to exercise more than 2 years). Raw outputs saved in
 **Lesson, again:** one real GA is not enough to validate limits, budgets or
 enums — each new real document has so far surfaced at least one genuine gap
 that schema-valid output on the first sample didn't catch.
+
+## Gantt Overview rendering fixes — 2026-09-30 (against the same VIGILANCE test)
+
+A real VILABS-produced reference workbook for VIGILANCE surfaced two more
+issues — both rendering bugs on the *backend* branch, not extraction bugs
+(the underlying JSON was already correct in both cases):
+
+1. **Milestone same-month collision.** WP1's `milestoneIds` correctly
+   included both MS1 and MS2, but they share `dueMonth: 6`. The renderer's
+   `Map<month, id>` let MS2 silently overwrite MS1, so MS1 never appeared
+   anywhere on the sheet. Fixed on the backend side (collect an array per
+   month, join as `"MS1 & MS2"`, matching the reference's own convention).
+2. **Wrong deliverable-to-task placement.** The backend's Gantt renderer had
+   been distributing a WP's deliverables round-robin across its task rows —
+   this happened to match the first sample GA by coincidence, but is not a
+   real rule, and placed several VIGILANCE deliverables on the wrong task
+   row entirely (`dueMonth` itself was always correct in the JSON).
+
+   Fixed here, in the schema: added optional `deliverables[].taskId`
+   (`llm/schemas/gantt.schema.json`), with confidence-gated guidance in
+   `GANTT_SYSTEM` — set it only when a task's own description text names the
+   deliverable it produces (e.g. T1.4's description literally states "the
+   task will produce the project's DMP as a deliverable", matching D1.2/
+   D1.3) or the deliverable's title unambiguously matches one task's theme
+   in that WP; omit rather than guess otherwise. A wrong `taskId` would
+   misrepresent real project data; an absent one just falls back to a safe
+   default (the WP's own row) on the render side.
+
+   Re-ran only the gantt call: **5 of 50** deliverables got a confident
+   `taskId`, all verified correct against the reference (e.g. D1.2/D1.3 ->
+   T1.4, D1.7/D1.8/D1.9 -> T1.5). The rest correctly stayed unset — the model
+   did not force a guess just to fill the field. 0 schema validation errors.
+   Updated `llm/examples/live-run-2026-09-28-ga2/gantt.output.json` to this
+   version.
+
+**Lesson, again (n=2 now):** even fields that validate and look
+schema-complete can still encode a *wrong* relationship if the renderer
+consuming them makes an undocumented assumption (here: "deliverables belong
+to tasks in round-robin order") that was never actually part of the schema
+contract. Comparing rendered output against a real reference file — not just
+running `jsonschema.validate()` — is what caught both of these.
