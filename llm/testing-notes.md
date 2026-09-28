@@ -134,3 +134,51 @@ Worth noting for `implementation-plan.md` §7 budget-cap sizing; not a blocker.
 2. Zod validation mirroring `llm/schemas/*.schema.json` (§5.E).
 3. Template placeholder work (§5.F) can proceed independently — the JSON shape
    feeding it is now confirmed stable against real data.
+
+## Second GA test — 2026-09-30 (VIGILANCE, GAP-101249737)
+
+First test against a real GA other than EVOLVE2CARE: 36 months, 8 WPs, 50
+deliverables, 20 milestones (vs EVOLVE2CARE's 24/6/26/3) — a meaningfully
+bigger, structurally different project. Found three real issues the single
+first sample hadn't exposed:
+
+1. **Context window overflow.** Raw pdfplumber markdown for this GA is 761K
+   chars (~214K tokens) — over Claude's 200K token limit — so all three
+   calls failed outright (`400 prompt is too long`). This directly
+   contradicts the earlier "chunking not needed" conclusion above, which was
+   only ever validated on one, smaller GA — that conclusion is now corrected
+   by this section, not still accurate.
+   **Fix:** added `trim_boilerplate()` to
+   `backend/src/pdf-parsing/extract_to_markdown.py`. None of the three
+   extraction prompts read the generic Terms & Conditions article body or
+   the trailing Annex 2+ (budget/accession/financial-form templates) — only
+   Preamble + Data Sheet + Annex 1 (Part A + Part B) matter. Anchored on
+   standard Horizon Europe/Euratom template headings (`ARTICLE 1 — SUBJECT
+   OF THE AGREEMENT`, `DESCRIPTION OF THE ACTION (PART A)`, `ANNEX 2`),
+   confirmed identical across both real sample GAs; falls back to a no-op if
+   an anchor isn't found, so a differently-laid-out GA is never silently
+   corrupted. Cut this GA to 563K chars (~162K tokens/call, comfortably under
+   the limit) and EVOLVE2CARE to 248K chars as a bonus regression check.
+2. **Output truncation.** Even after trimming, `gantt` hit
+   `stop_reason: max_tokens` at the old `max_tokens: 8192` — this GA's larger
+   Gantt data didn't fit, and the JSON was truncated mid-generation (missing
+   the entire `milestones` array — schema-invalid, not just incomplete).
+   **Fix:** raised `max_tokens` to `16384` for all three request packages.
+   Re-ran: `gantt` finished cleanly at 10,138 output tokens
+   (`stop_reason: tool_use`).
+3. **Enum gap.** This GA's deliverables use type code `DEM` (Demonstrator,
+   pilot, prototype, plan designs), not in the `type` enum (only
+   `R/DEC/DMP/ETHICS/OTHER/tbd` had been observed). **Fix:** expanded to the
+   full official Horizon Europe/Euratom deliverable-type list — `R, DEM, DEC,
+   OTHER, ETHICS, ORDP, DMP, SECU, tbd` — in both `llm/schemas/gantt.schema.json`
+   and its Zod mirror on the backend branch.
+
+After all three fixes: all three calls succeeded, 0 schema validation errors,
+and the backend's `DocumentGenerationService` rendered all three real output
+files (including correctly banded 3-year coloring on the Gantt Overview
+sheet — the first test to exercise more than 2 years). Raw outputs saved in
+[`llm/examples/live-run-2026-09-28-ga2/`](examples/live-run-2026-09-28-ga2/).
+
+**Lesson, again:** one real GA is not enough to validate limits, budgets or
+enums — each new real document has so far surfaced at least one genuine gap
+that schema-valid output on the first sample didn't catch.
