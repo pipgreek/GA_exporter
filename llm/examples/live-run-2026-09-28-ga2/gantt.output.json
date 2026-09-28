@@ -1,0 +1,1131 @@
+{
+  "projectAcronym": "VIGILANCE",
+  "totalMonths": 36,
+  "projectStartDate": "2025-12-01",
+  "reportingPeriods": [
+    {
+      "id": "RP1",
+      "monthFrom": 1,
+      "monthTo": 18
+    },
+    {
+      "id": "RP2",
+      "monthFrom": 19,
+      "monthTo": 36
+    }
+  ],
+  "workPackages": [
+    {
+      "id": "WP1",
+      "name": "Project Management and Coordination",
+      "lead": "GFT",
+      "monthFrom": 1,
+      "monthTo": 36,
+      "tasks": [
+        {
+          "id": "T1.1",
+          "name": "Project Coordination, Administrative and Financial Management",
+          "phases": [
+            {
+              "monthFrom": 1,
+              "monthTo": 36
+            }
+          ]
+        },
+        {
+          "id": "T1.2",
+          "name": "Technical Management",
+          "phases": [
+            {
+              "monthFrom": 1,
+              "monthTo": 36
+            }
+          ]
+        },
+        {
+          "id": "T1.3",
+          "name": "Quality and Risk Management",
+          "phases": [
+            {
+              "monthFrom": 1,
+              "monthTo": 36
+            }
+          ]
+        },
+        {
+          "id": "T1.4",
+          "name": "Data Governance and Management",
+          "phases": [
+            {
+              "monthFrom": 1,
+              "monthTo": 36
+            }
+          ]
+        },
+        {
+          "id": "T1.5",
+          "name": "Ethical Management and Regulatory Compliance",
+          "phases": [
+            {
+              "monthFrom": 1,
+              "monthTo": 36
+            }
+          ]
+        }
+      ],
+      "milestoneIds": [
+        "MS1",
+        "MS2",
+        "MS3"
+      ]
+    },
+    {
+      "id": "WP2",
+      "name": "Specifications of Framework and Technologies for Agentic ZTA",
+      "lead": "UPRC",
+      "monthFrom": 1,
+      "monthTo": 24,
+      "tasks": [
+        {
+          "id": "T2.1",
+          "name": "Analysis of Applicable Regulations, Policies and Standards",
+          "phases": [
+            {
+              "monthFrom": 1,
+              "monthTo": 24
+            }
+          ]
+        },
+        {
+          "id": "T2.2",
+          "name": "Analysis of Requirements and References Scenarios",
+          "phases": [
+            {
+              "monthFrom": 1,
+              "monthTo": 24
+            }
+          ]
+        },
+        {
+          "id": "T2.3",
+          "name": "Specification and Inventory of Cybersecurity Technologies",
+          "phases": [
+            {
+              "monthFrom": 1,
+              "monthTo": 24
+            }
+          ]
+        },
+        {
+          "id": "T2.4",
+          "name": "Reference Framework and Architecture of Agentic ZTA Mesh",
+          "phases": [
+            {
+              "monthFrom": 1,
+              "monthTo": 24
+            }
+          ]
+        }
+      ],
+      "milestoneIds": [
+        "MS4",
+        "MS5",
+        "MS6"
+      ]
+    },
+    {
+      "id": "WP3",
+      "name": "Incident and Vulnerability Assessment and Management",
+      "lead": "D-VISOR",
+      "monthFrom": 2,
+      "monthTo": 30,
+      "tasks": [
+        {
+          "id": "T3.1",
+          "name": "Game-theory Based Strategies for Incident and Vulnerability Assessment",
+          "phases": [
+            {
+              "monthFrom": 2,
+              "monthTo": 30
+            }
+          ]
+        },
+        {
+          "id": "T3.2",
+          "name": "Simulation Tool for Security Vulnerability Assessment",
+          "phases": [
+            {
+              "monthFrom": 2,
+              "monthTo": 30
+            }
+          ]
+        },
+        {
+          "id": "T3.3",
+          "name": "Adversarial Simulation, PenTesting, and Red Teaming Framework",
+          "phases": [
+            {
+              "monthFrom": 2,
+              "monthTo": 30
+            }
+          ]
+        },
+        {
+          "id": "T3.4",
+          "name": "Analysis and Reporting of PenTesting Outcomes",
+          "phases": [
+            {
+              "monthFrom": 2,
+              "monthTo": 30
+            }
+          ]
+        }
+      ],
+      "milestoneIds": [
+        "MS7",
+        "MS8",
+        "MS9"
+      ]
+    },
+    {
+      "id": "WP4",
+      "name": "Trusted and Secure Data and Services Sharing",
+      "lead": "UBI",
+      "monthFrom": 2,
+      "monthTo": 30,
+      "tasks": [
+        {
+          "id": "T4.1",
+          "name": "Quantum-Secured Biometric Sovereign Identity Chain (Q-BSIC)",
+          "phases": [
+            {
+              "monthFrom": 2,
+              "monthTo": 30
+            }
+          ]
+        },
+        {
+          "id": "T4.2",
+          "name": "Security/Privacy-Preserving Technologies for Information Exchange",
+          "phases": [
+            {
+              "monthFrom": 2,
+              "monthTo": 30
+            }
+          ]
+        },
+        {
+          "id": "T4.3",
+          "name": "Context-Aware Security-by-Design Recommendations System",
+          "phases": [
+            {
+              "monthFrom": 2,
+              "monthTo": 30
+            }
+          ]
+        },
+        {
+          "id": "T4.4",
+          "name": "Proactive Intelligence for Data Security and Threat Anomaly Detection",
+          "phases": [
+            {
+              "monthFrom": 2,
+              "monthTo": 30
+            }
+          ]
+        },
+        {
+          "id": "T4.5",
+          "name": "Quantum Security for Data Sharing and Transfer Services",
+          "phases": [
+            {
+              "monthFrom": 2,
+              "monthTo": 30
+            }
+          ]
+        }
+      ],
+      "milestoneIds": [
+        "MS10",
+        "MS11"
+      ]
+    },
+    {
+      "id": "WP5",
+      "name": "AI-based Agentic Platform for ZTA Mesh",
+      "lead": "INNOV",
+      "monthFrom": 3,
+      "monthTo": 36,
+      "tasks": [
+        {
+          "id": "T5.1",
+          "name": "Data and Knowledge Modelling (Semantics, Embedded)",
+          "phases": [
+            {
+              "monthFrom": 3,
+              "monthTo": 36
+            }
+          ]
+        },
+        {
+          "id": "T5.2",
+          "name": "Repository of Cybersecurity Agents",
+          "phases": [
+            {
+              "monthFrom": 3,
+              "monthTo": 36
+            }
+          ]
+        },
+        {
+          "id": "T5.3",
+          "name": "Agentic Wrappers for Cybersecurity Technologies",
+          "phases": [
+            {
+              "monthFrom": 3,
+              "monthTo": 36
+            }
+          ]
+        },
+        {
+          "id": "T5.4",
+          "name": "CyberSec Agents Orchestration and Coordination Layers",
+          "phases": [
+            {
+              "monthFrom": 3,
+              "monthTo": 36
+            }
+          ]
+        },
+        {
+          "id": "T5.5",
+          "name": "Industry Specific Agentic Security Blueprints",
+          "phases": [
+            {
+              "monthFrom": 3,
+              "monthTo": 36
+            }
+          ]
+        },
+        {
+          "id": "T5.6",
+          "name": "Agentic ZTA Platform Integration",
+          "phases": [
+            {
+              "monthFrom": 3,
+              "monthTo": 36
+            }
+          ]
+        }
+      ],
+      "milestoneIds": [
+        "MS12",
+        "MS13"
+      ]
+    },
+    {
+      "id": "WP6",
+      "name": "Pilots Implementations & Evaluation",
+      "lead": "OTE",
+      "monthFrom": 1,
+      "monthTo": 36,
+      "tasks": [
+        {
+          "id": "T6.1",
+          "name": "Multi-party Piloting Environments Preparations",
+          "phases": [
+            {
+              "monthFrom": 1,
+              "monthTo": 36
+            }
+          ]
+        },
+        {
+          "id": "T6.2",
+          "name": "VIGILANCE for Logistics and Mobility Value Chains",
+          "phases": [
+            {
+              "monthFrom": 1,
+              "monthTo": 36
+            }
+          ]
+        },
+        {
+          "id": "T6.3",
+          "name": "VIGILANCE for Telecommunication Value Chains",
+          "phases": [
+            {
+              "monthFrom": 1,
+              "monthTo": 36
+            }
+          ]
+        },
+        {
+          "id": "T6.4",
+          "name": "VIGILANCE for Banking and Finance Value Chains",
+          "phases": [
+            {
+              "monthFrom": 1,
+              "monthTo": 36
+            }
+          ]
+        },
+        {
+          "id": "T6.5",
+          "name": "VIGILANCE for Essential Services in Industry 4.0 Value Chains",
+          "phases": [
+            {
+              "monthFrom": 1,
+              "monthTo": 36
+            }
+          ]
+        },
+        {
+          "id": "T6.6",
+          "name": "Pilot Systems Evaluation and Stakeholders' Feedback",
+          "phases": [
+            {
+              "monthFrom": 1,
+              "monthTo": 36
+            }
+          ]
+        }
+      ],
+      "milestoneIds": [
+        "MS14",
+        "MS15"
+      ]
+    },
+    {
+      "id": "WP7",
+      "name": "VIGILANCE Cybersecurity Academy",
+      "lead": "STAM",
+      "monthFrom": 1,
+      "monthTo": 36,
+      "tasks": [
+        {
+          "id": "T7.1",
+          "name": "Training Platform Development and Integration",
+          "phases": [
+            {
+              "monthFrom": 1,
+              "monthTo": 36
+            }
+          ]
+        },
+        {
+          "id": "T7.2",
+          "name": "Cybersecurity Content Development and Integration",
+          "phases": [
+            {
+              "monthFrom": 1,
+              "monthTo": 36
+            }
+          ]
+        },
+        {
+          "id": "T7.3",
+          "name": "Training Demonstrators and Simulation",
+          "phases": [
+            {
+              "monthFrom": 1,
+              "monthTo": 36
+            }
+          ]
+        },
+        {
+          "id": "T7.4",
+          "name": "Stakeholders Training Activities",
+          "phases": [
+            {
+              "monthFrom": 1,
+              "monthTo": 36
+            }
+          ]
+        }
+      ],
+      "milestoneIds": [
+        "MS16",
+        "MS17"
+      ]
+    },
+    {
+      "id": "WP8",
+      "name": "Dissemination, Exploitation & Ecosystem Building",
+      "lead": "VIL",
+      "monthFrom": 1,
+      "monthTo": 36,
+      "tasks": [
+        {
+          "id": "T8.1",
+          "name": "Dissemination, Communication, and Premarketing",
+          "phases": [
+            {
+              "monthFrom": 1,
+              "monthTo": 36
+            }
+          ]
+        },
+        {
+          "id": "T8.2",
+          "name": "Contributions to Standards and Cybersecurity Clusters/Associations",
+          "phases": [
+            {
+              "monthFrom": 1,
+              "monthTo": 36
+            }
+          ]
+        },
+        {
+          "id": "T8.3",
+          "name": "Community and Ecosystem Building",
+          "phases": [
+            {
+              "monthFrom": 1,
+              "monthTo": 36
+            }
+          ]
+        },
+        {
+          "id": "T8.4",
+          "name": "Innovation Management and Exploitation Planning",
+          "phases": [
+            {
+              "monthFrom": 1,
+              "monthTo": 36
+            }
+          ]
+        },
+        {
+          "id": "T8.5",
+          "name": "Business Modelling and Sustainability Planning",
+          "phases": [
+            {
+              "monthFrom": 1,
+              "monthTo": 36
+            }
+          ]
+        }
+      ],
+      "milestoneIds": [
+        "MS18",
+        "MS19",
+        "MS20"
+      ]
+    }
+  ],
+  "deliverables": [
+    {
+      "id": "D1.1",
+      "title": "Project Management Handbook, Risk and Quality Management Plan",
+      "wp": "WP1",
+      "leadBeneficiary": "GFT",
+      "type": "R",
+      "disseminationLevel": "SEN",
+      "dueMonth": 3
+    },
+    {
+      "id": "D1.2",
+      "title": "Data Management Plan V1",
+      "wp": "WP1",
+      "leadBeneficiary": "D-VISOR",
+      "type": "DMP",
+      "disseminationLevel": "PU",
+      "dueMonth": 6
+    },
+    {
+      "id": "D1.3",
+      "title": "Data Management Plan V2",
+      "wp": "WP1",
+      "leadBeneficiary": "D-VISOR",
+      "type": "DMP",
+      "disseminationLevel": "PU",
+      "dueMonth": 18
+    },
+    {
+      "id": "D1.4",
+      "title": "Cybesecurity Governance Framework V1",
+      "wp": "WP1",
+      "leadBeneficiary": "IANUS",
+      "type": "R",
+      "disseminationLevel": "SEN",
+      "dueMonth": 12
+    },
+    {
+      "id": "D1.5",
+      "title": "Cybesecurity Governance Framework V2",
+      "wp": "WP1",
+      "leadBeneficiary": "IANUS",
+      "type": "R",
+      "disseminationLevel": "SEN",
+      "dueMonth": 24
+    },
+    {
+      "id": "D1.6",
+      "title": "Cybesecurity Governance Framework V3",
+      "wp": "WP1",
+      "leadBeneficiary": "IANUS",
+      "type": "R",
+      "disseminationLevel": "SEN",
+      "dueMonth": 36
+    },
+    {
+      "id": "D1.7",
+      "title": "VIGILANCE Trustworthy & Ethical Framework and assessment V1",
+      "wp": "WP1",
+      "leadBeneficiary": "SED",
+      "type": "OTHER",
+      "disseminationLevel": "SEN",
+      "dueMonth": 6
+    },
+    {
+      "id": "D1.8",
+      "title": "VIGILANCE Trustworthy & Ethical Framework and assessment V2",
+      "wp": "WP1",
+      "leadBeneficiary": "SED",
+      "type": "OTHER",
+      "disseminationLevel": "SEN",
+      "dueMonth": 18
+    },
+    {
+      "id": "D1.9",
+      "title": "VIGILANCE Trustworthy & Ethical Framework and assessment V3",
+      "wp": "WP1",
+      "leadBeneficiary": "SED",
+      "type": "OTHER",
+      "disseminationLevel": "SEN",
+      "dueMonth": 36
+    },
+    {
+      "id": "D2.1",
+      "title": "Cybersecurity requirements analysis & detailed Inventory of solutions V1",
+      "wp": "WP2",
+      "leadBeneficiary": "IANUS",
+      "type": "R",
+      "disseminationLevel": "PU",
+      "dueMonth": 6
+    },
+    {
+      "id": "D2.2",
+      "title": "Cybersecurity requirements analysis & detailed Inventory of solutions V2",
+      "wp": "WP2",
+      "leadBeneficiary": "IANUS",
+      "type": "R",
+      "disseminationLevel": "PU",
+      "dueMonth": 18
+    },
+    {
+      "id": "D2.3",
+      "title": "VIGILANCE Reference Zero-Trust Architecture V1",
+      "wp": "WP2",
+      "leadBeneficiary": "UPRC",
+      "type": "R",
+      "disseminationLevel": "PU",
+      "dueMonth": 9
+    },
+    {
+      "id": "D2.4",
+      "title": "VIGILANCE Reference Zero-Trust Architecture V2",
+      "wp": "WP2",
+      "leadBeneficiary": "UPRC",
+      "type": "R",
+      "disseminationLevel": "PU",
+      "dueMonth": 16
+    },
+    {
+      "id": "D2.5",
+      "title": "VIGILANCE Reference Zero-Trust Architecture V3",
+      "wp": "WP2",
+      "leadBeneficiary": "UPRC",
+      "type": "R",
+      "disseminationLevel": "PU",
+      "dueMonth": 24
+    },
+    {
+      "id": "D3.1",
+      "title": "Adaptive Threat Exposure and SVA Tool – Methodology and Prototype V1",
+      "wp": "WP3",
+      "leadBeneficiary": "STAM",
+      "type": "R",
+      "disseminationLevel": "PU",
+      "dueMonth": 6
+    },
+    {
+      "id": "D3.2",
+      "title": "Adaptive Threat Exposure and SVA Tool – Methodology and Prototype V2",
+      "wp": "WP3",
+      "leadBeneficiary": "STAM",
+      "type": "R",
+      "disseminationLevel": "PU",
+      "dueMonth": 18
+    },
+    {
+      "id": "D3.3",
+      "title": "Adaptive Threat Exposure and SVA Tool – Methodology and Prototype V3",
+      "wp": "WP3",
+      "leadBeneficiary": "STAM",
+      "type": "R",
+      "disseminationLevel": "PU",
+      "dueMonth": 30
+    },
+    {
+      "id": "D3.4",
+      "title": "Adversarial simulation and PenTesting framework and integration with ATEM V1",
+      "wp": "WP3",
+      "leadBeneficiary": "UBI",
+      "type": "R",
+      "disseminationLevel": "PU",
+      "dueMonth": 12
+    },
+    {
+      "id": "D3.5",
+      "title": "Adversarial simulation and PenTesting framework and integration with ATEM V2",
+      "wp": "WP3",
+      "leadBeneficiary": "UBI",
+      "type": "R",
+      "disseminationLevel": "PU",
+      "dueMonth": 24
+    },
+    {
+      "id": "D3.6",
+      "title": "Final ATEM-Driven SVA and Red Teaming Toolkit",
+      "wp": "WP3",
+      "leadBeneficiary": "D-VISOR",
+      "type": "DEM",
+      "disseminationLevel": "PU",
+      "dueMonth": 30
+    },
+    {
+      "id": "D3.7",
+      "title": "Analysis and Reporting of ATEM Pentesting Outcomes V1",
+      "wp": "WP3",
+      "leadBeneficiary": "AEGIS",
+      "type": "R",
+      "disseminationLevel": "SEN",
+      "dueMonth": 16
+    },
+    {
+      "id": "D3.8",
+      "title": "Analysis and Reporting of ATEM Pentesting Outcomes V2",
+      "wp": "WP3",
+      "leadBeneficiary": "AEGIS",
+      "type": "R",
+      "disseminationLevel": "SEN",
+      "dueMonth": 30
+    },
+    {
+      "id": "D4.1",
+      "title": "Specification and integration plan for privacy-preserving and Quantum data sharing systems V1",
+      "wp": "WP4",
+      "leadBeneficiary": "INT",
+      "type": "R",
+      "disseminationLevel": "PU",
+      "dueMonth": 12
+    },
+    {
+      "id": "D4.2",
+      "title": "Specification and integration plan for privacy-preserving and Quantum data sharing systems V2",
+      "wp": "WP4",
+      "leadBeneficiary": "INT",
+      "type": "R",
+      "disseminationLevel": "PU",
+      "dueMonth": 27
+    },
+    {
+      "id": "D4.3",
+      "title": "Self-adaptive Recommendation Workbench V1",
+      "wp": "WP4",
+      "leadBeneficiary": "D-VISOR",
+      "type": "DEM",
+      "disseminationLevel": "PU",
+      "dueMonth": 12
+    },
+    {
+      "id": "D4.4",
+      "title": "Self-adaptive Recommendation Workbench V2",
+      "wp": "WP4",
+      "leadBeneficiary": "D-VISOR",
+      "type": "DEM",
+      "disseminationLevel": "PU",
+      "dueMonth": 30
+    },
+    {
+      "id": "D4.5",
+      "title": "Secure and privacy-preserving data sharing toolkit V1",
+      "wp": "WP4",
+      "leadBeneficiary": "ETRA",
+      "type": "DEM",
+      "disseminationLevel": "PU",
+      "dueMonth": 12
+    },
+    {
+      "id": "D4.6",
+      "title": "Secure and privacy-preserving data sharing toolkit V2",
+      "wp": "WP4",
+      "leadBeneficiary": "ETRA",
+      "type": "DEM",
+      "disseminationLevel": "PU",
+      "dueMonth": 30
+    },
+    {
+      "id": "D5.1",
+      "title": "Agentic ZTA Platform – Specification, Knowledge models, and Early Component Prototypes V1",
+      "wp": "WP5",
+      "leadBeneficiary": "ETRA",
+      "type": "DEM",
+      "disseminationLevel": "PU",
+      "dueMonth": 18
+    },
+    {
+      "id": "D5.2",
+      "title": "Agentic ZTA Platform – Specification, Knowledge models, and Early Component Prototypes V2",
+      "wp": "WP5",
+      "leadBeneficiary": "ETRA",
+      "type": "DEM",
+      "disseminationLevel": "PU",
+      "dueMonth": 36
+    },
+    {
+      "id": "D5.3",
+      "title": "Agentic AI ZTA Platform and Sector-Specific Blueprint Suite V1",
+      "wp": "WP5",
+      "leadBeneficiary": "STAM",
+      "type": "R",
+      "disseminationLevel": "PU",
+      "dueMonth": 18
+    },
+    {
+      "id": "D5.4",
+      "title": "Agentic AI ZTA Platform and Sector-Specific Blueprint Suite V2",
+      "wp": "WP5",
+      "leadBeneficiary": "STAM",
+      "type": "R",
+      "disseminationLevel": "PU",
+      "dueMonth": 33
+    },
+    {
+      "id": "D6.1",
+      "title": "Specification of UC Scenarios and Planning of Integration and Validation Activities V1",
+      "wp": "WP6",
+      "leadBeneficiary": "OTE",
+      "type": "R",
+      "disseminationLevel": "SEN",
+      "dueMonth": 6
+    },
+    {
+      "id": "D6.2",
+      "title": "Specification of UC Scenarios and Planning of Integration and Validation Activities V2",
+      "wp": "WP6",
+      "leadBeneficiary": "OTE",
+      "type": "R",
+      "disseminationLevel": "SEN",
+      "dueMonth": 12
+    },
+    {
+      "id": "D6.3",
+      "title": "Specification of UC Scenarios and Planning of Integration and Validation Activities V3",
+      "wp": "WP6",
+      "leadBeneficiary": "OTE",
+      "type": "R",
+      "disseminationLevel": "SEN",
+      "dueMonth": 24
+    },
+    {
+      "id": "D6.4",
+      "title": "Consolidated evaluation report and cross-pilot recommendations V1",
+      "wp": "WP6",
+      "leadBeneficiary": "VIL",
+      "type": "R",
+      "disseminationLevel": "SEN",
+      "dueMonth": 24
+    },
+    {
+      "id": "D6.5",
+      "title": "Consolidated evaluation report and cross-pilot recommendations V2",
+      "wp": "WP6",
+      "leadBeneficiary": "VIL",
+      "type": "R",
+      "disseminationLevel": "SEN",
+      "dueMonth": 36
+    },
+    {
+      "id": "D7.1",
+      "title": "Training toolkit launch report and curriculum outline V1",
+      "wp": "WP7",
+      "leadBeneficiary": "IANUS",
+      "type": "R",
+      "disseminationLevel": "PU",
+      "dueMonth": 16
+    },
+    {
+      "id": "D7.2",
+      "title": "Training toolkit launch report and curriculum outline V2",
+      "wp": "WP7",
+      "leadBeneficiary": "IANUS",
+      "type": "R",
+      "disseminationLevel": "PU",
+      "dueMonth": 33
+    },
+    {
+      "id": "D7.3",
+      "title": "VIGILANCE Cybersecurity Academy V1",
+      "wp": "WP7",
+      "leadBeneficiary": "VIL",
+      "type": "R",
+      "disseminationLevel": "PU",
+      "dueMonth": 18
+    },
+    {
+      "id": "D7.4",
+      "title": "VIGILANCE Cybersecurity Academy V2",
+      "wp": "WP7",
+      "leadBeneficiary": "VIL",
+      "type": "R",
+      "disseminationLevel": "PU",
+      "dueMonth": 36
+    },
+    {
+      "id": "D8.1",
+      "title": "Communication and Dissemination plan",
+      "wp": "WP8",
+      "leadBeneficiary": "VIL",
+      "type": "R",
+      "disseminationLevel": "PU",
+      "dueMonth": 6
+    },
+    {
+      "id": "D8.2",
+      "title": "Dissemination, Standardization & Joint Activities Report V1",
+      "wp": "WP8",
+      "leadBeneficiary": "VIL",
+      "type": "R",
+      "disseminationLevel": "PU",
+      "dueMonth": 12
+    },
+    {
+      "id": "D8.3",
+      "title": "Dissemination, Standardization & Joint Activities Report V2",
+      "wp": "WP8",
+      "leadBeneficiary": "VIL",
+      "type": "R",
+      "disseminationLevel": "PU",
+      "dueMonth": 24
+    },
+    {
+      "id": "D8.4",
+      "title": "Dissemination, Standardization & Joint Activities Report V3",
+      "wp": "WP8",
+      "leadBeneficiary": "VIL",
+      "type": "R",
+      "disseminationLevel": "PU",
+      "dueMonth": 36
+    },
+    {
+      "id": "D8.5",
+      "title": "VIGILANCE Community and Ecosystem Building V1",
+      "wp": "WP8",
+      "leadBeneficiary": "OTE",
+      "type": "R",
+      "disseminationLevel": "PU",
+      "dueMonth": 12
+    },
+    {
+      "id": "D8.6",
+      "title": "VIGILANCE Community and Ecosystem Building V2",
+      "wp": "WP8",
+      "leadBeneficiary": "OTE",
+      "type": "R",
+      "disseminationLevel": "PU",
+      "dueMonth": 24
+    },
+    {
+      "id": "D8.7",
+      "title": "VIGILANCE Community and Ecosystem Building V3",
+      "wp": "WP8",
+      "leadBeneficiary": "OTE",
+      "type": "R",
+      "disseminationLevel": "PU",
+      "dueMonth": 36
+    },
+    {
+      "id": "D8.8",
+      "title": "Exploitation, Market analysis & Sustainable Business Models V1",
+      "wp": "WP8",
+      "leadBeneficiary": "INNOV",
+      "type": "R",
+      "disseminationLevel": "SEN",
+      "dueMonth": 18
+    },
+    {
+      "id": "D8.9",
+      "title": "Exploitation, Market analysis & Sustainable Business Models V2",
+      "wp": "WP8",
+      "leadBeneficiary": "INNOV",
+      "type": "R",
+      "disseminationLevel": "SEN",
+      "dueMonth": 36
+    }
+  ],
+  "milestones": [
+    {
+      "id": "MS1",
+      "name": "Security Advisory Board Mobilized",
+      "wp": "WP1",
+      "leadBeneficiary": "IANUS",
+      "dueMonth": 6,
+      "meansOfVerification": "The SAB of the project should be established and mobilized - verified by SAB linked to the project's pilots and security activities"
+    },
+    {
+      "id": "MS2",
+      "name": "Ethics Advisory Board Mobilized",
+      "wp": "WP1",
+      "leadBeneficiary": "SED",
+      "dueMonth": 6,
+      "meansOfVerification": "The EAB of the project should be established and mobilized - EAB to be linked with the ethical and communicate with the Ethics Manager"
+    },
+    {
+      "id": "MS3",
+      "name": "VIGILANCE successful completion",
+      "wp": "WP1",
+      "leadBeneficiary": "GFT",
+      "dueMonth": 36,
+      "meansOfVerification": "Successful implementation of the project - verified by project's deliverables, exploitable tools and financial activities completed"
+    },
+    {
+      "id": "MS4",
+      "name": "Co-Creation Sessions",
+      "wp": "WP2",
+      "leadBeneficiary": "IANUS",
+      "dueMonth": 6,
+      "meansOfVerification": "Co-creation sessions for each one of the pilots verified by D2.1"
+    },
+    {
+      "id": "MS5",
+      "name": "High-level conceptual model and reference architecture",
+      "wp": "WP2",
+      "leadBeneficiary": "UPRC",
+      "dueMonth": 9,
+      "meansOfVerification": "Initial version of zero-trust architecture and principles verified by D2.2"
+    },
+    {
+      "id": "MS6",
+      "name": "Inventory of Cybersecurity solutions",
+      "wp": "WP2",
+      "leadBeneficiary": "INNOV",
+      "dueMonth": 18,
+      "meansOfVerification": "Second round of co-creation sessions for each one of the pilots verified by D2.1"
+    },
+    {
+      "id": "MS7",
+      "name": "Initial strategy and specification for Adaptive Threat Exposure and SVA",
+      "wp": "WP3",
+      "leadBeneficiary": "D-VISOR",
+      "dueMonth": 6,
+      "meansOfVerification": "Completion of initial analysis and design activities under tasks T3.1 and T3.2 verified by D3.1"
+    },
+    {
+      "id": "MS8",
+      "name": "Integration of ATEM-enabled adversarial simulation and Red Teaming modules in the VIGILANCE environment",
+      "wp": "WP3",
+      "leadBeneficiary": "UBI",
+      "dueMonth": 18,
+      "meansOfVerification": "This milestone captures the operationalization of ATEM within the adversarial simulation framework (T3.2–T3.3) and it's verified in D3.2"
+    },
+    {
+      "id": "MS9",
+      "name": "Validation and evaluation of ATEM-enhanced SVA and PenTesting outcomes",
+      "wp": "WP3",
+      "leadBeneficiary": "AEGIS",
+      "dueMonth": 30,
+      "meansOfVerification": "Full integration and validation of the WP3 ATEM toolkit and reporting outcomes verified in D3.3 & D3.4"
+    },
+    {
+      "id": "MS10",
+      "name": "Specification of data privacy, Quantum security and context-aware intelligence",
+      "wp": "WP4",
+      "leadBeneficiary": "INT",
+      "dueMonth": 12,
+      "meansOfVerification": "Successful integration of early-stage results from Tasks T4.1 to T4.3 verified in D4.1"
+    },
+    {
+      "id": "MS11",
+      "name": "Pilot-ready security framework for trusted data sharing and threat detection",
+      "wp": "WP4",
+      "leadBeneficiary": "D-VISOR",
+      "dueMonth": 30,
+      "meansOfVerification": "Delivery of a modular and ready for deployment framework combining proactive threat detection, biometric authentication, and secure data exchange. The milestone is verified in D4.2 & D4.3"
+    },
+    {
+      "id": "MS12",
+      "name": "Core agentic components and orchestration layer established",
+      "wp": "WP5",
+      "leadBeneficiary": "INNOV",
+      "dueMonth": 16,
+      "meansOfVerification": "Foundational elements of the ZTA Mesh are in place, including the semantic knowledge modelling engine (T5.1), the initial version of the cybersecurity agents repository (T5.2), and the orchestration layers architecture (T5.4). Verified in D5.1"
+    },
+    {
+      "id": "MS13",
+      "name": "Final integrated Agentic ZTA platform for operational environments",
+      "wp": "WP5",
+      "leadBeneficiary": "ETRA",
+      "dueMonth": 33,
+      "meansOfVerification": "Certifies the readiness of the complete ZTA Mesh stack, including fully integrated wrappers, blueprints per sector, orchestrated agent layers, and context-driven decision-making intelligence. Milestone verified in D5.2"
+    },
+    {
+      "id": "MS14",
+      "name": "Multi-Party pilot scenarios deployments finalized",
+      "wp": "WP6",
+      "leadBeneficiary": "OTE",
+      "dueMonth": 24,
+      "meansOfVerification": "Ensures that the environment setup for all pilot domains is complete, including user onboarding, co-creation planning, scenario design, and pre- evaluation baselines. The miliestone is verified by D6.1"
+    },
+    {
+      "id": "MS15",
+      "name": "Final pilot validation and cross-sectoral evaluation",
+      "wp": "WP6",
+      "leadBeneficiary": "VIL",
+      "dueMonth": 36,
+      "meansOfVerification": "Marks the full execution of all pilots across domains and the completion of feedback cycles and the milestone is verified by D6.2"
+    },
+    {
+      "id": "MS16",
+      "name": "Training toolkit and material",
+      "wp": "WP7",
+      "leadBeneficiary": "IANUS",
+      "dueMonth": 18,
+      "meansOfVerification": "Providing the first prototype and training material, Milestone verified by D7.1 & D7.2"
+    },
+    {
+      "id": "MS17",
+      "name": "VIGILANCE Cybersecurity Academy establishment",
+      "wp": "WP7",
+      "leadBeneficiary": "VIL",
+      "dueMonth": 36,
+      "meansOfVerification": "Learning outcomes, user engagement statistics, stakeholder feedback, and recommendations for future training initiatives. Milestone verified by D7.2"
+    },
+    {
+      "id": "MS18",
+      "name": "VIGILANCE branding",
+      "wp": "WP8",
+      "leadBeneficiary": "VIL",
+      "dueMonth": 3,
+      "meansOfVerification": "Communication/dissemination artefacts verified by the activities listed in D8.1"
+    },
+    {
+      "id": "MS19",
+      "name": "Critical Mass of VIGILANCE Community",
+      "wp": "WP8",
+      "leadBeneficiary": "OTE",
+      "dueMonth": 36,
+      "meansOfVerification": "Establishment of VIGILANCE vibrant community - mean of verification linked with D8.3"
+    },
+    {
+      "id": "MS20",
+      "name": "VIGILANCE Business Plan",
+      "wp": "WP8",
+      "leadBeneficiary": "ETRA",
+      "dueMonth": 36,
+      "meansOfVerification": "Establishment of sustainable business plan for the exploitation of project's results and solutions. Milestone verified and linked with D8.4"
+    }
+  ]
+}
