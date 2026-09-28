@@ -1,9 +1,8 @@
-import { Worksheet } from 'exceljs';
+import { Cell, Worksheet } from 'exceljs';
+import { GRID_BORDER_COLOR, HEADER_BAND_FILL, HEADER_FONT_COLOR } from './excel-style';
 import { PreviewSheet } from './preview.types';
 
-const HEADER_FILL_ARGB = 'FF1F4E78';
-const HEADER_FONT_ARGB = 'FFFFFFFF';
-const SECTION_LABEL_FONT_ARGB = 'FF1F4E78';
+const SECTION_LABEL_FONT_ARGB = HEADER_FONT_COLOR;
 
 export function writeSheet(worksheet: Worksheet, sheet: PreviewSheet): void {
   worksheet.addRow(sheet.headers);
@@ -12,12 +11,30 @@ export function writeSheet(worksheet: Worksheet, sheet: PreviewSheet): void {
   }
 }
 
-/** Styles header row 1 (fill + white bold text) and freezes it. */
+export function setFill(cell: Cell, argb: string): void {
+  cell.fill = { type: 'pattern', pattern: 'solid', fgColor: { argb } };
+}
+
+const THIN_BORDER_SIDE = { style: 'thin' as const, color: { argb: GRID_BORDER_COLOR } };
+
+export function applyGridBorders(worksheet: Worksheet, fromRow: number, lastCol: number, lastRow: number): void {
+  for (let r = fromRow; r <= lastRow; r++) {
+    for (let c = 1; c <= lastCol; c++) {
+      worksheet.getCell(r, c).border = {
+        left: THIN_BORDER_SIDE,
+        right: THIN_BORDER_SIDE,
+        bottom: THIN_BORDER_SIDE,
+      };
+    }
+  }
+}
+
+/** Styles header row 1 (cyan fill, dark-blue bold text — matches VILABS' reference workbook) and freezes it. */
 export function styleHeaderRow(worksheet: Worksheet): void {
   const headerRow = worksheet.getRow(1);
   headerRow.eachCell({ includeEmpty: true }, (cell) => {
-    cell.fill = { type: 'pattern', pattern: 'solid', fgColor: { argb: HEADER_FILL_ARGB } };
-    cell.font = { bold: true, color: { argb: HEADER_FONT_ARGB } };
+    setFill(cell, HEADER_BAND_FILL);
+    cell.font = { bold: true, color: { argb: HEADER_FONT_COLOR } };
   });
   worksheet.views = [{ state: 'frozen', ySplit: 1 }];
 }
