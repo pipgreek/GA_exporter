@@ -97,21 +97,23 @@ Upload PDF
 
 **Κατάσταση 2026-09-28:** ολοκληρωμένο και δοκιμασμένο — `pnpm build` καθαρό, live run του `generateAll()` πάνω στο πραγματικό GA (~31s, ίδια αποτελέσματα με το `llm/testing-notes.md` live test), και mocked test και για τα δύο retry paths (retry-then-succeed, exhaust-retries-then-throw). Τα 3 validated JSON αποθηκεύονται σε `{requestId}/intermediate/{info,gantt,kpi}.json` στο Supabase Storage, έτοιμα για το document generation step (§G) που ακολουθεί.
 
-#### F. Templates (Word/Excel) — **[owner: Γιώργος]**
-- [x] Αρχεία-αφετηρία ανέβηκαν στο repo (`docs/templates/`: Gantt EVOLVE2CARE, KPI VIGILANCE, Info docx)
-- [ ] Μετατροπή σε **κενά** templates με placeholders (docxtemplater syntax για Word, named cells/template rows για Excel) — τα τρέχοντα αρχεία έχουν ακόμα πραγματικά δεδομένα παραδειγμάτων, όχι placeholders
-- [ ] Ορισμός μέγιστου εύρους (π.χ. μήνες/WPs) που καλύπτουν τα templates
-- [ ] Μετακίνηση/οργάνωση των τελικών templates σε `backend/templates/`
+#### F. Templates (Word/Excel) — **[owner: Γιώργος, υλοποιήθηκε 2026-09-28]**
+- [x] **INFO (Word)**: πραγματικό docxtemplater template (`backend/templates/info-template.docx`), παραγόμενο από script (`backend/scripts/generate-info-template.ts`, τρέχει μία φορά, το binary μπαίνει στο repo). Nested πεδία (`ownEntity`, `duration`, `socialMedia`) γράφονται ως `{#scope}...{/scope}` blocks — **όχι** dot-notation (`{a.b}`), γιατί το docxtemplater δεν το υποστηρίζει by default (βρέθηκε bug σε αρχικό test, διορθώθηκε).
+- [x] **Gantt/KPI (Excel)**: **αλλαγή αρχιτεκτονικής απόφασης** — αντί για static template αρχείο με fixed tabs, το workbook χτίζεται προγραμματιστικά (exceljs) με κοινό styling module (`excel-render-utils.ts`: header fill/bold/freeze, auto-width, sheet-name sanitization). Λόγος: το πλήθος στηλών (μήνες) και sheets (KPI categories) είναι **εγγενώς μεταβλητό ανά GA** — το `llm/schemas/preview-mapping.md` το επιβεβαιώνει ρητά ("one sheet per category"). Ένα fixed-tab template δεν θα μπορούσε ποτέ να καλύψει σωστά όλα τα GAs. Τα `docs/templates/*.xlsx` παραδείγματα παραμένουν ως οπτική αναφορά στυλ, όχι ως literal templates.
+- [x] Ορισμός μέγιστου εύρους — `backend/src/document-generation/render-limits.ts`: `MAX_TOTAL_MONTHS=48`, `MAX_WORK_PACKAGES=30`, `MAX_KPI_CATEGORIES=40`. Δεν είναι τεχνικός περιορισμός (οι στήλες/sheets είναι δυναμικά) αλλά **sanity guard**: η υπέρβαση θεωρείται πιθανό extraction bug, όχι πραγματικό μεγάλο project, και αποτυγχάνει το job καθαρά (status `error`) αντί να παράγει αλλοιωμένο αρχείο.
+- [x] Templates στο `backend/templates/`
 
 #### G. Document generation engine
-- [ ] `renderInfoDoc(json)` — docxtemplater fill → .docx
-- [ ] `renderGanttExcel(json)` — exceljs fill (μήνες/στήλες, χρωματισμός D/MS markers, duplicateRow για λίστες) → .xlsx
-- [ ] `renderKpiExcel(json)` — exceljs fill → .xlsx
-- [ ] Αποθήκευση παραγόμενων αρχείων στο Supabase Storage (`{requestId}/output/*`)
+- [x] `renderInfoDoc(json)` — docxtemplater fill → .docx (`info-renderer.ts`)
+- [x] `renderGanttExcel(json)` / `renderKpiExcel(json)` — exceljs, χτίζονται από τα ίδια `gantt-mapping.ts`/`kpi-mapping.ts` που τροφοδοτούν και το preview (μία πηγή αλήθειας, §2)
+- [x] `DocumentGenerationService.generateAll()` — τρέχει και τα 3 παράλληλα
+- [x] Αποθήκευση παραγόμενων αρχείων στο Supabase Storage (`{requestId}/output/INFO_Generation.docx`, `Gantt_Chart.xlsx`, `KPI_Monitoring.xlsx`, `preview.json` — ίδια ονόματα με το `api-contract.md`)
 
-#### H. Preview & Download endpoints
-- [ ] `GET /preview/{requestId}` — επιστρέφει `{ info: {html}, gantt: {sheets[]}, kpi: {sheets[]} }` (βλ. §6). Το frontend το καλεί μόνο όταν ο χρήστης ανοίξει preview.
-- [ ] `GET /download/{requestId}/{fileType}` — signed URL ή direct stream από Supabase Storage
+**Κατάσταση 2026-09-28:** ολοκληρωμένο, δοκιμασμένο. `DocumentGenerationService.generateAll()` δοκιμάστηκε με το πραγματικό validated JSON (openpyxl inspection του .xlsx, έλεγχος του mammoth HTML) — εκεί εντοπίστηκε και διορθώθηκε το docxtemplater dot-notation bug. Πλήρες worker integration test (πραγματικό PDF → πραγματικό pdfplumber parsing → mocked LLM με πραγματικά cached δεδομένα → πραγματικό document generation → fake in-memory storage): επιβεβαιώθηκε η ακριβής σειρά κατάστασης `scanning→extracting→analyzing→generating→done`, ότι `done` εμφανίζεται **μόνο** αφού υπάρχουν και τα 4 αρχεία στο storage, και ότι μια παραβίαση του render-limit αποτυγχάνει το job καθαρά (status `error`, μηδέν partial output files) αντί να δηλώσει ψευδώς `done`.
+
+#### H. Preview & Download endpoints — επόμενο βήμα
+- [ ] `GET /preview/{requestId}` — επιστρέφει `{ info: {html}, gantt: {sheets[]}, kpi: {sheets[]} }` (βλ. §6). Τα δεδομένα είναι ήδη έτοιμα στο storage (`{requestId}/output/preview.json`) — απομένει μόνο το HTTP endpoint. Το frontend το καλεί μόνο όταν ο χρήστης ανοίξει preview.
+- [ ] `GET /download/{requestId}/{fileType}` — signed URL ή direct stream από Supabase Storage (αρχεία ήδη εκεί, ίδια ονόματα με το api-contract.md)
 - [ ] `GET /download-all/{requestId}` — δημιουργία .zip (archiver) on-the-fly ή προ-δημιουργημένο
 
 #### I. Cleanup & ops
@@ -210,7 +212,7 @@ kpi:   { sheets: [{ name: string, headers: string[], rows: (string | number | nu
 
 ## 7. Ανοιχτά σημεία προς απόφαση
 
-- [ ] Μέγιστο εύρος μηνών/WPs στα Excel templates
+- [x] ~~Μέγιστο εύρος μηνών/WPs στα Excel templates~~ — αποφασίστηκε 2026-09-28: `MAX_TOTAL_MONTHS=48`, `MAX_WORK_PACKAGES=30`, `MAX_KPI_CATEGORIES=40` (`backend/src/document-generation/render-limits.ts`), όχι τεχνικός περιορισμός αλλά sanity guard αφού το rendering είναι πλέον δυναμικό (§5.F)
 - [x] ~~Ακριβές μέγεθος/typical σελίδες Grant Agreement (επηρεάζει αν χρειάζεται chunking πριν το LLM)~~ — δοκιμάστηκε 2026-09-28: το πλήρες GA (5.955 γραμμές .md) χωράει σε ένα call χωρίς chunking (~107K input tokens, καλά μέσα στο context window). Βλ. `llm/testing-notes.md`.
 - [ ] Error/retry UX σε αποτυχία LLM parsing
 - [ ] Anthropic API key management & budget cap — τώρα με πραγματικό αριθμό αναφοράς: ~$0.38/Grant Agreement (μετρημένο 2026-09-28, `llm/testing-notes.md`)
@@ -218,15 +220,16 @@ kpi:   { sheets: [{ name: string, headers: string[], rows: (string | number | nu
 
 ## 8. Σειρά προτεραιότητας (ενημερωμένη 2026-09-28)
 
-**Κατάσταση:** `llm` ολοκληρωμένο και δοκιμασμένο έναντι live API (εκκρεμεί merge) · `frontend` πλήρες αλλά πάνω σε mocks, ήδη στο `main` · `backend` έχει infra + PDF→Markdown + LLM integration/validation έτοιμα και δοκιμασμένα (§5.D-E), σταματάει πριν το document generation στάδιο.
+**Κατάσταση:** `llm` ολοκληρωμένο και δοκιμασμένο έναντι live API (εκκρεμεί merge) · `frontend` πλήρες αλλά πάνω σε mocks, ήδη στο `main` · `backend` έχει infra + PDF→Markdown + LLM integration/validation + **πλήρες document generation** έτοιμα και δοκιμασμένα (§5.C-G) — ο worker παράγει πλέον όλα τα τελικά αρχεία και φτάνει σε status `done`. Απομένουν μόνο τα HTTP endpoints (§5.H) για να τα εκθέσει στο frontend.
 
-1. ~~Templates (Γιώργος) + JSON Schemas (Αριστείδης)~~ — schemas/prompts έτοιμα και δοκιμασμένα· τα templates χρειάζονται ακόμα μετατροπή σε placeholder-ready (βλ. §5.F)
+1. ~~Templates (Γιώργος) + JSON Schemas (Αριστείδης)~~ — schemas/prompts έτοιμα και δοκιμασμένα· τα Excel templates έγιναν δυναμικό rendering αντί για static αρχεία (βλ. §5.F)
 2. ~~API contract (§6)~~ — κλειδωμένο στο `docs/api-contract.md`
 3. ~~Backend: LLM integration (§5.D) + validation (§5.E)~~ — ολοκληρωμένο, δοκιμασμένο live
-4. **Τώρα:**
+4. ~~Backend: document generation engine (§5.F-G) + worker ολοκλήρωση (done μόνο όταν όλα τα outputs είναι έτοιμα)~~ — ολοκληρωμένο, δοκιμασμένο end-to-end
+5. **Τώρα:**
    - Merge `llm` → `main`
-   - Backend: μετατροπή templates σε placeholder-ready (§5.F) + document generation (§5.G) + preview/download endpoints (§5.H)
+   - Backend: preview/download HTTP endpoints (§5.H) — τα δεδομένα είναι ήδη στο storage, μένει μόνο η έκθεσή τους
    - Frontend: switch από mock API routes στο πραγματικό backend, μόλις τα endpoints είναι έτοιμα
-5. Integration testing end-to-end (πραγματικό PDF → download αρχεία)
-6. Ops: deploy Render/Vercel, cleanup job, Redis TTL, budget cap (§5.A, §5.I)
-7. Merge backend/frontend σε `main`
+6. Integration testing end-to-end (πραγματικό PDF → download αρχεία, μέσω πραγματικού Supabase — ακόμα δεν έχει συνδεθεί τοπικά, §5.A)
+7. Ops: deploy Render/Vercel, cleanup job, Redis TTL, budget cap (§5.A, §5.I)
+8. Merge backend/frontend σε `main`
