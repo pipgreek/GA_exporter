@@ -85,28 +85,38 @@ function buildOverviewSheet(workbook: Workbook, gantt: GanttJson): Worksheet {
     wpLabelCell.value = wp.id;
     wpLabelCell.font = { bold: true };
 
-    const dueMonthToMilestoneId = new Map<number, string>();
+    // A WP can have multiple milestones due the same month (e.g. an ethics
+    // board and a security board both mobilized in month 6) — collect all
+    // ids per month rather than overwriting, and join them like the
+    // reference workbook does ("MS1 & MS2").
+    const dueMonthToMilestoneIds = new Map<number, string[]>();
     for (const id of wp.milestoneIds ?? []) {
       const milestone = milestonesById.get(id);
-      if (milestone) dueMonthToMilestoneId.set(milestone.dueMonth, milestone.id);
+      if (!milestone) continue;
+      const ids = dueMonthToMilestoneIds.get(milestone.dueMonth) ?? [];
+      ids.push(milestone.id);
+      dueMonthToMilestoneIds.set(milestone.dueMonth, ids);
     }
 
+    const wpRowMilestoneMonths = new Set<number>();
     for (let m = 1; m <= totalMonths; m++) {
       const cell = wpRow.getCell(1 + m);
-      const milestoneId = dueMonthToMilestoneId.get(m);
-      if (milestoneId) {
-        cell.value = milestoneId;
+      const milestoneIds = dueMonthToMilestoneIds.get(m);
+      if (milestoneIds && milestoneIds.length > 0) {
+        cell.value = milestoneIds.join(' & ');
         setFill(cell, MILESTONE_FILL);
         cell.font = { bold: true, color: { argb: MILESTONE_FONT_COLOR } };
+        wpRowMilestoneMonths.add(m);
       } else if (m >= wp.monthFrom && m <= wp.monthTo) {
         setFill(cell, WP_FILL);
       }
     }
     rowIndex += 1;
 
-    const taskRowStart = rowIndex;
+    const taskRowByTaskId = new Map<string, ReturnType<typeof ws.getRow>>();
     for (const task of wp.tasks) {
       const taskRow = ws.getRow(rowIndex);
+      taskRowByTaskId.set(task.id, taskRow);
       const taskLabelCell = taskRow.getCell(1);
       taskLabelCell.value = task.id;
       taskLabelCell.font = { bold: true };
@@ -121,22 +131,27 @@ function buildOverviewSheet(workbook: Workbook, gantt: GanttJson): Worksheet {
       rowIndex += 1;
     }
 
-    // Deliverables only carry a wp reference in the schema, not a task id.
-    // Distributed round-robin across the WP's own task rows (matches the
-    // numbering pattern observed in the reference workbook, e.g. D1.1/D1.4
-    // -> T1.1, D1.2/D1.5 -> T1.2); falls back to the WP row itself if the WP
-    // has no tasks.
+    // Deliverables only carry a wp reference in the schema; taskId is set by
+    // the LLM only when confidently determinable from the text (see
+    // gantt.schema.json). When present and it names one of this WP's own
+    // tasks, place the marker on that task's row (matches the reference
+    // workbook); otherwise fall back to the WP's own row, which is always
+    // correct even if less precise — never guess a task (implementation-plan.md §7).
     const wpDeliverables = deliverablesByWp.get(wp.id) ?? [];
-    for (let i = 0; i < wpDeliverables.length; i++) {
-      const d = wpDeliverables[i];
+    for (const d of wpDeliverables) {
       if (d.dueMonth < 1 || d.dueMonth > totalMonths) continue;
-      const targetRow =
-        wp.tasks.length > 0 ? ws.getRow(taskRowStart + (i % wp.tasks.length)) : wpRow;
+      const onWpRow = !d.taskId || !taskRowByTaskId.has(d.taskId);
+      const targetRow = onWpRow ? wpRow : taskRowByTaskId.get(d.taskId as string)!;
       const cell = targetRow.getCell(1 + d.dueMonth);
-      const style = deliverableStyle(d.disseminationLevel);
-      cell.value = d.id;
-      setFill(cell, style.fill);
-      cell.font = { bold: true, color: { argb: style.font } };
+      cell.value = cell.value ? `${cell.value} & ${d.id}` : d.id;
+      // A milestone sharing this WP-row cell takes styling precedence — it's
+      // the rarer, typically more significant marker; the deliverable id is
+      // still appended to the text either way, just not re-colored.
+      if (!(onWpRow && wpRowMilestoneMonths.has(d.dueMonth))) {
+        const style = deliverableStyle(d.disseminationLevel);
+        setFill(cell, style.fill);
+        cell.font = { bold: true, color: { argb: style.font } };
+      }
     }
   }
 

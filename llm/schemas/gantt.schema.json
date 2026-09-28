@@ -84,6 +84,11 @@
           "title": { "type": "string" },
           "wp": { "type": "string", "pattern": "^WP[0-9]+$" },
           "leadBeneficiary": { "type": "string", "default": "tbd" },
+          "taskId": {
+            "type": "string",
+            "pattern": "^T[0-9]+\\.[0-9]+$",
+            "description": "The specific task (within this deliverable's own WP) that produces it, if and only if that can be determined with confidence from the text - either an explicit statement in the task's own description (e.g. 'the task will produce the project's DMP as a deliverable') or an unambiguous thematic match between the deliverable's title and exactly one task's description in that WP. Omit entirely rather than guess when the text doesn't support a confident choice - the render engine falls back to placing an un-attributed deliverable on the WP's own row, which is always correct, just less precise."
+          },
           "type": {
             "type": "string",
             "description": "Deliverable type code as used on the EU Portal (full official Horizon Europe/Euratom list).",

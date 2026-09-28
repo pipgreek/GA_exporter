@@ -35,6 +35,10 @@ const DeliverableSchema = z.object({
   title: z.string(),
   wp: z.string().regex(/^WP[0-9]+$/),
   leadBeneficiary: z.string(),
+  // The task (within this deliverable's own WP) that produces it, only when
+  // stated/inferable with confidence — absent otherwise. The render engine
+  // falls back to the WP's own row rather than guessing (implementation-plan.md §7).
+  taskId: z.string().regex(/^T[0-9]+\.[0-9]+$/).optional(),
   type: DeliverableTypeEnum,
   disseminationLevel: DisseminationLevelEnum,
   dueMonth: z.number().int().min(1),
