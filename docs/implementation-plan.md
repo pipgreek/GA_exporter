@@ -161,7 +161,7 @@ Upload PDF
 
 ### 🧠 Αριστείδης — branch `llm`
 
-**Κατάσταση 2026-09-28: ουσιαστικά ολοκληρωμένο.** Εκκρεμεί μόνο merge `llm` → `main`.
+**Κατάσταση 2026-09-28: ολοκληρωμένο, δοκιμασμένο έναντι live API.** Εκκρεμεί μόνο merge `llm` → `main`.
 
 #### A. JSON Schemas (contract με backend, .md/.json αρχεία)
 - [x] Schema **INFO** (`llm/schemas/info.schema.json`)
@@ -171,7 +171,7 @@ Upload PDF
 
 #### B. Prompts (ένα ανά τύπο αρχείου)
 - [x] Prompt **INFO/Gantt/KPI** — πλήρη, ready-to-send Anthropic request packages (`llm/prompts/*.request.json`, model+system+tools+tool_choice)
-- [x] Test πάνω στο δείγμα Grant Agreement (GAP-101158152) — αποτελέσματα σε `llm/examples/*.example.md`
+- [x] **Live test 2026-09-28** — και τα 3 requests τρέχουν κανονικά (`stop_reason: tool_use`) πάνω στο πλήρες, πραγματικό `.md` του Grant Agreement GAP-101158152 (107K tokens input/call), **0 σφάλματα validation** έναντι των schemas. Καμία αλλαγή prompt/schema δεν χρειάστηκε. Λεπτομέρειες, ποιοτικός έλεγχος και μετρημένο πραγματικό κόστος (~$0.38/GA): [`llm/testing-notes.md`](../llm/testing-notes.md). Raw outputs: `llm/examples/live-run-2026-09-28/`.
 
 #### C. Τεκμηρίωση
 - [x] `.md` αρχεία ανά schema/prompt + παραδείγματα input/output (`llm/schemas/README.md`, `llm/prompts/README.md`, `llm/examples/`)
@@ -184,7 +184,7 @@ Upload PDF
 
 ## 6. Κοινό API Contract (backend ↔ frontend)
 
-Το κλειδωμένο v1 contract τεκμηριώνεται στο [`api-contract.md`](api-contract.md). Οι λεπτομέρειες εκεί είναι η πηγή αλήθειας για request/response shapes, status, preview, download filenames/headers, errors, CORS και retention.
+Το κλειδωμένο v1 contract τεκμηριώνεται στο [`api-contract.md`](api-contract.md) και είναι κοινό για backend, frontend και llm. Οι λεπτομέρειες εκεί είναι η πηγή αλήθειας για request/response shapes, status, preview, download filenames/headers, errors, CORS και retention.
 
 ```
 POST   /upload                      multipart/form-data (PDF) → { requestId }
@@ -195,7 +195,7 @@ GET    /download-all/{requestId}    → .zip
 ```
 
 `status` values: `scanning` → `extracting` → `analyzing` → `generating` → `done` | `error`
-`done` σημαίνει ότι και τα τρία τελικά αρχεία και τα preview δεδομένα είναι έτοιμα· το PDF parsing μόνο του δεν αρκεί.
+`done` σημαίνει ότι και τα τρία τελικά αρχεία και τα preview δεδομένα είναι διαθέσιμα· το PDF parsing μόνο του δεν αρκεί.
 
 Excel previews — ένα στοιχείο ανά sheet, με τη σειρά του workbook (συμφωνήθηκε με backend 2026-09-25):
 
@@ -209,20 +209,20 @@ kpi:   { sheets: [{ name: string, headers: string[], rows: (string | number | nu
 ## 7. Ανοιχτά σημεία προς απόφαση
 
 - [ ] Μέγιστο εύρος μηνών/WPs στα Excel templates
-- [ ] Ακριβές μέγεθος/typical σελίδες Grant Agreement (επηρεάζει αν χρειάζεται chunking πριν το LLM)
+- [x] ~~Ακριβές μέγεθος/typical σελίδες Grant Agreement (επηρεάζει αν χρειάζεται chunking πριν το LLM)~~ — δοκιμάστηκε 2026-09-28: το πλήρες GA (5.955 γραμμές .md) χωράει σε ένα call χωρίς chunking (~107K input tokens, καλά μέσα στο context window). Βλ. `llm/testing-notes.md`.
 - [ ] Error/retry UX σε αποτυχία LLM parsing
-- [ ] Anthropic API key management & budget cap
+- [ ] Anthropic API key management & budget cap — τώρα με πραγματικό αριθμό αναφοράς: ~$0.38/Grant Agreement (μετρημένο 2026-09-28, `llm/testing-notes.md`)
 - [ ] Σειρά merge προς `main` (ποιο branch πρώτο)
 
 ## 8. Σειρά προτεραιότητας (ενημερωμένη 2026-09-28)
 
-**Κατάσταση:** `llm` ουσιαστικά έτοιμο (εκκρεμεί merge) · `frontend` πλήρες αλλά πάνω σε mocks, ήδη στο `main` · `backend` έχει infra+PDF→Markdown έτοιμα, σταματάει πριν το LLM/rendering στάδιο.
+**Κατάσταση:** `llm` ολοκληρωμένο και δοκιμασμένο έναντι live API (εκκρεμεί merge) · `frontend` πλήρες αλλά πάνω σε mocks, ήδη στο `main` · `backend` έχει infra+PDF→Markdown έτοιμα, σταματάει πριν το LLM/rendering στάδιο.
 
-1. ~~Templates (Γιώργος) + JSON Schemas (Αριστείδης)~~ — schemas/prompts έτοιμα· τα templates χρειάζονται ακόμα μετατροπή σε placeholder-ready (βλ. §5.F)
+1. ~~Templates (Γιώργος) + JSON Schemas (Αριστείδης)~~ — schemas/prompts έτοιμα και δοκιμασμένα· τα templates χρειάζονται ακόμα μετατροπή σε placeholder-ready (βλ. §5.F)
 2. ~~API contract (§6)~~ — κλειδωμένο στο `docs/api-contract.md`
 3. **Τώρα:**
    - Merge `llm` → `main`
-   - Backend: μετατροπή templates σε placeholder-ready + LLM integration (§5.D) + validation (§5.E) + document generation (§5.G) + preview/download endpoints (§5.H)
+   - Backend: μετατροπή templates σε placeholder-ready + LLM integration (§5.D, χρησιμοποιώντας τα ήδη δοκιμασμένα `llm/prompts/*.request.json`) + validation (§5.E) + document generation (§5.G) + preview/download endpoints (§5.H)
    - Frontend: switch από mock API routes στο πραγματικό backend, μόλις τα endpoints είναι έτοιμα
 4. Integration testing end-to-end (πραγματικό PDF → download αρχεία)
 5. Ops: deploy Render/Vercel, cleanup job, Redis TTL, budget cap (§5.A, §5.I)
