@@ -85,7 +85,7 @@ const doc = new Document({
         tag('{#workPackages}'),
         tag('{id} - {name} [{leadBeneficiary} | M{monthFrom}-M{monthTo}]'),
         tag('{#tasks}'),
-        tag('Task {id} - {name}'),
+        tag('Task {id} - {name} [{leader} | M{monthFrom}-M{monthTo}]'),
         tag('{/tasks}'),
         tag('{/workPackages}'),
         blank(),
