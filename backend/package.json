@@ -25,6 +25,7 @@
     "bullmq": "^6.3.8",
     "docxtemplater": "^3.66.3",
     "exceljs": "^4.4.0",
+    "ioredis": "^5.4.1",
     "joi": "^17.13.3",
     "mammoth": "^1.11.0",
     "multer": "^2.4.0",
