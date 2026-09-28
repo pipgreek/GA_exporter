@@ -86,8 +86,8 @@
           "leadBeneficiary": { "type": "string", "default": "tbd" },
           "type": {
             "type": "string",
-            "description": "Deliverable type code as used on the EU Portal.",
-            "enum": ["R", "DEC", "DMP", "ETHICS", "OTHER", "tbd"],
+            "description": "Deliverable type code as used on the EU Portal (full official Horizon Europe/Euratom list).",
+            "enum": ["R", "DEM", "DEC", "OTHER", "ETHICS", "ORDP", "DMP", "SECU", "tbd"],
             "default": "tbd"
           },
           "disseminationLevel": {

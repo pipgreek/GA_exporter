@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+import re
 import sys
 from io import BytesIO
 
@@ -73,6 +74,58 @@ def extract_document(pdf_bytes: bytes) -> str:
     return "\n\n---\n\n".join(pages_markdown) + "\n"
 
 
+_ARTICLE1_HEADING = re.compile(r"^ARTICLE\s*1\s*—\s*SUBJECT OF THE AGREEMENT$", re.IGNORECASE)
+_ANNEX1_HEADING = re.compile(
+    r"^(DESCRIPTION OF THE ACTION \(PART A\)|Description of the action \(DoA\))$", re.IGNORECASE
+)
+_ANNEX2_HEADING = re.compile(r"^ANNEX 2$")
+
+
+def _find_line(lines: list[str], pattern: re.Pattern) -> int | None:
+    for index, line in enumerate(lines):
+        if pattern.match(line.strip()):
+            return index
+    return None
+
+
+def trim_boilerplate(markdown: str) -> str:
+    """Drops the generic Terms & Conditions article body and the trailing
+    budget/accession/financial-form annexes (Annex 2 onward). None of the
+    three extraction prompts (llm/prompts/*.request.json) read those
+    sections - they only use the Preamble, Data Sheet and Annex 1 (Part A +
+    Part B). This is standard, identical boilerplate across Horizon
+    Europe/Euratom Grant Agreements, confirmed against multiple real sample
+    GAs, and can be large enough on its own to push a big GA over the
+    model's context window.
+
+    Falls back to returning the input unchanged whenever an anchor heading
+    isn't found with confidence, so a GA with a slightly different layout
+    is never silently corrupted - worst case, extraction just has to handle
+    a longer document.
+    """
+    lines = markdown.split("\n")
+    total = len(lines)
+
+    article1 = _find_line(lines, _ARTICLE1_HEADING)
+    annex1 = _find_line(lines, _ANNEX1_HEADING)
+    annex2 = _find_line(lines, _ANNEX2_HEADING)
+
+    segments: list[tuple[int, int]] = []
+    if article1 is not None and annex1 is not None and annex1 > article1:
+        segments.append((0, article1))
+        annex1_end = annex2 if (annex2 is not None and annex2 > annex1) else total
+        segments.append((annex1, annex1_end))
+    elif annex2 is not None:
+        segments.append((0, annex2))
+    else:
+        return markdown
+
+    kept_lines: list[str] = []
+    for start, end in segments:
+        kept_lines.extend(lines[start:end])
+    return "\n".join(kept_lines)
+
+
 def main() -> int:
     if hasattr(sys.stdout, "reconfigure"):
         sys.stdout.reconfigure(encoding="utf-8", errors="replace")
@@ -86,7 +139,13 @@ def main() -> int:
 
     try:
         markdown = extract_document(pdf_bytes)
-        sys.stdout.write(markdown)
+        trimmed = trim_boilerplate(markdown)
+        if len(trimmed) != len(markdown):
+            print(
+                f"Trimmed boilerplate sections: {len(markdown)} -> {len(trimmed)} chars.",
+                file=sys.stderr,
+            )
+        sys.stdout.write(trimmed)
     except Exception as error:  # Keep tracebacks out of the API response.
         print(f"PDF extraction failed ({type(error).__name__}).", file=sys.stderr)
         return 2
