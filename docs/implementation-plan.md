@@ -175,15 +175,18 @@ Upload PDF
 
 ## 6. Κοινό API Contract (backend ↔ frontend)
 
+Το κλειδωμένο v1 contract τεκμηριώνεται στο [`api-contract.md`](api-contract.md). Οι λεπτομέρειες εκεί είναι η πηγή αλήθειας για request/response shapes, status, preview, download filenames/headers, errors, CORS και retention.
+
 ```
 POST   /upload                      multipart/form-data (PDF) → { requestId }
 GET    /status/{requestId}          → { status, progress, message }
-GET    /preview/{requestId}         → { info: {html}, gantt: {headers, rows}, kpi: {headers, rows} }
+GET    /preview/{requestId}         → { info: {html}, gantt: {sheets: [...]}, kpi: {sheets: [...]} }
 GET    /download/{requestId}/{type} → file (type: info | gantt | kpi)
 GET    /download-all/{requestId}    → .zip
 ```
 
 `status` values: `scanning` → `extracting` → `analyzing` → `generating` → `done` | `error`
+`done` σημαίνει ότι και τα τρία τελικά αρχεία και τα preview δεδομένα είναι έτοιμα· το PDF parsing μόνο του δεν αρκεί.
 
 ## 7. Ανοιχτά σημεία προς απόφαση
 
@@ -196,7 +199,7 @@ GET    /download-all/{requestId}    → .zip
 ## 8. Σειρά προτεραιότητας (προτεινόμενη)
 
 1. **Templates** (Γιώργος) + **JSON Schemas** (Αριστείδης) — παράλληλα, πρώτα — ορίζουν το contract για όλους
-2. **API contract** (§6) — κλειδώνει νωρίς ώστε frontend/backend να δουλέψουν παράλληλα με mocks
+2. **API contract** (§6) — κλειδωμένο στο `docs/api-contract.md`, ώστε frontend/backend να δουλέψουν παράλληλα με mocks
 3. Backend pipeline (upload → parsing → LLM → templates → download) και Frontend UI — παράλληλα
 4. Integration testing end-to-end
 5. Merge σε `main`

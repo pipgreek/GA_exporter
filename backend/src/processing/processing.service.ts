@@ -5,7 +5,7 @@ import { Queue } from 'bullmq';
 import { randomUUID } from 'node:crypto';
 import { GA_EXPORT_QUEUE } from '../infrastructure/queue/queue.constants';
 import { SupabaseStorageService } from '../infrastructure/storage/storage.service';
-import { PdfProcessingJobData } from './processing.types';
+import { PROCESSING_STATUSES, PdfProcessingJobData, ProcessingStatus } from './processing.types';
 
 @Injectable()
 export class ProcessingService {
@@ -35,7 +35,7 @@ export class ProcessingService {
     return { requestId };
   }
 
-  async getStatus(requestId: string): Promise<{ status: string; progress: number; message: string }> {
+  async getStatus(requestId: string): Promise<{ status: ProcessingStatus; progress: number; message: string }> {
     const job = await this.queue.getJob(requestId);
     if (!job) throw new NotFoundException('Processing request was not found or has expired.');
 
@@ -43,10 +43,11 @@ export class ProcessingService {
     const progress = job.progress;
     if (state === 'completed') {
       const completed = typeof progress === 'object' && progress !== null ? progress as Record<string, unknown> : {};
+      const completedStatus = this.isProcessingStatus(completed.status) ? completed.status : 'done';
       return {
-        status: 'done',
-        progress: typeof completed.progress === 'number' ? completed.progress : 100,
-        message: typeof completed.message === 'string' ? completed.message : 'PDF extraction completed.',
+        status: completedStatus,
+        progress: completedStatus === 'done' ? 100 : this.normalizeProgress(completed.progress),
+        message: typeof completed.message === 'string' ? completed.message : 'Processing completed.',
       };
     }
     if (state === 'failed') {
@@ -55,8 +56,8 @@ export class ProcessingService {
     if (typeof progress === 'object' && progress !== null) {
       const current = progress as Record<string, unknown>;
       return {
-        status: typeof current.status === 'string' ? current.status : 'scanning',
-        progress: typeof current.progress === 'number' ? current.progress : 0,
+        status: this.isProcessingStatus(current.status) ? current.status : 'scanning',
+        progress: this.normalizeProgress(current.progress),
         message: typeof current.message === 'string' ? current.message : 'Queued for processing.',
       };
     }
@@ -65,5 +66,15 @@ export class ProcessingService {
 
   private async storageUpload(requestId: string, pdf: Buffer): Promise<string> {
     return this.storage.upload(`${requestId}/input/original.pdf`, pdf, 'application/pdf');
+  }
+
+  private isProcessingStatus(value: unknown): value is ProcessingStatus {
+    return typeof value === 'string' && PROCESSING_STATUSES.includes(value as ProcessingStatus);
+  }
+
+  private normalizeProgress(value: unknown): number {
+    return typeof value === 'number' && Number.isFinite(value)
+      ? Math.max(0, Math.min(100, Math.round(value)))
+      : 0;
   }
 }

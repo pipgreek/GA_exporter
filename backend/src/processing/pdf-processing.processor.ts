@@ -31,9 +31,9 @@ export class PdfProcessingProcessor extends WorkerHost {
         characterCount: markdown.length,
       };
       await this.setProgress(job, {
-        status: 'done',
-        progress: 100,
-        message: 'PDF extraction completed.',
+        status: 'extracting',
+        progress: 35,
+        message: 'Text extraction is complete; analysis and file generation are pending.',
         markdownStoragePath,
       });
       return result;

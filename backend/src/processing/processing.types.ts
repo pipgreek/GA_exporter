@@ -1,4 +1,7 @@
 export type ProcessingStatus = 'scanning' | 'extracting' | 'analyzing' | 'generating' | 'done' | 'error';
+export const PROCESSING_STATUSES: readonly ProcessingStatus[] = [
+  'scanning', 'extracting', 'analyzing', 'generating', 'done', 'error',
+];
 
 export interface PdfProcessingJobData {
   requestId: string;

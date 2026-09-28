@@ -11,7 +11,8 @@ import { parseRedisConnection } from './infrastructure/queue/redis-connection';
 
 const validationSchema = Joi.object({
   NODE_ENV: Joi.string().valid('development', 'production', 'test').default('development'),
-  PORT: Joi.number().port().default(3000),
+  PORT: Joi.number().port().default(3001),
+  CORS_ORIGINS: Joi.string().default('http://localhost:3000'),
   REDIS_URL: Joi.string().uri({ scheme: ['redis', 'rediss'] }).default('redis://127.0.0.1:6379'),
   SUPABASE_URL: Joi.string().uri().allow('').optional(),
   SUPABASE_SERVICE_ROLE_KEY: Joi.string().allow('').optional(),

@@ -16,7 +16,7 @@ export class SupabaseStorageService {
       .upload(path, file, { contentType, upsert: false });
 
     if (error) {
-      throw new ServiceUnavailableException(`Supabase Storage upload failed: ${error.message}`);
+      throw new ServiceUnavailableException('File storage upload failed.');
     }
     return data.path;
   }
@@ -25,7 +25,7 @@ export class SupabaseStorageService {
     const bucket = this.config.getOrThrow<string>('SUPABASE_BUCKET');
     const { data, error } = await this.getClient().storage.from(bucket).download(path);
     if (error) {
-      throw new ServiceUnavailableException(`Supabase Storage download failed: ${error.message}`);
+      throw new ServiceUnavailableException('File storage download failed.');
     }
     return Buffer.from(await data.arrayBuffer());
   }

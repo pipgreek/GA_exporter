@@ -25,18 +25,20 @@ docker compose up -d redis
 pnpm start:dev
 ```
 
-The liveness endpoint is `GET http://localhost:3000/health`.
+The liveness endpoint is `GET http://localhost:3001/health`. The frontend uses `http://localhost:3000` by default; set its `NEXT_PUBLIC_API_URL` to `http://localhost:3001` to connect them locally.
 
 ### Processing API
 
 - `POST /upload` — send a PDF as `multipart/form-data` using the field name `file`. Returns `202 Accepted` with `{ "requestId": "<uuid>" }` after the PDF is stored and queued.
-- `GET /status/{requestId}` — returns `{ "status": "scanning|extracting|analyzing|generating|done|error", "progress": 0, "message": "..." }`. The request ID must be a UUID v4. Status is retained for `JOB_RETENTION_SECONDS` (default 24 hours).
+- `GET /status/{requestId}` — returns `{ "status": "scanning|extracting|analyzing|generating|done|error", "progress": 0, "message": "..." }`. The request ID must be a UUID v4. Records are retained for at most `JOB_RETENTION_SECONDS` (default 24 hours).
+- The upload limit is 25 MiB. JSON errors contain a `message` string; clients should ignore optional NestJS error metadata.
+- CORS is restricted to the comma-separated `CORS_ORIGINS` allowlist. Set the deployed frontend origin there; credentials are disabled.
 
-The current worker implements the `scanning` and `extracting` stages. LLM analysis and output generation are subsequent pipeline stages. Preview/download endpoints are not implemented yet.
+The current worker implements the `scanning` and `extracting` stages only. It intentionally does not report `done` after extraction: that status is reserved for when all three final files and preview data are available. LLM analysis, output generation, and preview/download endpoints are not implemented yet.
 
 `PdfParserService.extractToMarkdown()` accepts PDF bytes and invokes the bundled `pdfplumber` helper. It preserves page boundaries and emits detected tables as Markdown. Set `PDF_PYTHON_EXECUTABLE` if Python is not available as `python` (Windows) or `python3` (Linux/macOS). Scanned pages are marked as having no extractable text; OCR is not included in this first parser pass.
 
-`POST /upload` stores the source PDF under `<requestId>/input/original.pdf` and enqueues a processing job. The worker downloads it, extracts Markdown, uploads the intermediate file under `<requestId>/intermediate/grant-agreement.md`, and stores structured progress in BullMQ/Redis. Completed and failed job records are retained for `JOB_RETENTION_SECONDS` (default 86400) for status access.
+`POST /upload` stores the source PDF under `<requestId>/input/original.pdf` and enqueues a processing job. The worker downloads it, extracts Markdown, uploads the intermediate file under `<requestId>/intermediate/grant-agreement.md`, and stores structured progress in BullMQ/Redis. Job records are retained for at most `JOB_RETENTION_SECONDS` (default 86400). Supabase file cleanup within 24 hours is still to be implemented.
 
 Local Redis listens on `127.0.0.1:6379`. For Upstash, set `REDIS_URL` to the TLS `rediss://` connection URL. Supabase Storage is configured with `SUPABASE_URL`, `SUPABASE_SERVICE_ROLE_KEY`, and `SUPABASE_BUCKET`. The service role key must remain server-side and must not be committed or exposed to the frontend. The bucket must exist in Supabase before uploads are enabled.
 
