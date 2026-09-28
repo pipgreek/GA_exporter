@@ -52,6 +52,38 @@ Cross-checked against the real reference material in `docs/Παραδείγμα�
 (§6 page-break/table-continuation handling, lead-beneficiary prefix stripping,
 type/dissemination-level code extraction) rather than exposing new gaps.
 
+> **Update (same day, found via the rendered INFO Word doc):** the above was
+> wrong for one field. `info.schema.json`'s `workPackages[].tasks[].leader` /
+> `monthFrom` / `monthTo` were present in the schema and *did* validate, but the
+> original `INFO_SYSTEM` prompt only had a throwaway clause ("...which state
+> each task's leader and month range") — the model was silently omitting
+> `leader` for every task, and collapsing multi-phase tasks like `T1.1.
+> [M1-M4, M19-M24] | Leader: Sploro` down to just the first phase
+> (`monthFrom:1, monthTo:4`), even though the source markdown states the
+> leader and full range explicitly (`docs/Παραδείγματα/Grant Agreement -
+> GAP-101158152.md:2586`). Schema validation didn't catch this because
+> `leader`/`monthFrom`/`monthTo` are legitimately optional at the task level
+> (a task with no stated leader is valid) — so this was silent data loss, not
+> a validation failure.
+>
+> Fixed in `llm/prompts/build_requests.py`'s `INFO_SYSTEM`: replaced the
+> throwaway clause with an explicit rule quoting the exact inline-annotation
+> pattern (`"T1.1. ... [M1-M4, M19-M24] | Leader: Sploro | Partners involved:
+> ALL"`), instructing the model to always extract the leader and — since this
+> schema has no per-task `phases[]` array (unlike Gantt) — to span
+> `monthFrom`/`monthTo` from the first phase's start to the last phase's end
+> rather than dropping the field. Regenerated `llm/prompts/info.request.json`
+> via `build_requests.py` and re-ran only the info call: `T1.1` now correctly
+> returns `{ leader: 'SPLORO', monthFrom: 1, monthTo: 24 }`. Re-validated
+> against `info.schema.json` (0 errors) and `llm/examples/live-run-2026-09-28/
+> info.output.json` was updated to this corrected output. `gantt`/`kpi` were
+> unaffected (their own prompts already had per-task `phases[]`/leader
+> handling) and were not re-run.
+>
+> **Lesson:** schema-valid isn't the same as complete — a spot-check against
+> the *rendered document*, not just `jsonschema.validate()`, is what actually
+> caught this.
+
 ## Enum coverage observed (single GA, so partial)
 
 - `deliverables[].type`: **5 of 6** enum values seen in real data — `R`, `DEC`,
