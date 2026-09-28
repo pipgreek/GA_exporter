@@ -102,7 +102,7 @@ def main():
                 f"Regenerate with build_requests.py after editing the schema."
             ),
             "model": "claude-haiku-4-5-20251001",
-            "max_tokens": 8192,
+            "max_tokens": 16384,
             "system": SYSTEMS[name].strip(),
             "tools": [
                 {

@@ -27,7 +27,7 @@ const GanttWorkPackageSchema = z.object({
   tasks: z.array(GanttTaskSchema),
 });
 
-const DeliverableTypeEnum = z.enum(['R', 'DEC', 'DMP', 'ETHICS', 'OTHER', 'tbd']);
+const DeliverableTypeEnum = z.enum(['R', 'DEM', 'DEC', 'OTHER', 'ETHICS', 'ORDP', 'DMP', 'SECU', 'tbd']);
 const DisseminationLevelEnum = z.enum(['PU', 'SEN', 'EU-R', 'EU-C', 'EU-S', 'tbd']);
 
 const DeliverableSchema = z.object({
