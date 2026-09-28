@@ -224,11 +224,12 @@ kpi:   { sheets: [{ name: string, headers: string[], rows: (string | number | nu
 - [x] ~~Ακριβές μέγεθος/typical σελίδες Grant Agreement (επηρεάζει αν χρειάζεται chunking πριν το LLM)~~ — **διορθωμένο συμπέρασμα 2026-09-30**: το 1ο δοκιμασμένο GA (EVOLVE2CARE, 5.955 γραμμές .md) χωρούσε άνετα χωρίς chunking, αλλά ένα 2ο, μεγαλύτερο GA (VIGILANCE, 9.657 γραμμές .md, 761K chars) **ξεπέρασε το όριο των 200K tokens** και απέτυχε εξ ολοκλήρου. Λύθηκε **όχι** με chunking, αλλά με στοχευμένο trimming: το `extract_to_markdown.py` πλέον αφαιρεί το γενικό "Terms & Conditions" άρθρα-σώμα και τα Annexes 2-5 (budget/νομικά έντυπα) που κανένα από τα 3 prompts δεν χρειάζεται — μόνο Preamble+DataSheet+Annex1 μένουν. Βλ. `llm/testing-notes.md` §"Second GA test".
 - [ ] Error/retry UX σε αποτυχία LLM parsing
 - [ ] Anthropic API key management & budget cap — πραγματικοί αριθμοί αναφοράς από 2 GAs: ~$0.38 (EVOLVE2CARE, 24μηνο/6WP) έως ~$0.59 (VIGILANCE, 36μηνο/8WP/50 deliverables), μετρημένα 2026-09-28/30, `llm/testing-notes.md`
-- [ ] Σειρά merge προς `main` (ποιο branch πρώτο)
+- [x] ~~Σειρά merge προς `main` (ποιο branch πρώτο)~~ — έγινε 2026-09-30: πρώτα `backend` (περιείχε ήδη όλο το `llm`), μετά `frontend`. Καθαρά merges, ένα μικρό conflict μόνο σε αυτό το αρχείο.
+- [ ] **Deploy path**: το `backend/dist` διαβάζει `../../../llm/prompts/*.request.json` με σχετικό path (`llm/request-packages.ts`) — το Render build root πρέπει να περιλαμβάνει το `llm/` folder δίπλα στο `backend/`, βρέθηκε κατά τη διάρκεια local testing όταν το τρέξιμο από λάθος git branch (χωρίς `llm/`) έσπασε το LLM extraction στάδιο σιωπηλά μέχρι τον έλεγχο logs
 
 ## 8. Σειρά προτεραιότητας (ενημερωμένη 2026-09-30)
 
-**Κατάσταση:** `llm` ολοκληρωμένο, δοκιμασμένο έναντι live API σε **3 πραγματικά GAs** (EVOLVE2CARE, VIGILANCE, ARGENTIC) — εκκρεμεί merge · **`backend` έχει ολοκληρώσει όλο το pipeline ΚΑΙ δοκιμαστεί end-to-end με πραγματικό infra** (Supabase Storage + Upstash Redis, όχι πια fakes) — απομένει μόνο deploy (Render) και ops (cleanup/TTL/budget cap) · `frontend` πλήρες, ήδη στο `main`, πάνω σε mocks — το frontend-side config (env var, CORS) είναι έτοιμο, απομένει μόνο live backend deployment για το τελικό switch.
+**Κατάσταση: `backend` (μαζί με `llm`) και `frontend` merged στο `main`** (2026-09-30) — καθαρό merge και για τα δύο, ένα μόνο conflict (`docs/implementation-plan.md`, λυμένο). `pnpm build` επιβεβαιωμένο καθαρό πάνω στο ενοποιημένο `main`. Το `main` πλέον περιέχει ολόκληρη τη λύση: backend pipeline (δοκιμασμένο end-to-end με πραγματικό Supabase+Redis), frontend UI (ακόμα πάνω σε mocks), llm schemas/prompts (δοκιμασμένα σε 3 πραγματικά GAs).
 
 1. ~~Templates (Γιώργος) + JSON Schemas (Αριστείδης)~~ — schemas/prompts έτοιμα και δοκιμασμένα· τα Excel templates έγιναν δυναμικό rendering αντί για static αρχεία (βλ. §5.F)
 2. ~~API contract (§6)~~ — κλειδωμένο στο `docs/api-contract.md`
@@ -237,9 +238,8 @@ kpi:   { sheets: [{ name: string, headers: string[], rows: (string | number | nu
 5. ~~Backend: preview/download HTTP endpoints (§5.H)~~ — ολοκληρωμένο, δοκιμασμένο
 6. ~~Backend: πραγματική σύνδεση Supabase Storage + Upstash Redis (§5.A)~~ — ολοκληρωμένο, δοκιμασμένο (πραγματικό project/bucket/Redis instance του χρήστη)
 7. ~~Integration testing end-to-end με πραγματικό Supabase/Redis~~ — ολοκληρωμένο: πραγματικό HTTP upload → queue → worker → storage → preview/download, όλα επιτυχή
-8. **Τώρα:**
-   - Merge `llm` → `main`
-   - Backend: deploy σε Render.com (free tier)
+8. ~~Merge `backend`+`llm`+`frontend` → `main`~~ — ολοκληρωμένο 2026-09-30
+9. **Τώρα:**
+   - Backend: deploy σε Render.com (free tier) — **σημαντικό:** το `backend/dist` διαβάζει το sibling `llm/prompts/*.request.json` με σχετικό path, άρα το deploy build root πρέπει να περιλαμβάνει και το `llm/` folder, όχι μόνο το `backend/` (βρέθηκε κατά τα local tests, §7)
    - Frontend: deploy σε Vercel, μετά switch `NEXT_PUBLIC_API_URL` στο live backend URL
-9. Ops: cleanup job (storage retention), Redis TTL σε status keys, budget cap (§5.I)
-10. Merge backend/frontend σε `main`
+10. Ops: cleanup job (storage retention), Redis TTL σε status keys, budget cap (§5.I)
