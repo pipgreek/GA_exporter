@@ -113,10 +113,14 @@ Upload PDF
 
 **Κατάσταση 2026-09-28:** ολοκληρωμένο, δοκιμασμένο. `DocumentGenerationService.generateAll()` δοκιμάστηκε με το πραγματικό validated JSON (openpyxl inspection του .xlsx, έλεγχος του mammoth HTML) — εκεί εντοπίστηκε και διορθώθηκε το docxtemplater dot-notation bug. Πλήρες worker integration test (πραγματικό PDF → πραγματικό pdfplumber parsing → mocked LLM με πραγματικά cached δεδομένα → πραγματικό document generation → fake in-memory storage): επιβεβαιώθηκε η ακριβής σειρά κατάστασης `scanning→extracting→analyzing→generating→done`, ότι `done` εμφανίζεται **μόνο** αφού υπάρχουν και τα 4 αρχεία στο storage, και ότι μια παραβίαση του render-limit αποτυγχάνει το job καθαρά (status `error`, μηδέν partial output files) αντί να δηλώσει ψευδώς `done`.
 
-#### H. Preview & Download endpoints — επόμενο βήμα
-- [ ] `GET /preview/{requestId}` — επιστρέφει `{ info: {html}, gantt: {sheets[]}, kpi: {sheets[]} }` (βλ. §6). Τα δεδομένα είναι ήδη έτοιμα στο storage (`{requestId}/output/preview.json`) — απομένει μόνο το HTTP endpoint. Το frontend το καλεί μόνο όταν ο χρήστης ανοίξει preview.
-- [ ] `GET /download/{requestId}/{fileType}` — signed URL ή direct stream από Supabase Storage (αρχεία ήδη εκεί, ίδια ονόματα με το api-contract.md)
-- [ ] `GET /download-all/{requestId}` — δημιουργία .zip (archiver) on-the-fly ή προ-δημιουργημένο
+#### H. Preview & Download endpoints
+- [x] `GET /preview/{requestId}` — επιστρέφει το αποθηκευμένο `{requestId}/output/preview.json`, 200 μόνο όταν `done`, 409 αν όχι έτοιμο, 404 αν άγνωστο/ληγμένο
+- [x] `GET /download/{requestId}/{fileType}` — direct stream από Supabase Storage, σωστό filename/Content-Type/Content-Disposition ανά `api-contract.md`
+- [x] `GET /download-all/{requestId}` — .zip on-the-fly με `archiver` (`GA_Exporter_files.zip`)
+- [x] `output-files.ts` — μία πηγή αλήθειας για storage paths/filenames/content-types, χρησιμοποιείται και από τον worker (γράφει) και από τα endpoints (διαβάζουν) ώστε να μην αποσυγχρονιστούν
+- [x] CORS: `exposedHeaders: ['Content-Disposition']` στο `main.ts` (χωρίς αυτό το frontend δεν μπορεί να διαβάσει το filename cross-origin)
+
+**Κατάσταση 2026-09-30:** ολοκληρωμένο, δοκιμασμένο — service-level integration test (fake storage + duck-typed fake BullMQ Queue, χωρίς Redis) κάλυψε όλα τα success/error paths (preview 200/409/404, download 200/404/409, download-all zip): 13/13 checks πέρασαν, το zip επαληθεύτηκε περιεχομενικά με Python zipfile. **Με αυτό ολοκληρώνεται όλο το backend pipeline (§5.A-H εκτός infra/ops).**
 
 #### I. Cleanup & ops
 - [ ] Cron/job που διαγράφει αρχεία στο Supabase Storage μετά από Χ ώρες
@@ -220,18 +224,19 @@ kpi:   { sheets: [{ name: string, headers: string[], rows: (string | number | nu
 - [ ] Anthropic API key management & budget cap — πραγματικοί αριθμοί αναφοράς από 2 GAs: ~$0.38 (EVOLVE2CARE, 24μηνο/6WP) έως ~$0.59 (VIGILANCE, 36μηνο/8WP/50 deliverables), μετρημένα 2026-09-28/30, `llm/testing-notes.md`
 - [ ] Σειρά merge προς `main` (ποιο branch πρώτο)
 
-## 8. Σειρά προτεραιότητας (ενημερωμένη 2026-09-28)
+## 8. Σειρά προτεραιότητας (ενημερωμένη 2026-09-30)
 
-**Κατάσταση:** `llm` ολοκληρωμένο και δοκιμασμένο έναντι live API (εκκρεμεί merge) · `frontend` πλήρες αλλά πάνω σε mocks, ήδη στο `main` · `backend` έχει infra + PDF→Markdown + LLM integration/validation + **πλήρες document generation** έτοιμα και δοκιμασμένα (§5.C-G) — ο worker παράγει πλέον όλα τα τελικά αρχεία και φτάνει σε status `done`. Απομένουν μόνο τα HTTP endpoints (§5.H) για να τα εκθέσει στο frontend.
+**Κατάσταση:** `llm` ολοκληρωμένο, δοκιμασμένο έναντι live API σε **3 πραγματικά GAs** (EVOLVE2CARE, VIGILANCE, ARGENTIC) — εκκρεμεί merge · `frontend` πλήρες αλλά πάνω σε mocks, ήδη στο `main` · **`backend` έχει ολοκληρώσει όλο το pipeline** (§5.A-H εκτός infra/ops): upload→queue→PDF parsing→LLM extraction→validation→document generation→preview/download endpoints. Το μόνο που απομένει στο backend είναι infra σύνδεση (Supabase/Redis/Render, §5.A/§5.I) και το frontend switch από mocks.
 
 1. ~~Templates (Γιώργος) + JSON Schemas (Αριστείδης)~~ — schemas/prompts έτοιμα και δοκιμασμένα· τα Excel templates έγιναν δυναμικό rendering αντί για static αρχεία (βλ. §5.F)
 2. ~~API contract (§6)~~ — κλειδωμένο στο `docs/api-contract.md`
 3. ~~Backend: LLM integration (§5.D) + validation (§5.E)~~ — ολοκληρωμένο, δοκιμασμένο live
-4. ~~Backend: document generation engine (§5.F-G) + worker ολοκλήρωση (done μόνο όταν όλα τα outputs είναι έτοιμα)~~ — ολοκληρωμένο, δοκιμασμένο end-to-end
-5. **Τώρα:**
+4. ~~Backend: document generation engine (§5.F-G) + worker ολοκλήρωση~~ — ολοκληρωμένο, δοκιμασμένο end-to-end
+5. ~~Backend: preview/download HTTP endpoints (§5.H)~~ — ολοκληρωμένο, δοκιμασμένο
+6. **Τώρα:**
    - Merge `llm` → `main`
-   - Backend: preview/download HTTP endpoints (§5.H) — τα δεδομένα είναι ήδη στο storage, μένει μόνο η έκθεσή τους
-   - Frontend: switch από mock API routes στο πραγματικό backend, μόλις τα endpoints είναι έτοιμα
-6. Integration testing end-to-end (πραγματικό PDF → download αρχεία, μέσω πραγματικού Supabase — ακόμα δεν έχει συνδεθεί τοπικά, §5.A)
-7. Ops: deploy Render/Vercel, cleanup job, Redis TTL, budget cap (§5.A, §5.I)
-8. Merge backend/frontend σε `main`
+   - Backend: πραγματική σύνδεση Supabase Storage + Upstash Redis (§5.A) — μέχρι τώρα όλα τα tests έτρεχαν με fake/in-memory storage
+   - Frontend: switch από mock API routes στο πραγματικό backend, μόλις υπάρχει live deployment
+7. Integration testing end-to-end με πραγματικό Supabase/Redis (όχι πια fakes)
+8. Ops: deploy Render/Vercel, cleanup job, Redis TTL, budget cap (§5.A, §5.I)
+9. Merge backend/frontend σε `main`
