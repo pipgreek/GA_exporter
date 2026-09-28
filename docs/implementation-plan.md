@@ -97,6 +97,8 @@ Upload PDF
 
 **Κατάσταση 2026-09-28:** ολοκληρωμένο και δοκιμασμένο — `pnpm build` καθαρό, live run του `generateAll()` πάνω στο πραγματικό GA (~31s, ίδια αποτελέσματα με το `llm/testing-notes.md` live test), και mocked test και για τα δύο retry paths (retry-then-succeed, exhaust-retries-then-throw). Τα 3 validated JSON αποθηκεύονται σε `{requestId}/intermediate/{info,gantt,kpi}.json` στο Supabase Storage, έτοιμα για το document generation step (§G) που ακολουθεί.
 
+> **Ενημέρωση 2026-09-30 (2ο GA test):** ένα μεγαλύτερο πραγματικό GA (VIGILANCE) αποκάλυψε ότι το `max_tokens: 8192` δεν αρκούσε πάντα (το gantt call έκοβε στη μέση, `stop_reason: max_tokens`, λείπε ολόκληρο το `milestones` array). Ανέβηκε σε `16384` και για τα 3 request packages (`llm/prompts/*.request.json`). Βρέθηκε επίσης νέος deliverable `type` κωδικός (`DEM`) που δεν υπήρχε στο enum — επεκτάθηκε στην πλήρη επίσημη λίστα EU Portal. Λεπτομέρειες: `llm/testing-notes.md` §"Second GA test".
+
 #### F. Templates (Word/Excel) — **[owner: Γιώργος, υλοποιήθηκε 2026-09-28]**
 - [x] **INFO (Word)**: πραγματικό docxtemplater template (`backend/templates/info-template.docx`), παραγόμενο από script (`backend/scripts/generate-info-template.ts`, τρέχει μία φορά, το binary μπαίνει στο repo). Nested πεδία (`ownEntity`, `duration`, `socialMedia`) γράφονται ως `{#scope}...{/scope}` blocks — **όχι** dot-notation (`{a.b}`), γιατί το docxtemplater δεν το υποστηρίζει by default (βρέθηκε bug σε αρχικό test, διορθώθηκε).
 - [x] **Gantt/KPI (Excel)**: **αλλαγή αρχιτεκτονικής απόφασης** — αντί για static template αρχείο με fixed tabs, το workbook χτίζεται προγραμματιστικά (exceljs) με κοινό styling module (`excel-render-utils.ts`: header fill/bold/freeze, auto-width, sheet-name sanitization). Λόγος: το πλήθος στηλών (μήνες) και sheets (KPI categories) είναι **εγγενώς μεταβλητό ανά GA** — το `llm/schemas/preview-mapping.md` το επιβεβαιώνει ρητά ("one sheet per category"). Ένα fixed-tab template δεν θα μπορούσε ποτέ να καλύψει σωστά όλα τα GAs. Τα `docs/templates/*.xlsx` παραδείγματα παραμένουν ως οπτική αναφορά στυλ, όχι ως literal templates.
@@ -213,9 +215,9 @@ kpi:   { sheets: [{ name: string, headers: string[], rows: (string | number | nu
 ## 7. Ανοιχτά σημεία προς απόφαση
 
 - [x] ~~Μέγιστο εύρος μηνών/WPs στα Excel templates~~ — αποφασίστηκε 2026-09-28: `MAX_TOTAL_MONTHS=48`, `MAX_WORK_PACKAGES=30`, `MAX_KPI_CATEGORIES=40` (`backend/src/document-generation/render-limits.ts`), όχι τεχνικός περιορισμός αλλά sanity guard αφού το rendering είναι πλέον δυναμικό (§5.F)
-- [x] ~~Ακριβές μέγεθος/typical σελίδες Grant Agreement (επηρεάζει αν χρειάζεται chunking πριν το LLM)~~ — δοκιμάστηκε 2026-09-28: το πλήρες GA (5.955 γραμμές .md) χωράει σε ένα call χωρίς chunking (~107K input tokens, καλά μέσα στο context window). Βλ. `llm/testing-notes.md`.
+- [x] ~~Ακριβές μέγεθος/typical σελίδες Grant Agreement (επηρεάζει αν χρειάζεται chunking πριν το LLM)~~ — **διορθωμένο συμπέρασμα 2026-09-30**: το 1ο δοκιμασμένο GA (EVOLVE2CARE, 5.955 γραμμές .md) χωρούσε άνετα χωρίς chunking, αλλά ένα 2ο, μεγαλύτερο GA (VIGILANCE, 9.657 γραμμές .md, 761K chars) **ξεπέρασε το όριο των 200K tokens** και απέτυχε εξ ολοκλήρου. Λύθηκε **όχι** με chunking, αλλά με στοχευμένο trimming: το `extract_to_markdown.py` πλέον αφαιρεί το γενικό "Terms & Conditions" άρθρα-σώμα και τα Annexes 2-5 (budget/νομικά έντυπα) που κανένα από τα 3 prompts δεν χρειάζεται — μόνο Preamble+DataSheet+Annex1 μένουν. Βλ. `llm/testing-notes.md` §"Second GA test".
 - [ ] Error/retry UX σε αποτυχία LLM parsing
-- [ ] Anthropic API key management & budget cap — τώρα με πραγματικό αριθμό αναφοράς: ~$0.38/Grant Agreement (μετρημένο 2026-09-28, `llm/testing-notes.md`)
+- [ ] Anthropic API key management & budget cap — πραγματικοί αριθμοί αναφοράς από 2 GAs: ~$0.38 (EVOLVE2CARE, 24μηνο/6WP) έως ~$0.59 (VIGILANCE, 36μηνο/8WP/50 deliverables), μετρημένα 2026-09-28/30, `llm/testing-notes.md`
 - [ ] Σειρά merge προς `main` (ποιο branch πρώτο)
 
 ## 8. Σειρά προτεραιότητας (ενημερωμένη 2026-09-28)
