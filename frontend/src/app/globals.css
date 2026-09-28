@@ -1,0 +1,65 @@
+@import "tailwindcss";
+
+@theme inline {
+  --font-sans: var(--font-inter);
+}
+
+body {
+  font-family: var(--font-inter), ui-sans-serif, system-ui, sans-serif;
+}
+
+/* Fade-in used when sections appear (progress, previews, pages). */
+@keyframes fade-in {
+  from {
+    opacity: 0;
+    transform: translateY(4px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+.fade-in {
+  animation: fade-in 0.5s ease-in-out;
+}
+
+/* Animated background blobs (from the UI/UX mockup). */
+@keyframes blob-1 {
+  0%, 100% { transform: translate(0, 0) scale(1); }
+  33% { transform: translate(260px, 190px) scale(1.25); }
+  66% { transform: translate(-170px, 230px) scale(0.85); }
+}
+@keyframes blob-2 {
+  0%, 100% { transform: translate(0, 0) scale(1); }
+  50% { transform: translate(-280px, -210px) scale(1.35); }
+}
+@keyframes blob-3 {
+  0%, 100% { transform: translate(0, 0) scale(1); }
+  50% { transform: translate(220px, -260px) scale(1.2); }
+}
+.blob-1 { animation: blob-1 5s ease-in-out infinite; }
+.blob-2 { animation: blob-2 4.5s ease-in-out infinite; }
+.blob-3 { animation: blob-3 5.5s ease-in-out infinite; }
+
+/* INFO document preview (HTML from mammoth). */
+.doc-preview {
+  color: var(--color-slate-700);
+  font-size: 0.875rem;
+  line-height: 1.6;
+}
+.doc-preview h1 { margin: 0 0 1rem; font-size: 1.25rem; font-weight: 700; color: var(--color-slate-900); }
+.doc-preview h2 { margin: 1.25rem 0 0.5rem; font-size: 1rem; font-weight: 700; color: var(--color-slate-900); }
+.doc-preview h3 { margin: 1rem 0 0.5rem; font-weight: 600; color: var(--color-slate-900); }
+.doc-preview p { margin: 0.5rem 0; }
+.doc-preview ul { margin: 0.5rem 0; padding-left: 1.25rem; list-style: disc; }
+.doc-preview ol { margin: 0.5rem 0; padding-left: 1.25rem; list-style: decimal; }
+.doc-preview li { margin: 0.125rem 0; }
+.doc-preview table { width: 100%; margin: 0.75rem 0; border-collapse: collapse; }
+.doc-preview th,
+.doc-preview td { border: 1px solid var(--color-slate-200); padding: 0.375rem 0.625rem; text-align: left; vertical-align: top; }
+.doc-preview th { width: 30%; background: var(--color-slate-50); font-weight: 600; color: var(--color-slate-900); }
+.doc-preview img { max-width: 100%; height: auto; }
+
+@media (prefers-reduced-motion: reduce) {
+  .blob-1, .blob-2, .blob-3, .fade-in { animation: none; }
+}
