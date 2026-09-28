@@ -129,7 +129,7 @@ export function HomeView() {
         title="Remove file?"
         description={
           busy
-            ? "Processing is in progress. Removing the file will cancel it."
+            ? "Processing will continue in the background. Removing this file will stop showing this request here."
             : "Are you sure you want to remove the uploaded file?"
         }
         confirmLabel="Yes, Remove"

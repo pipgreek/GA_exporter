@@ -4,11 +4,7 @@ import type { FileType } from "@/lib/api/types";
 export interface GeneratedFile {
   type: FileType;
   title: string;
-  /**
-   * File name shown on the card. Placeholder until the backend contract defines
-   * the real names (open point in docs/frontend-notes.md); the downloaded file
-   * is named by the backend's Content-Disposition header.
-   */
+  /** File name shown on the card and returned by the backend Content-Disposition header. */
   fileName: string;
   /** Short format label, e.g. "Word (.docx)". */
   format: string;
@@ -21,6 +17,7 @@ export interface GeneratedFile {
 }
 
 export const ZIP_FILE_NAME = "GA_Exporter_files.zip";
+export const MAX_PDF_UPLOAD_BYTES = 25 * 1024 * 1024;
 
 /** The three files generated from a Grant Agreement, in display order. */
 export const GENERATED_FILES: GeneratedFile[] = [

@@ -22,10 +22,14 @@ npm run dev
 
 ## Backend: mock ή πραγματικό
 
-Όλες οι κλήσεις περνούν από το [`src/lib/api/client.ts`](src/lib/api/client.ts), με τους τύπους του API contract στο [`src/lib/api/types.ts`](src/lib/api/types.ts) (implementation plan §6).
+Όλες οι κλήσεις περνούν από το [`src/lib/api/client.ts`](src/lib/api/client.ts), με τους τύπους στο [`src/lib/api/types.ts`](src/lib/api/types.ts). Το canonical v1 contract είναι στο [`../docs/api-contract.md`](../docs/api-contract.md) (implementation plan §6).
 
 - **Χωρίς `NEXT_PUBLIC_API_URL`** → χρησιμοποιείται το ενσωματωμένο mock backend στο `/api/mock/*` ([`src/app/api/mock`](src/app/api/mock), λογική στο [`src/mocks/mockBackend.ts`](src/mocks/mockBackend.ts)).
 - **Με `NEXT_PUBLIC_API_URL`** (στο `.env.local`, βλ. [`.env.example`](.env.example)) → χρησιμοποιείται το πραγματικό backend, χωρίς αλλαγές στον κώδικα.
+
+Για τοπική εκτέλεση, το frontend στο `http://localhost:3000` συνδέεται με backend στο `http://localhost:3001` μέσω `NEXT_PUBLIC_API_URL`.
+
+Το όριο PDF των 25 MiB εφαρμόζεται τόσο στο dropzone όσο και στο mock upload route. `done` σημαίνει ότι είναι έτοιμα και τα τρία outputs και τα preview δεδομένα.
 
 ### Σενάρια δοκιμής του mock
 

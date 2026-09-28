@@ -90,7 +90,7 @@ export function useProcessingStatus(requestId: string, handlers: Handlers): Proc
         if (res.status === "done") {
           stop();
           setStalled(false);
-          setView({ status: "done", progress: 100, message: STATUS_MESSAGES.done });
+          setView({ status: "done", progress: 100, message: res.message || STATUS_MESSAGES.done });
           notifyDone();
           return;
         }
@@ -106,7 +106,7 @@ export function useProcessingStatus(requestId: string, handlers: Handlers): Proc
         setView({
           status: res.status,
           progress: Math.max(0, Math.min(100, Math.round(res.progress))),
-          message: STATUS_MESSAGES[res.status],
+          message: res.message || STATUS_MESSAGES[res.status],
         });
       } catch (err) {
         if (stopped) return;

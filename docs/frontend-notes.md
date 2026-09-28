@@ -59,15 +59,18 @@ Logo ViLabs (επιστροφή στην αρχική), animated background, toa
 
 Σενάρια (από το όνομα του PDF): κανονικό (~15"), `error` (αποτυχία στο `analyzing`), `slow` (κολλάει στο `analyzing` → έλεγχος timeout 90"), `preview-error` (το preview αποτυγχάνει τα πρώτα 20"). Λεπτομέρειες στο `frontend/README.md`.
 
-## Προς επιβεβαίωση με το backend
+## API contract v1 — κλειδωμένο
 
-Υποθέσεις που κάναμε στο `frontend/src/lib/api/types.ts` επειδή το §6 δεν τις ορίζει:
+Οι routes και οι payloads ακολουθούν `docs/api-contract.md` (canonical) και το §6 του implementation plan:
 
-- Όνομα πεδίου του PDF στο `POST /upload`: `file`.
-- ~~Μορφή Excel previews~~ → **συμφωνήθηκε** (απόφαση 5).
-- Ονόματα αρχείων για τις κάρτες/downloads (π.χ. `files: [{ type, fileName }]` στο `done`, ή σταθερά ονόματα).
-- Downloads: `Content-Disposition: attachment; filename="..."` (το `<a download>` αγνοείται σε άλλο domain).
-- Διάρκεια διατήρησης αρχείων: η σελίδα Privacy Policy γράφει «deleted automatically within 24 hours» (`RETENTION_HOURS` στο `src/app/privacy/page.tsx`) — πρέπει να ταιριάζει με το cleanup job / Redis TTL του backend.
+- `POST /upload`, multipart field `file`, PDF έως 25 MiB, returns `202 { requestId }`.
+- `GET /status/{requestId}` returns `{ status, progress, message }`. `done` σημαίνει ότι είναι έτοιμα και τα 3 αρχεία και τα preview δεδομένα.
+- Excel preview: `{ sheets: [{ name, headers, rows }] }` για Gantt/KPI.
+- Downloads: σταθερά filenames από `src/lib/files.ts`; το `Content-Disposition` είναι η πηγή αλήθειας για το filename.
+- Διατήρηση δεδομένων έως 24 ώρες. Το storage cleanup πρέπει ακόμη να υλοποιηθεί στο backend.
+- Δεν υπάρχει cancel endpoint. Αφαίρεση/reset στο UI εγκαταλείπει την προβολή του request, αλλά δεν σταματά το backend job.
+- CORS: backend allowlist μέσω `CORS_ORIGINS`; production origin συμπληρώνεται κατά το deployment.
+- Local origins: frontend `localhost:3000`, backend `localhost:3001`; `NEXT_PUBLIC_API_URL` δείχνει στο backend.
 
 ## Privacy Policy — προς επιβεβαίωση πριν τη δημοσίευση
 
@@ -78,12 +81,18 @@ Logo ViLabs (επιστροφή στην αρχική), animated background, toa
 - **Όροι του Anthropic API** για χρήση/διατήρηση των δεδομένων που στέλνονται.
 - **Νομικός έλεγχος** από υπεύθυνο της VILABS (δεν είναι νομικό κείμενο εγκεκριμένο από νομικό).
 - Αν στο μέλλον προστεθούν cookies/analytics (π.χ. Vercel Analytics), να ενημερωθεί η ενότητα 8.
-- Σφάλματα: HTTP 4xx/5xx με σώμα `{ message }`.
-- CORS: το backend πρέπει να επιτρέπει το origin του frontend (Vercel + `localhost:3000`).
+- Οι περιοχές/όροι των παρόχων και η νομική επιβεβαίωση της Privacy Policy παραμένουν πριν τη δημοσίευση.
 
 ## Ημερολόγιο προόδου
 
 Νεότερα πάνω. Ενημερώνεται μετά από κάθε ολοκληρωμένο βήμα.
+
+### 2026-09-28 — Κλείδωμα HTTP API contract v1 ✅
+- Καταγράφηκαν routes, payloads, status semantics, multi-sheet previews, filenames/download headers, error body, 25 MiB όριο upload, CORS allowlist και retention στο `docs/api-contract.md`.
+- Ευθυγραμμίστηκαν plan, API types, mock upload/size validation και file cards.
+- Διορθώθηκε το κείμενο αφαίρεσης αρχείου: δεν υπάρχει cancel endpoint, άρα το backend job συνεχίζει.
+- `done` σημαίνει ότι τα τρία outputs και τα previews είναι διαθέσιμα.
+- Επόμενο: live LLM evaluation και ολοκλήρωση backend pipeline πριν ενεργοποιηθεί το πλήρες πραγματικό API.
 
 ### 2026-09-25 — Καθαρισμός αρχικών εγγράφων
 - Αφαιρέθηκαν από το `docs/` (κατόπιν αιτήματος): `1.png`–`4.png` (wireframes) και `Frontend Description.docx`, αφού η υλοποίηση και οι αποφάσεις είναι πλέον σε αυτό το αρχείο και στο plan. Ανακτώνται από το ιστορικό του git αν χρειαστούν. Το `Backend Description.docx` (backend) παραμένει.

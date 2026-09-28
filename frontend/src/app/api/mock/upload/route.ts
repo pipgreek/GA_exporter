@@ -1,4 +1,5 @@
 import { createRequestId, scenarioFromFileName } from "@/mocks/mockBackend";
+import { MAX_PDF_UPLOAD_BYTES } from "@/lib/files";
 
 // Mock of POST /upload — accepts a single PDF as multipart/form-data.
 export async function POST(request: Request) {
@@ -12,6 +13,9 @@ export async function POST(request: Request) {
   const file = formData.get("file");
   if (!(file instanceof File)) {
     return Response.json({ message: "No file uploaded." }, { status: 400 });
+  }
+  if (file.size > MAX_PDF_UPLOAD_BYTES) {
+    return Response.json({ message: "PDF files must be 25 MiB or smaller." }, { status: 413 });
   }
 
   const isPdf = file.type === "application/pdf" || file.name.toLowerCase().endsWith(".pdf");

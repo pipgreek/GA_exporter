@@ -207,7 +207,7 @@ GET    /download-all/{requestId}    → .zip
 ```
 
 `status` values: `scanning` → `extracting` → `analyzing` → `generating` → `done` | `error`
-`done` σημαίνει ότι και τα τρία τελικά αρχεία και τα preview δεδομένα είναι διαθέσιμα· το PDF parsing μόνο του δεν αρκεί.
+`done` σημαίνει ότι και τα τρία τελικά αρχεία και τα preview δεδομένα είναι διαθέσιμα· το PDF parsing μόνο του δεν αρκεί. Το v1 contract ορίζει upload έως 25 MiB, UUID v4 `requestId`, Excel previews με `sheets[]`, σταθερά filenames και `Content-Disposition: attachment`. Διατήρηση δεδομένων έως 24 ώρες· CORS allowlist ρυθμίζεται ανά deployment μέσω `CORS_ORIGINS`. Αναλυτικά στο `docs/api-contract.md`.
 
 Excel previews — ένα στοιχείο ανά sheet, με τη σειρά του workbook (συμφωνήθηκε με backend 2026-09-25):
 
