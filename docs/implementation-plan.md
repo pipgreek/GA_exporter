@@ -79,26 +79,27 @@ Upload PDF
 - [x] `GET /status/{requestId}` — επιστρέφει `{ status, progress, message }`
 
 #### C. PDF → Markdown
-- [ ] Ενσωμάτωση pdfplumber/Unstructured.io
-- [ ] Εξαγωγή κειμένου + πινάκων σε δομημένο `.md`
-- [ ] Test με το δείγμα PDF (Grant Agreement GAP-101158152)
+- [x] Ενσωμάτωση pdfplumber (`extract_to_markdown.py` + `pdf-parser.service.ts`)
+- [x] Εξαγωγή κειμένου + πινάκων σε δομημένο `.md`
+- [x] Test με το δείγμα PDF (Grant Agreement GAP-101158152) — βλ. `docs/Παραδείγματα/Grant Agreement - GAP-101158152.md`
+
+> **Κατάσταση 2026-09-28:** ο worker (`pdf-processing.processor.ts`) σταματάει εδώ («analysis and file generation are pending»). Τα βήματα D-H παρακάτω δεν είναι ακόμα καλωδιωμένα στο pipeline.
 
 #### D. LLM integration (χρησιμοποιεί τα schemas/prompts από branch `llm`)
 - [ ] Anthropic SDK setup, Claude Haiku client
-- [ ] 3 service functions: `generateInfoJson()`, `generateGanttJson()`, `generateKpiJson()` — tool-use/structured output calls
+- [ ] 3 service functions: `generateInfoJson()`, `generateGanttJson()`, `generateKpiJson()` — tool-use/structured output calls (τα ready-to-send request packages υπάρχουν ήδη στο `llm/prompts/*.request.json`, εκκρεμεί merge `llm`→`main` και wiring)
 - [ ] Παράλληλη εκτέλεση των 3 calls
 - [ ] Retry logic σε αποτυχία validation (1-2 retries)
 
 #### E. Validation
-- [ ] Zod schemas (ένα ανά τύπο αρχείου — κοινά με το `llm` branch contract)
+- [ ] Zod schemas (mirror των `llm/schemas/*.schema.json`)
 - [ ] Error handling / error state στο status αν αποτύχει μετά τα retries
 
 #### F. Templates (Word/Excel) — **[owner: Γιώργος]**
-- [ ] Δημιουργία κενού Word template (INFO) με placeholders (docxtemplater syntax), βασισμένο στο δείγμα "info tab"
-- [ ] Δημιουργία κενού Excel template (Gantt) — sheets: Overview, Deliverables' List, Milestones' List — βασισμένο στα EVOLVE2CARE/RE-SPHERE δείγματα
-- [ ] Δημιουργία κενού Excel template (KPI) — βασισμένο στο VIGILANCE δείγμα
+- [x] Αρχεία-αφετηρία ανέβηκαν στο repo (`docs/templates/`: Gantt EVOLVE2CARE, KPI VIGILANCE, Info docx)
+- [ ] Μετατροπή σε **κενά** templates με placeholders (docxtemplater syntax για Word, named cells/template rows για Excel) — τα τρέχοντα αρχεία έχουν ακόμα πραγματικά δεδομένα παραδειγμάτων, όχι placeholders
 - [ ] Ορισμός μέγιστου εύρους (π.χ. μήνες/WPs) που καλύπτουν τα templates
-- [ ] Αποθήκευση templates στο repo (`backend/templates/`)
+- [ ] Μετακίνηση/οργάνωση των τελικών templates σε `backend/templates/`
 
 #### G. Document generation engine
 - [ ] `renderInfoDoc(json)` — docxtemplater fill → .docx
@@ -160,23 +161,24 @@ Upload PDF
 
 ### 🧠 Αριστείδης — branch `llm`
 
+**Κατάσταση 2026-09-28: ουσιαστικά ολοκληρωμένο.** Εκκρεμεί μόνο merge `llm` → `main`.
+
 #### A. JSON Schemas (contract με backend, .md/.json αρχεία)
-- [ ] Schema **INFO**: `{ contract, gaNumber, callTopic, typeOfAction, duration, reportingPeriods[], workPackages[], roles[] }`
-- [ ] Schema **Gantt**: `{ workPackages[{id, name, startMonth, endMonth, lead, tasks[]}], deliverables[], milestones[] }`
-- [ ] Schema **KPI**: `{ categories[{name, kpis[{label, target, achieved, monthlyValues[]}]}] }`
-- [ ] Καθορισμός required/optional fields, τύποι δεδομένων
+- [x] Schema **INFO** (`llm/schemas/info.schema.json`)
+- [x] Schema **Gantt** (`llm/schemas/gantt.schema.json`)
+- [x] Schema **KPI** (`llm/schemas/kpi.schema.json`)
+- [x] Required/optional fields, τύποι δεδομένων — τεκμηριωμένα στο `llm/schemas/README.md`
 
 #### B. Prompts (ένα ανά τύπο αρχείου)
-- [ ] Prompt **INFO** — οδηγίες εξαγωγής γενικών στοιχείων + WPs/roles από το `.md`
-- [ ] Prompt **Gantt** — οδηγίες εξαγωγής χρονοδιαγράμματος/deliverables/milestones
-- [ ] Prompt **KPI** — οδηγίες εξαγωγής δεικτών παρακολούθησης
-- [ ] Test prompts πάνω στο δείγμα Grant Agreement (GAP-101158152) — έλεγχος ποιότητας εξαγωγής
+- [x] Prompt **INFO/Gantt/KPI** — πλήρη, ready-to-send Anthropic request packages (`llm/prompts/*.request.json`, model+system+tools+tool_choice)
+- [x] Test πάνω στο δείγμα Grant Agreement (GAP-101158152) — αποτελέσματα σε `llm/examples/*.example.md`
 
 #### C. Τεκμηρίωση
-- [ ] `.md` αρχεία με το κάθε schema + prompt + παραδείγματα input/output
-- [ ] Οδηγίες για tool-use/structured output format (πώς να μεταφραστεί το schema σε Anthropic tool definition)
+- [x] `.md` αρχεία ανά schema/prompt + παραδείγματα input/output (`llm/schemas/README.md`, `llm/prompts/README.md`, `llm/examples/`)
+- [x] `llm/prompts/build_requests.py` — regenerate τα request packages αν αλλάξουν τα schemas (schema/prompt δεν αποσυγχρονίζονται)
+- [x] `llm/schemas/preview-mapping.md` — πώς το κάθε schema αντιστοιχεί στο frontend preview
 
-**Dependency:** το backend χρειάζεται αυτά τα schemas/prompts για να υλοποιήσει τα §D του backend plan — καλό να είναι από τα πρώτα πράγματα που κλειδώνουν.
+**Επόμενο βήμα:** merge `llm` → `main`, μετά το backend καταναλώνει απευθείας τα `llm/prompts/*.request.json` (βλ. §5 backend D).
 
 ---
 
@@ -212,10 +214,16 @@ kpi:   { sheets: [{ name: string, headers: string[], rows: (string | number | nu
 - [ ] Anthropic API key management & budget cap
 - [ ] Σειρά merge προς `main` (ποιο branch πρώτο)
 
-## 8. Σειρά προτεραιότητας (προτεινόμενη)
+## 8. Σειρά προτεραιότητας (ενημερωμένη 2026-09-28)
 
-1. **Templates** (Γιώργος) + **JSON Schemas** (Αριστείδης) — παράλληλα, πρώτα — ορίζουν το contract για όλους
-2. **API contract** (§6) — κλειδωμένο στο `docs/api-contract.md`, ώστε frontend/backend να δουλέψουν παράλληλα με mocks
-3. Backend pipeline (upload → parsing → LLM → templates → download) και Frontend UI — παράλληλα
-4. Integration testing end-to-end
-5. Merge σε `main`
+**Κατάσταση:** `llm` ουσιαστικά έτοιμο (εκκρεμεί merge) · `frontend` πλήρες αλλά πάνω σε mocks, ήδη στο `main` · `backend` έχει infra+PDF→Markdown έτοιμα, σταματάει πριν το LLM/rendering στάδιο.
+
+1. ~~Templates (Γιώργος) + JSON Schemas (Αριστείδης)~~ — schemas/prompts έτοιμα· τα templates χρειάζονται ακόμα μετατροπή σε placeholder-ready (βλ. §5.F)
+2. ~~API contract (§6)~~ — κλειδωμένο στο `docs/api-contract.md`
+3. **Τώρα:**
+   - Merge `llm` → `main`
+   - Backend: μετατροπή templates σε placeholder-ready + LLM integration (§5.D) + validation (§5.E) + document generation (§5.G) + preview/download endpoints (§5.H)
+   - Frontend: switch από mock API routes στο πραγματικό backend, μόλις τα endpoints είναι έτοιμα
+4. Integration testing end-to-end (πραγματικό PDF → download αρχεία)
+5. Ops: deploy Render/Vercel, cleanup job, Redis TTL, budget cap (§5.A, §5.I)
+6. Merge backend/frontend σε `main`
