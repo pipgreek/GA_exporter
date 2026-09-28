@@ -67,11 +67,13 @@ Upload PDF
 ### 🔧 pipgreek + Γιώργος — branch `backend`
 
 #### A. Infra & setup
-- [ ] NestJS project scaffold (`backend/`)
-- [ ] Σύνδεση Upstash Redis (queue)
-- [ ] Σύνδεση Supabase Storage (file storage)
+- [x] NestJS project scaffold (`backend/`)
+- [x] Σύνδεση Upstash Redis (queue) — πραγματικό free-tier instance, δοκιμασμένο 2026-09-30
+- [x] Σύνδεση Supabase Storage (file storage) — πραγματικό project + private bucket `ga-exporter`, δοκιμασμένο 2026-09-30
 - [ ] Deploy pipeline σε Render.com (free tier)
-- [ ] Env vars / secrets management (Anthropic API key κ.λπ.)
+- [x] Env vars / secrets management (`backend/.env`, Anthropic API key + Supabase + Redis credentials)
+
+**Κατάσταση 2026-09-30:** πλήρες end-to-end test με πραγματικό infra (όχι πια fakes) — HTTP upload → πραγματικό BullMQ/Upstash queue → worker → πραγματικό Supabase Storage → `/status`, `/preview`, `/download`, `/download-all` endpoints, όλα με πραγματικά αρχεία. Βρέθηκε και διορθώθηκε ένα ακόμη πραγματικό bug: το `ioredis` δεν ήταν δηλωμένο dependency (BullMQ το φορτώνει δυναμικά) — δούλευε σε όλα τα προηγούμενα tests μόνο επειδή χρησιμοποιούσαν fake queue, ποτέ πραγματικό Redis. Test data καθαρίστηκε μετά.
 
 #### B. Upload & queue
 - [x] `POST /upload` — δέχεται PDF (multipart/form-data), ελέγχει το PDF signature, αποθήκευση στο Supabase Storage, δημιουργία `requestId`, βάζει job στην ουρά (BullMQ)
@@ -226,17 +228,18 @@ kpi:   { sheets: [{ name: string, headers: string[], rows: (string | number | nu
 
 ## 8. Σειρά προτεραιότητας (ενημερωμένη 2026-09-30)
 
-**Κατάσταση:** `llm` ολοκληρωμένο, δοκιμασμένο έναντι live API σε **3 πραγματικά GAs** (EVOLVE2CARE, VIGILANCE, ARGENTIC) — εκκρεμεί merge · `frontend` πλήρες αλλά πάνω σε mocks, ήδη στο `main` · **`backend` έχει ολοκληρώσει όλο το pipeline** (§5.A-H εκτός infra/ops): upload→queue→PDF parsing→LLM extraction→validation→document generation→preview/download endpoints. Το μόνο που απομένει στο backend είναι infra σύνδεση (Supabase/Redis/Render, §5.A/§5.I) και το frontend switch από mocks.
+**Κατάσταση:** `llm` ολοκληρωμένο, δοκιμασμένο έναντι live API σε **3 πραγματικά GAs** (EVOLVE2CARE, VIGILANCE, ARGENTIC) — εκκρεμεί merge · **`backend` έχει ολοκληρώσει όλο το pipeline ΚΑΙ δοκιμαστεί end-to-end με πραγματικό infra** (Supabase Storage + Upstash Redis, όχι πια fakes) — απομένει μόνο deploy (Render) και ops (cleanup/TTL/budget cap) · `frontend` πλήρες, ήδη στο `main`, πάνω σε mocks — το frontend-side config (env var, CORS) είναι έτοιμο, απομένει μόνο live backend deployment για το τελικό switch.
 
 1. ~~Templates (Γιώργος) + JSON Schemas (Αριστείδης)~~ — schemas/prompts έτοιμα και δοκιμασμένα· τα Excel templates έγιναν δυναμικό rendering αντί για static αρχεία (βλ. §5.F)
 2. ~~API contract (§6)~~ — κλειδωμένο στο `docs/api-contract.md`
 3. ~~Backend: LLM integration (§5.D) + validation (§5.E)~~ — ολοκληρωμένο, δοκιμασμένο live
 4. ~~Backend: document generation engine (§5.F-G) + worker ολοκλήρωση~~ — ολοκληρωμένο, δοκιμασμένο end-to-end
 5. ~~Backend: preview/download HTTP endpoints (§5.H)~~ — ολοκληρωμένο, δοκιμασμένο
-6. **Τώρα:**
+6. ~~Backend: πραγματική σύνδεση Supabase Storage + Upstash Redis (§5.A)~~ — ολοκληρωμένο, δοκιμασμένο (πραγματικό project/bucket/Redis instance του χρήστη)
+7. ~~Integration testing end-to-end με πραγματικό Supabase/Redis~~ — ολοκληρωμένο: πραγματικό HTTP upload → queue → worker → storage → preview/download, όλα επιτυχή
+8. **Τώρα:**
    - Merge `llm` → `main`
-   - Backend: πραγματική σύνδεση Supabase Storage + Upstash Redis (§5.A) — μέχρι τώρα όλα τα tests έτρεχαν με fake/in-memory storage
-   - Frontend: switch από mock API routes στο πραγματικό backend, μόλις υπάρχει live deployment
-7. Integration testing end-to-end με πραγματικό Supabase/Redis (όχι πια fakes)
-8. Ops: deploy Render/Vercel, cleanup job, Redis TTL, budget cap (§5.A, §5.I)
-9. Merge backend/frontend σε `main`
+   - Backend: deploy σε Render.com (free tier)
+   - Frontend: deploy σε Vercel, μετά switch `NEXT_PUBLIC_API_URL` στο live backend URL
+9. Ops: cleanup job (storage retention), Redis TTL σε status keys, budget cap (§5.I)
+10. Merge backend/frontend σε `main`
