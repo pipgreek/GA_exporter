@@ -117,6 +117,6 @@ Reading it surfaced real page-based table extraction artifacts that the rules ab
 - `max_tokens: 8192` is a starting guess — the EVOLVE2CARE sample GA has 6 WPs / 27
   deliverables/milestones combined; a larger consortium could need more. Revisit once
   tested against a few real GAs of different sizes.
-- See `llm/schemas/README.md` "Open points" for schema-level items (max months/WPs,
-  enum coverage, KPI grouping shape, frontend preview mapping) that also affect these
-  prompts once resolved.
+- See `llm/schemas/README.md` "Template and extraction follow-ups" for max months/WPs
+  and enum coverage. KPI grouping and frontend preview mapping are resolved; the
+  transport/API contract is in `docs/api-contract.md`.

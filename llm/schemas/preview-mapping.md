@@ -6,14 +6,15 @@ The frontend's read-only Excel preview component expects a generic, flat shape:
 { sheets: [{ name: string, headers: string[], rows: (string | number | null)[][] }] }
 ```
 
-This is **not** something the LLM should ever produce directly (it would duplicate
+This shape is part of the canonical HTTP API contract v1 in [`../../docs/api-contract.md`](../../docs/api-contract.md) and is implemented in the frontend API types. It is **not** something the LLM should ever produce directly (it would duplicate
 the extraction schema and drift from it). It's a **pure backend transform** applied
 to the already-validated `gantt.schema.json` / `kpi.schema.json` JSON — same source
 of truth (implementation-plan.md §2's "ίδιο JSON τροφοδοτεί frontend preview"), one
 small mapping function per file type, no extra LLM call and no extra tokens.
 
 This doc is the spec for that transform, so backend can implement it without having
-to reverse-engineer the schema shapes.
+to reverse-engineer the schema shapes. The endpoint wraps these mappings as
+`GET /preview/{requestId}` → `{ info: { html }, gantt: { sheets }, kpi: { sheets } }`.
 
 ## Gantt → 3 sheets
 

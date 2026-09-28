@@ -73,7 +73,9 @@ on the backend, and the template-filling engine (docxtemplater / exceljs).
     blocks) still gets exactly one group, just with no `label` — so the shape is uniform
     even though real GAs vary in how deep their indicator sections nest.
 
-## Open points (need decision before backend/frontend lock the contract)
+## Template and extraction follow-ups
+
+The HTTP transport/API contract is locked in [`../../docs/api-contract.md`](../../docs/api-contract.md). These remaining items affect template capacity and extraction coverage, not the upload/status/preview/download response shapes.
 
 - Max `totalMonths` / WP count the Excel templates should support without breaking
   merged-cell layout (implementation-plan.md §7).
