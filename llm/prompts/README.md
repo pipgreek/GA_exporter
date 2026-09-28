@@ -108,15 +108,23 @@ Reading it surfaced real page-based table extraction artifacts that the rules ab
 - `:3459-3461` — `Milestone No` is a bare number (`1`, `2`, `3`), confirming the
   `MS`-prefix normalization instruction is necessary, not hypothetical.
 
+## Tested against the live Anthropic API — 2026-09-28
+
+All three request packages were run against the real, full parser output above.
+All three succeeded (`stop_reason: tool_use`) and validated with zero schema errors.
+No prompt or schema changes were needed. Full results, token usage, quality
+spot-check and a measured real-world cost figure: [`../testing-notes.md`](../testing-notes.md).
+Raw outputs saved as a regression fixture in
+[`../examples/live-run-2026-09-28/`](../examples/live-run-2026-09-28/).
+
 ## Not covered yet / open follow-ups
 
-- **Still not tested against the live Anthropic API** (implementation-plan.md §5.B).
-  The rules above are informed by manually reading the real parser output, but no model
-  has actually been run over it yet — that's the next concrete step, now that a real
-  `{{grant_agreement_markdown}}` value exists in the repo.
-- `max_tokens: 8192` is a starting guess — the EVOLVE2CARE sample GA has 6 WPs / 27
-  deliverables/milestones combined; a larger consortium could need more. Revisit once
+- `max_tokens: 8192` confirmed generous against this GA (max observed: 5,198 output
+  tokens) — kept as-is for headroom on larger consortia. Only tested against one GA
+  so far (6 WPs / 26 deliverables / 3 milestones / 13 KPI categories); revisit once
   tested against a few real GAs of different sizes.
 - See `llm/schemas/README.md` "Template and extraction follow-ups" for max months/WPs
-  and enum coverage. KPI grouping and frontend preview mapping are resolved; the
+  (a backend rendering concern, unchanged by this test) and enum coverage (5/6
+  `type` values and 2/6 `disseminationLevel` values observed so far — see
+  `testing-notes.md`). KPI grouping and frontend preview mapping are resolved; the
   transport/API contract is in `docs/api-contract.md`.

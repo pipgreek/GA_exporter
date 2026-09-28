@@ -1,0 +1,527 @@
+{
+  "projectAcronym": "EVOLVE2CARE",
+  "projectStartDate": "2024-10-01",
+  "totalMonths": 24,
+  "reportingPeriods": [
+    {
+      "id": "RP1",
+      "monthFrom": 1,
+      "monthTo": 12
+    },
+    {
+      "id": "RP2",
+      "monthFrom": 13,
+      "monthTo": 24
+    }
+  ],
+  "workPackages": [
+    {
+      "id": "WP1",
+      "name": "EVOLVE2CARE experimentation space framework",
+      "lead": "AUTH",
+      "monthFrom": 1,
+      "monthTo": 24,
+      "tasks": [
+        {
+          "id": "T1.1",
+          "name": "Drivers and Barriers for the development of innovations",
+          "phases": [
+            {
+              "monthFrom": 1,
+              "monthTo": 4
+            },
+            {
+              "monthFrom": 19,
+              "monthTo": 24
+            }
+          ]
+        },
+        {
+          "id": "T1.2",
+          "name": "Definition of Stakeholders' requirements and KPI framework",
+          "phases": [
+            {
+              "monthFrom": 1,
+              "monthTo": 6
+            },
+            {
+              "monthFrom": 15,
+              "monthTo": 19
+            }
+          ]
+        },
+        {
+          "id": "T1.3",
+          "name": "Specification of Use Cases, Marketplace Architecture and Action Plan",
+          "phases": [
+            {
+              "monthFrom": 1,
+              "monthTo": 9
+            },
+            {
+              "monthFrom": 17,
+              "monthTo": 19
+            }
+          ]
+        }
+      ],
+      "milestoneIds": [
+        "MS1"
+      ]
+    },
+    {
+      "id": "WP2",
+      "name": "Matching AccelUP Experimentation Space and Services with Innovators and Researchers",
+      "lead": "AUTH",
+      "monthFrom": 2,
+      "monthTo": 24,
+      "tasks": [
+        {
+          "id": "T2.1",
+          "name": "EVOLVE2CARE Experimentation Space infrastructure",
+          "phases": [
+            {
+              "monthFrom": 7,
+              "monthTo": 24
+            }
+          ]
+        },
+        {
+          "id": "T2.2",
+          "name": "LLs, Innovators and Researchers Scouting and selection",
+          "phases": [
+            {
+              "monthFrom": 2,
+              "monthTo": 12
+            }
+          ]
+        },
+        {
+          "id": "T2.3",
+          "name": "Training Program for Living Labs",
+          "phases": [
+            {
+              "monthFrom": 4,
+              "monthTo": 14
+            }
+          ]
+        },
+        {
+          "id": "T2.4",
+          "name": "Training Program for Innovators/Researchers",
+          "phases": [
+            {
+              "monthFrom": 4,
+              "monthTo": 14
+            }
+          ]
+        }
+      ],
+      "milestoneIds": [
+        "MS2",
+        "MS3"
+      ]
+    },
+    {
+      "id": "WP3",
+      "name": "Set Up of AccelUP experimentation Space and Services Execution, Lessons Learnt and Best practices",
+      "lead": "AV",
+      "monthFrom": 12,
+      "monthTo": 24,
+      "tasks": [
+        {
+          "id": "T3.1",
+          "name": "Use Case Execution of Experimentation Services, Monitoring and Evaluation",
+          "phases": [
+            {
+              "monthFrom": 12,
+              "monthTo": 24
+            }
+          ]
+        },
+        {
+          "id": "T3.2",
+          "name": "Knowledge sharing, exchange of best practices, and policy recommendations",
+          "phases": [
+            {
+              "monthFrom": 13,
+              "monthTo": 24
+            }
+          ]
+        },
+        {
+          "id": "T3.3",
+          "name": "AccelUP Standardization, Scalability, Replicability and Sustainable Business Model",
+          "phases": [
+            {
+              "monthFrom": 13,
+              "monthTo": 24
+            }
+          ]
+        },
+        {
+          "id": "T3.4",
+          "name": "Evaluation and advancement of the commercialization potential for Innovators/Researchers",
+          "phases": [
+            {
+              "monthFrom": 14,
+              "monthTo": 24
+            }
+          ]
+        }
+      ],
+      "milestoneIds": []
+    },
+    {
+      "id": "WP4",
+      "name": "EVOLVE2CARE's People-Centric Experimentation Ecosystem Outreach, Sustainability and Clustering",
+      "lead": "VILABS",
+      "monthFrom": 1,
+      "monthTo": 24,
+      "tasks": [
+        {
+          "id": "T4.1",
+          "name": "EVOLVE2CARE Dissemination, Communication and Outreach for the Open Calls",
+          "phases": [
+            {
+              "monthFrom": 1,
+              "monthTo": 24
+            }
+          ]
+        },
+        {
+          "id": "T4.2",
+          "name": "Exploitation and IPR of AccelUP",
+          "phases": [
+            {
+              "monthFrom": 1,
+              "monthTo": 24
+            }
+          ]
+        },
+        {
+          "id": "T4.3",
+          "name": "Clustering with EIT KICs",
+          "phases": [
+            {
+              "monthFrom": 12,
+              "monthTo": 24
+            }
+          ]
+        }
+      ],
+      "milestoneIds": []
+    },
+    {
+      "id": "WP5",
+      "name": "Project Coordination and Management",
+      "lead": "AUTH",
+      "monthFrom": 1,
+      "monthTo": 24,
+      "tasks": [
+        {
+          "id": "T5.1",
+          "name": "Project Coordination and financial management",
+          "phases": [
+            {
+              "monthFrom": 1,
+              "monthTo": 24
+            }
+          ]
+        },
+        {
+          "id": "T5.2",
+          "name": "Technical, and Innovation Management",
+          "phases": [
+            {
+              "monthFrom": 1,
+              "monthTo": 24
+            }
+          ]
+        },
+        {
+          "id": "T5.3",
+          "name": "Quality, Risk, and Data Management Plan",
+          "phases": [
+            {
+              "monthFrom": 1,
+              "monthTo": 24
+            }
+          ]
+        }
+      ],
+      "milestoneIds": []
+    },
+    {
+      "id": "WP6",
+      "name": "Ethics requirements",
+      "lead": "AUTH",
+      "monthFrom": 1,
+      "monthTo": 24,
+      "tasks": [],
+      "milestoneIds": []
+    }
+  ],
+  "deliverables": [
+    {
+      "id": "D1.1",
+      "title": "Roadmap on navigating the complexities of enabling innovative technologies in transitional care",
+      "wp": "WP1",
+      "leadBeneficiary": "SPLORO",
+      "type": "R",
+      "disseminationLevel": "PU",
+      "dueMonth": 4
+    },
+    {
+      "id": "D1.2",
+      "title": "Stakeholder Needs Analysis and KPI framework",
+      "wp": "WP1",
+      "leadBeneficiary": "AUTH",
+      "type": "R",
+      "disseminationLevel": "PU",
+      "dueMonth": 6
+    },
+    {
+      "id": "D1.3",
+      "title": "EVOVLE2CARE Action Plan",
+      "wp": "WP1",
+      "leadBeneficiary": "AUTH",
+      "type": "R",
+      "disseminationLevel": "PU",
+      "dueMonth": 9
+    },
+    {
+      "id": "D1.4",
+      "title": "Roadmap on navigating the complexities of enabling innovative technologies in transitional care - Final",
+      "wp": "WP1",
+      "leadBeneficiary": "SPLORO",
+      "type": "R",
+      "disseminationLevel": "PU",
+      "dueMonth": 24
+    },
+    {
+      "id": "D1.5",
+      "title": "Stakeholder Needs Analysis and KPI framework - Final",
+      "wp": "WP1",
+      "leadBeneficiary": "AUTH",
+      "type": "R",
+      "disseminationLevel": "PU",
+      "dueMonth": 19
+    },
+    {
+      "id": "D1.6",
+      "title": "EVOVLE2CARE Action Plan - Final",
+      "wp": "WP1",
+      "leadBeneficiary": "AUTH",
+      "type": "R",
+      "disseminationLevel": "PU",
+      "dueMonth": 19
+    },
+    {
+      "id": "D2.1",
+      "title": "AccelUP Experimentation Space infrastructure",
+      "wp": "WP2",
+      "leadBeneficiary": "AUTH",
+      "type": "OTHER",
+      "disseminationLevel": "PU",
+      "dueMonth": 12
+    },
+    {
+      "id": "D2.2",
+      "title": "LLs, Innovators and Researchers Scouting and selection Report",
+      "wp": "WP2",
+      "leadBeneficiary": "SPLORO",
+      "type": "R",
+      "disseminationLevel": "PU",
+      "dueMonth": 12
+    },
+    {
+      "id": "D2.3",
+      "title": "Training Program for Living Labs",
+      "wp": "WP2",
+      "leadBeneficiary": "ENoLL IVZW",
+      "type": "OTHER",
+      "disseminationLevel": "PU",
+      "dueMonth": 14
+    },
+    {
+      "id": "D2.4",
+      "title": "Training Program for Innovators/Researchers",
+      "wp": "WP2",
+      "leadBeneficiary": "AV",
+      "type": "OTHER",
+      "disseminationLevel": "PU",
+      "dueMonth": 14
+    },
+    {
+      "id": "D2.5",
+      "title": "AccelUP Experimentation Space infrastructure - Final",
+      "wp": "WP2",
+      "leadBeneficiary": "AUTH",
+      "type": "OTHER",
+      "disseminationLevel": "PU",
+      "dueMonth": 24
+    },
+    {
+      "id": "D3.1",
+      "title": "Monitoring and Evaluation of the experimentation services",
+      "wp": "WP3",
+      "leadBeneficiary": "AUTH",
+      "type": "R",
+      "disseminationLevel": "PU",
+      "dueMonth": 24
+    },
+    {
+      "id": "D3.2",
+      "title": "Lessons Learnt and Policy Recommendations Report",
+      "wp": "WP3",
+      "leadBeneficiary": "ENoLL IVZW",
+      "type": "R",
+      "disseminationLevel": "PU",
+      "dueMonth": 24
+    },
+    {
+      "id": "D3.3",
+      "title": "Standardization, Scalability, Replicability and Business Model",
+      "wp": "WP3",
+      "leadBeneficiary": "AV",
+      "type": "R",
+      "disseminationLevel": "PU",
+      "dueMonth": 24
+    },
+    {
+      "id": "D3.4",
+      "title": "Commercialization Potential of Innovations",
+      "wp": "WP3",
+      "leadBeneficiary": "AV",
+      "type": "R",
+      "disseminationLevel": "PU",
+      "dueMonth": 24
+    },
+    {
+      "id": "D4.1",
+      "title": "Dissemination, Communication and Outreach Strategy and Materials",
+      "wp": "WP4",
+      "leadBeneficiary": "VILABS",
+      "type": "DEC",
+      "disseminationLevel": "PU",
+      "dueMonth": 3
+    },
+    {
+      "id": "D4.2",
+      "title": "Exploitation and IPR Management",
+      "wp": "WP4",
+      "leadBeneficiary": "VILABS",
+      "type": "R",
+      "disseminationLevel": "PU",
+      "dueMonth": 24
+    },
+    {
+      "id": "D4.3",
+      "title": "Clustering with EIT KICs projects and relevant initiatives",
+      "wp": "WP4",
+      "leadBeneficiary": "ENoLL IVZW",
+      "type": "R",
+      "disseminationLevel": "PU",
+      "dueMonth": 24
+    },
+    {
+      "id": "D4.4",
+      "title": "Dissemination, Communication and Outreach Strategy and Materials - Final",
+      "wp": "WP4",
+      "leadBeneficiary": "VILABS",
+      "type": "R",
+      "disseminationLevel": "PU",
+      "dueMonth": 24
+    },
+    {
+      "id": "D5.1",
+      "title": "Project Management Handbook",
+      "wp": "WP5",
+      "leadBeneficiary": "AUTH",
+      "type": "DMP",
+      "disseminationLevel": "PU",
+      "dueMonth": 4
+    },
+    {
+      "id": "D5.2",
+      "title": "Interim Reports",
+      "wp": "WP5",
+      "leadBeneficiary": "AUTH",
+      "type": "R",
+      "disseminationLevel": "PU",
+      "dueMonth": 7
+    },
+    {
+      "id": "D5.3",
+      "title": "Technical, IPR and Innovation Management",
+      "wp": "WP5",
+      "leadBeneficiary": "AV",
+      "type": "R",
+      "disseminationLevel": "PU",
+      "dueMonth": 4
+    },
+    {
+      "id": "D5.4",
+      "title": "Project Management Handbook - Final",
+      "wp": "WP5",
+      "leadBeneficiary": "AUTH",
+      "type": "R",
+      "disseminationLevel": "PU",
+      "dueMonth": 24
+    },
+    {
+      "id": "D5.5",
+      "title": "Interim Reports - Final",
+      "wp": "WP5",
+      "leadBeneficiary": "AUTH",
+      "type": "R",
+      "disseminationLevel": "PU",
+      "dueMonth": 13
+    },
+    {
+      "id": "D5.6",
+      "title": "Technical, IPR and Innovation Management - Final",
+      "wp": "WP5",
+      "leadBeneficiary": "AV",
+      "type": "R",
+      "disseminationLevel": "PU",
+      "dueMonth": 24
+    },
+    {
+      "id": "D6.1",
+      "title": "OEI - Requirement No. 1",
+      "wp": "WP6",
+      "leadBeneficiary": "AUTH",
+      "type": "ETHICS",
+      "disseminationLevel": "SEN",
+      "dueMonth": 16
+    }
+  ],
+  "milestones": [
+    {
+      "id": "MS1",
+      "name": "Holistic ACCELUP architectural blueprints, functional specifications, and integration roadmap available (first version)",
+      "wp": "WP1",
+      "leadBeneficiary": "AUTH",
+      "dueMonth": 9,
+      "meansOfVerification": "D1.3(v1)"
+    },
+    {
+      "id": "MS2",
+      "name": "AccelUP platform up and running to onboard Living Labs",
+      "wp": "WP2",
+      "leadBeneficiary": "AUTH",
+      "dueMonth": 12,
+      "meansOfVerification": "D2.1(v1)"
+    },
+    {
+      "id": "MS3",
+      "name": "Innovators and LLs onboarded on the AccelUP",
+      "wp": "WP2",
+      "leadBeneficiary": "SPLORO",
+      "dueMonth": 12,
+      "meansOfVerification": "D2.2"
+    }
+  ]
+}

@@ -153,23 +153,24 @@ Upload PDF
 
 ### 🧠 Αριστείδης — branch `llm`
 
+**Κατάσταση 2026-09-28: ολοκληρωμένο, δοκιμασμένο έναντι live API.** Εκκρεμεί merge `llm` → `main`.
+
 #### A. JSON Schemas (contract με backend, .md/.json αρχεία)
-- [ ] Schema **INFO**: `{ contract, gaNumber, callTopic, typeOfAction, duration, reportingPeriods[], workPackages[], roles[] }`
-- [ ] Schema **Gantt**: `{ workPackages[{id, name, startMonth, endMonth, lead, tasks[]}], deliverables[], milestones[] }`
-- [ ] Schema **KPI**: `{ categories[{name, kpis[{label, target, achieved, monthlyValues[]}]}] }`
-- [ ] Καθορισμός required/optional fields, τύποι δεδομένων
+- [x] Schema **INFO** (`llm/schemas/info.schema.json`)
+- [x] Schema **Gantt** (`llm/schemas/gantt.schema.json`)
+- [x] Schema **KPI** (`llm/schemas/kpi.schema.json`)
+- [x] Required/optional fields, τύποι δεδομένων — τεκμηριωμένα στο `llm/schemas/README.md`
 
 #### B. Prompts (ένα ανά τύπο αρχείου)
-- [ ] Prompt **INFO** — οδηγίες εξαγωγής γενικών στοιχείων + WPs/roles από το `.md`
-- [ ] Prompt **Gantt** — οδηγίες εξαγωγής χρονοδιαγράμματος/deliverables/milestones
-- [ ] Prompt **KPI** — οδηγίες εξαγωγής δεικτών παρακολούθησης
-- [ ] Test prompts πάνω στο δείγμα Grant Agreement (GAP-101158152) — έλεγχος ποιότητας εξαγωγής
+- [x] Prompt **INFO/Gantt/KPI** — πλήρη, ready-to-send Anthropic request packages (`llm/prompts/*.request.json`)
+- [x] **Live test 2026-09-28** — και τα 3 requests τρέχουν κανονικά (`stop_reason: tool_use`) πάνω στο πλήρες, πραγματικό `.md` του Grant Agreement GAP-101158152 (107K tokens input/call), **0 σφάλματα validation** έναντι των schemas. Καμία αλλαγή prompt/schema δεν χρειάστηκε. Λεπτομέρειες, ποιοτικός έλεγχος και μετρημένο πραγματικό κόστος (~$0.38/GA): [`llm/testing-notes.md`](../llm/testing-notes.md). Raw outputs: `llm/examples/live-run-2026-09-28/`.
 
 #### C. Τεκμηρίωση
-- [ ] `.md` αρχεία με το κάθε schema + prompt + παραδείγματα input/output
-- [ ] Οδηγίες για tool-use/structured output format (πώς να μεταφραστεί το schema σε Anthropic tool definition)
+- [x] `.md` αρχεία ανά schema/prompt + παραδείγματα input/output (`llm/schemas/README.md`, `llm/prompts/README.md`, `llm/examples/`)
+- [x] `llm/prompts/build_requests.py` — regenerate τα request packages αν αλλάξουν τα schemas
+- [x] `llm/schemas/preview-mapping.md` — πώς το κάθε schema αντιστοιχεί στο frontend preview
 
-**Dependency:** το backend χρειάζεται αυτά τα schemas/prompts για να υλοποιήσει τα §D του backend plan — καλό να είναι από τα πρώτα πράγματα που κλειδώνουν.
+**Επόμενο βήμα:** merge `llm` → `main`, μετά το backend καταναλώνει απευθείας τα `llm/prompts/*.request.json` (βλ. §5 backend D).
 
 ---
 
@@ -191,9 +192,9 @@ GET    /download-all/{requestId}    → .zip
 ## 7. Ανοιχτά σημεία προς απόφαση
 
 - [ ] Μέγιστο εύρος μηνών/WPs στα Excel templates
-- [ ] Ακριβές μέγεθος/typical σελίδες Grant Agreement (επηρεάζει αν χρειάζεται chunking πριν το LLM)
+- [x] ~~Ακριβές μέγεθος/typical σελίδες Grant Agreement (επηρεάζει αν χρειάζεται chunking πριν το LLM)~~ — δοκιμάστηκε 2026-09-28: το πλήρες GA (5.955 γραμμές .md) χωράει σε ένα call χωρίς chunking (~107K input tokens, καλά μέσα στο context window). Βλ. `llm/testing-notes.md`.
 - [ ] Error/retry UX σε αποτυχία LLM parsing
-- [ ] Anthropic API key management & budget cap
+- [ ] Anthropic API key management & budget cap — τώρα με πραγματικό αριθμό αναφοράς: ~$0.38/Grant Agreement (μετρημένο 2026-09-28, `llm/testing-notes.md`)
 - [ ] Σειρά merge προς `main` (ποιο branch πρώτο)
 
 ## 8. Σειρά προτεραιότητας (προτεινόμενη)
