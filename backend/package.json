@@ -14,6 +14,7 @@
     "start:prod": "node dist/main.js"
   },
   "dependencies": {
+    "@anthropic-ai/sdk": "^0.68.0",
     "@nestjs/bullmq": "^11.0.5",
     "@nestjs/common": "^11.1.28",
     "@nestjs/config": "^4.0.2",
@@ -24,7 +25,8 @@
     "joi": "^17.13.3",
     "multer": "^2.4.0",
     "reflect-metadata": "^0.2.2",
-    "rxjs": "^7.8.2"
+    "rxjs": "^7.8.2",
+    "zod": "^3.24.1"
   },
   "devDependencies": {
     "@nestjs/cli": "^11.0.24",

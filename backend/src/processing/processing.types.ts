@@ -20,4 +20,7 @@ export interface PdfProcessingResult {
   pageCount: number;
   tableCount: number;
   characterCount: number;
+  infoStoragePath: string;
+  ganttStoragePath: string;
+  kpiStoragePath: string;
 }
