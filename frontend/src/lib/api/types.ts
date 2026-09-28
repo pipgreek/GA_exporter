@@ -19,7 +19,7 @@ export interface UploadResponse {
 /** GET /status/{requestId} */
 export interface StatusResponse {
   status: ProcessingStatus;
-  /** 0–100 */
+  /** 0–100. `done` means all three files and preview data are available. */
   progress: number;
   message: string;
 }
@@ -45,7 +45,9 @@ export interface PreviewResponse {
   kpi: WorkbookPreview;
 }
 
-/** Error body returned by the API on 4xx/5xx. */
+/** Error body returned by the API on 4xx/5xx. Other NestJS metadata may be present. */
 export interface ApiErrorBody {
   message: string;
+  statusCode?: number;
+  error?: string;
 }

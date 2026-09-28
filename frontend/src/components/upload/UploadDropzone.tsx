@@ -2,6 +2,7 @@
 
 import { CloudUpload } from "lucide-react";
 import { ErrorCode, useDropzone, type FileRejection } from "react-dropzone";
+import { MAX_PDF_UPLOAD_BYTES } from "@/lib/files";
 
 interface UploadDropzoneProps {
   /** Locked while a file is uploaded (only one Grant Agreement at a time). */
@@ -13,6 +14,7 @@ interface UploadDropzoneProps {
 function rejectionMessage(rejections: FileRejection[]): string {
   const codes = rejections.flatMap((r) => r.errors.map((e) => e.code));
   if (codes.includes(ErrorCode.TooManyFiles)) return "Please upload a single PDF file.";
+  if (codes.includes("file-too-large")) return "PDF files must be 25 MiB or smaller.";
   return "Please select a valid PDF file.";
 }
 
@@ -21,6 +23,7 @@ export function UploadDropzone({ disabled, onFileAccepted, onFileRejected }: Upl
     accept: { "application/pdf": [".pdf"] },
     multiple: false,
     maxFiles: 1,
+    maxSize: MAX_PDF_UPLOAD_BYTES,
     disabled,
     onDropAccepted: (files) => onFileAccepted(files[0]),
     onDropRejected: (rejections) => onFileRejected(rejectionMessage(rejections)),
