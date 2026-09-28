@@ -4,6 +4,7 @@ import { GA_EXPORT_QUEUE } from '../infrastructure/queue/queue.constants';
 import { SupabaseStorageService } from '../infrastructure/storage/storage.service';
 import { PdfParserService } from '../pdf-parsing/pdf-parser.service';
 import { LlmService } from '../llm/llm.service';
+import { DocumentGenerationService } from '../document-generation/document-generation.service';
 import { PdfProcessingJobData, PdfProcessingResult, ProcessingProgress } from './processing.types';
 
 @Processor(GA_EXPORT_QUEUE, { concurrency: 1 })
@@ -12,6 +13,7 @@ export class PdfProcessingProcessor extends WorkerHost {
     private readonly storage: SupabaseStorageService,
     private readonly parser: PdfParserService,
     private readonly llm: LlmService,
+    private readonly documentGeneration: DocumentGenerationService,
   ) {
     super();
   }
@@ -28,16 +30,41 @@ export class PdfProcessingProcessor extends WorkerHost {
 
       await this.setProgress(job, {
         status: 'analyzing',
-        progress: 45,
+        progress: 40,
         message: 'Extracting structured data with the LLM.',
         markdownStoragePath,
       });
       const extraction = await this.llm.generateAll(markdown);
 
-      const [infoStoragePath, ganttStoragePath, kpiStoragePath] = await Promise.all([
-        this.storeJson(job.data.requestId, 'info', extraction.info),
-        this.storeJson(job.data.requestId, 'gantt', extraction.gantt),
-        this.storeJson(job.data.requestId, 'kpi', extraction.kpi),
+      await this.setProgress(job, {
+        status: 'generating',
+        progress: 75,
+        message: 'Generating Word and Excel files.',
+        markdownStoragePath,
+      });
+      const generated = await this.documentGeneration.generateAll(extraction);
+
+      const [infoStoragePath, ganttStoragePath, kpiStoragePath, previewStoragePath] = await Promise.all([
+        this.storage.upload(
+          `${job.data.requestId}/output/INFO_Generation.docx`,
+          generated.infoDocx,
+          'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
+        ),
+        this.storage.upload(
+          `${job.data.requestId}/output/Gantt_Chart.xlsx`,
+          generated.ganttXlsx,
+          'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
+        ),
+        this.storage.upload(
+          `${job.data.requestId}/output/KPI_Monitoring.xlsx`,
+          generated.kpiXlsx,
+          'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
+        ),
+        this.storage.upload(
+          `${job.data.requestId}/output/preview.json`,
+          Buffer.from(JSON.stringify(generated.preview), 'utf8'),
+          'application/json',
+        ),
       ]);
 
       const result: PdfProcessingResult = {
@@ -48,11 +75,16 @@ export class PdfProcessingProcessor extends WorkerHost {
         infoStoragePath,
         ganttStoragePath,
         kpiStoragePath,
+        previewStoragePath,
       };
+      // Terminal progress write before returning: getStatus() reads the last
+      // job.progress payload for a completed job (processing.service.ts), so
+      // this is what makes `done` mean "all three files + preview are ready"
+      // (docs/api-contract.md), not just "the worker function returned".
       await this.setProgress(job, {
-        status: 'generating',
-        progress: 70,
-        message: 'LLM extraction is complete; document generation is pending.',
+        status: 'done',
+        progress: 100,
+        message: 'All files are ready.',
         markdownStoragePath,
       });
       return result;
@@ -60,12 +92,6 @@ export class PdfProcessingProcessor extends WorkerHost {
       await this.setProgress(job, { status: 'error', progress: 100, message: 'PDF processing failed.' });
       throw error;
     }
-  }
-
-  private async storeJson(requestId: string, name: 'info' | 'gantt' | 'kpi', data: unknown): Promise<string> {
-    const path = `${requestId}/intermediate/${name}.json`;
-    await this.storage.upload(path, Buffer.from(JSON.stringify(data), 'utf8'), 'application/json');
-    return path;
   }
 
   private async setProgress(job: Job, progress: ProcessingProgress): Promise<void> {

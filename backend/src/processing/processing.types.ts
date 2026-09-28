@@ -20,7 +20,9 @@ export interface PdfProcessingResult {
   pageCount: number;
   tableCount: number;
   characterCount: number;
+  /** Final downloadable files (api-contract.md filenames), not the intermediate LLM JSON. */
   infoStoragePath: string;
   ganttStoragePath: string;
   kpiStoragePath: string;
+  previewStoragePath: string;
 }

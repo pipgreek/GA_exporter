@@ -8,6 +8,7 @@ import { QueueModule } from './infrastructure/queue/queue.module';
 import { StorageModule } from './infrastructure/storage/storage.module';
 import { ProcessingModule } from './processing/processing.module';
 import { LlmModule } from './llm/llm.module';
+import { DocumentGenerationModule } from './document-generation/document-generation.module';
 import { parseRedisConnection } from './infrastructure/queue/redis-connection';
 
 const validationSchema = Joi.object({
@@ -42,6 +43,7 @@ const validationOptions = { abortEarly: false };
     StorageModule,
     PdfParsingModule,
     LlmModule,
+    DocumentGenerationModule,
     ProcessingModule,
   ],
 })
