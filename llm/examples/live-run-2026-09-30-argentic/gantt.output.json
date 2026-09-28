@@ -1,0 +1,981 @@
+{
+  "projectAcronym": "ARGENTIC",
+  "totalMonths": 36,
+  "projectStartDate": "tbd",
+  "reportingPeriods": [
+    {
+      "id": "RP1",
+      "monthFrom": 1,
+      "monthTo": 18
+    },
+    {
+      "id": "RP2",
+      "monthFrom": 19,
+      "monthTo": 36
+    }
+  ],
+  "workPackages": [
+    {
+      "id": "WP1",
+      "name": "Project Coordination",
+      "lead": "MAG",
+      "monthFrom": 1,
+      "monthTo": 36,
+      "milestoneIds": [
+        "MS1",
+        "MS2"
+      ],
+      "tasks": [
+        {
+          "id": "T1.1",
+          "name": "Project management",
+          "phases": [
+            {
+              "monthFrom": 1,
+              "monthTo": 36
+            }
+          ]
+        },
+        {
+          "id": "T1.2",
+          "name": "Technical and scientific coordination",
+          "phases": [
+            {
+              "monthFrom": 1,
+              "monthTo": 36
+            }
+          ]
+        },
+        {
+          "id": "T1.3",
+          "name": "Data management, risk management and quality assurance",
+          "phases": [
+            {
+              "monthFrom": 1,
+              "monthTo": 36
+            }
+          ]
+        },
+        {
+          "id": "T1.4",
+          "name": "Social impact, ethical and legal compliance",
+          "phases": [
+            {
+              "monthFrom": 1,
+              "monthTo": 36
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "WP2",
+      "name": "Agentic and sovereign architecture for the cognitive continuum",
+      "lead": "NVCR",
+      "monthFrom": 1,
+      "monthTo": 12,
+      "milestoneIds": [
+        "MS4"
+      ],
+      "tasks": [
+        {
+          "id": "T2.1",
+          "name": "Use case-driven requirements and cognitive continuum scenarios",
+          "phases": [
+            {
+              "monthFrom": 1,
+              "monthTo": 12
+            }
+          ]
+        },
+        {
+          "id": "T2.2",
+          "name": "Reference architecture for distributed agentic intelligence",
+          "phases": [
+            {
+              "monthFrom": 1,
+              "monthTo": 12
+            }
+          ]
+        },
+        {
+          "id": "T2.3",
+          "name": "Compliance blueprint for sovereignty, privacy and energy constraints",
+          "phases": [
+            {
+              "monthFrom": 1,
+              "monthTo": 12
+            }
+          ]
+        },
+        {
+          "id": "T2.4",
+          "name": "Federated interoperability and agentic collaboration protocols",
+          "phases": [
+            {
+              "monthFrom": 3,
+              "monthTo": 12
+            }
+          ]
+        },
+        {
+          "id": "T2.5",
+          "name": "Digital Twin integration layer",
+          "phases": [
+            {
+              "monthFrom": 3,
+              "monthTo": 12
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "WP3",
+      "name": "Distributed agentic intelligence for Edge-Cloud-HPC systems",
+      "lead": "UTU",
+      "monthFrom": 4,
+      "monthTo": 30,
+      "milestoneIds": [
+        "MS5"
+      ],
+      "tasks": [
+        {
+          "id": "T3.1",
+          "name": "Lightweight Language Model integration for edge agents",
+          "phases": [
+            {
+              "monthFrom": 4,
+              "monthTo": 30
+            }
+          ]
+        },
+        {
+          "id": "T3.2",
+          "name": "Agent lifecycle, goal resolution and auto-evolution mechanisms",
+          "phases": [
+            {
+              "monthFrom": 4,
+              "monthTo": 30
+            }
+          ]
+        },
+        {
+          "id": "T3.3",
+          "name": "Multi-agent collaboration and dynamic task delegation",
+          "phases": [
+            {
+              "monthFrom": 4,
+              "monthTo": 30
+            }
+          ]
+        },
+        {
+          "id": "T3.4",
+          "name": "Agentic intent-handling and self-optimisation",
+          "phases": [
+            {
+              "monthFrom": 4,
+              "monthTo": 30
+            }
+          ]
+        },
+        {
+          "id": "T3.5",
+          "name": "Hardware-Software Co-design for Sovereign Agents",
+          "phases": [
+            {
+              "monthFrom": 4,
+              "monthTo": 30
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "WP4",
+      "name": "Federated knowledge and contextual data infrastructure",
+      "lead": "UOULU",
+      "monthFrom": 4,
+      "monthTo": 30,
+      "milestoneIds": [],
+      "tasks": [
+        {
+          "id": "T4.1",
+          "name": "Local Knowledge Graphs and memory embeddings per agent",
+          "phases": [
+            {
+              "monthFrom": 4,
+              "monthTo": 30
+            }
+          ]
+        },
+        {
+          "id": "T4.2",
+          "name": "Federated knowledge orchestration and role-based access",
+          "phases": [
+            {
+              "monthFrom": 4,
+              "monthTo": 30
+            }
+          ]
+        },
+        {
+          "id": "T4.3",
+          "name": "Next-generation retrieval-augmented generation (RAG 2.0) interfaces for secure contextual retrieval and external data fusion",
+          "phases": [
+            {
+              "monthFrom": 4,
+              "monthTo": 30
+            }
+          ]
+        },
+        {
+          "id": "T4.4",
+          "name": "Federated ontology alignment and privacy contracts",
+          "phases": [
+            {
+              "monthFrom": 4,
+              "monthTo": 30
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "WP5",
+      "name": "Agentic orchestration and human-governed autonomy",
+      "lead": "SQD",
+      "monthFrom": 6,
+      "monthTo": 33,
+      "milestoneIds": [
+        "MS5"
+      ],
+      "tasks": [
+        {
+          "id": "T5.1",
+          "name": "AI-orchestrated task placement for the cognitive continuum",
+          "phases": [
+            {
+              "monthFrom": 6,
+              "monthTo": 33
+            }
+          ]
+        },
+        {
+          "id": "T5.2",
+          "name": "Human-in-the-loop control points and decision escalation",
+          "phases": [
+            {
+              "monthFrom": 6,
+              "monthTo": 33
+            }
+          ]
+        },
+        {
+          "id": "T5.3",
+          "name": "Explainability, auditing and policy-aligned agent behaviour logging",
+          "phases": [
+            {
+              "monthFrom": 6,
+              "monthTo": 33
+            }
+          ]
+        },
+        {
+          "id": "T5.4",
+          "name": "Agentic-aware scheduling and EcoMode governance",
+          "phases": [
+            {
+              "monthFrom": 6,
+              "monthTo": 33
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "WP6",
+      "name": "Sustainable agent lifecycle, RLHF, and evaluation pipelines",
+      "lead": "UM",
+      "monthFrom": 13,
+      "monthTo": 33,
+      "milestoneIds": [
+        "MS8",
+        "MS9"
+      ],
+      "tasks": [
+        {
+          "id": "T6.1",
+          "name": "Continuous integration and secure model lifecycle automation",
+          "phases": [
+            {
+              "monthFrom": 13,
+              "monthTo": 28
+            }
+          ]
+        },
+        {
+          "id": "T6.2",
+          "name": "Reinforcement learning from Human Feedback (RLHF) integration",
+          "phases": [
+            {
+              "monthFrom": 13,
+              "monthTo": 28
+            }
+          ]
+        },
+        {
+          "id": "T6.3",
+          "name": "Evaluation framework for robustness, efficiency and bias auditing",
+          "phases": [
+            {
+              "monthFrom": 13,
+              "monthTo": 33
+            }
+          ]
+        },
+        {
+          "id": "T6.4",
+          "name": "Energy-aware fine-tuning and model switching",
+          "phases": [
+            {
+              "monthFrom": 13,
+              "monthTo": 33
+            }
+          ]
+        },
+        {
+          "id": "T6.5",
+          "name": "Provenance and compliance verification pipeline",
+          "phases": [
+            {
+              "monthFrom": 13,
+              "monthTo": 33
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "WP7",
+      "name": "Continuum-scale deployment and pilot validation",
+      "lead": "MAG",
+      "monthFrom": 13,
+      "monthTo": 36,
+      "milestoneIds": [
+        "MS7",
+        "MS8",
+        "MS10"
+      ],
+      "tasks": [
+        {
+          "id": "T7.1",
+          "name": "Pilot case strategy, preparation and planning",
+          "phases": [
+            {
+              "monthFrom": 13,
+              "monthTo": 18
+            }
+          ]
+        },
+        {
+          "id": "T7.2",
+          "name": "UC1 - Bedside agentic AI monitoring for proactive hospital care",
+          "phases": [
+            {
+              "monthFrom": 19,
+              "monthTo": 33
+            }
+          ]
+        },
+        {
+          "id": "T7.3",
+          "name": "UC2 - Mangrovia IoT",
+          "phases": [
+            {
+              "monthFrom": 19,
+              "monthTo": 33
+            }
+          ]
+        },
+        {
+          "id": "T7.4",
+          "name": "UC3 - Digital marketing optimization",
+          "phases": [
+            {
+              "monthFrom": 19,
+              "monthTo": 33
+            }
+          ]
+        },
+        {
+          "id": "T7.5",
+          "name": "UC4 - Immersive AR/VR cultural heritage personalized guide",
+          "phases": [
+            {
+              "monthFrom": 19,
+              "monthTo": 33
+            }
+          ]
+        },
+        {
+          "id": "T7.6",
+          "name": "UC5 - AI-driven strawberry breeding and cultivation optimisation",
+          "phases": [
+            {
+              "monthFrom": 19,
+              "monthTo": 33
+            }
+          ]
+        },
+        {
+          "id": "T7.7",
+          "name": "UC6 - Recruitment with Agentic AI: Efficiency, oversight & fairness",
+          "phases": [
+            {
+              "monthFrom": 19,
+              "monthTo": 33
+            }
+          ]
+        },
+        {
+          "id": "T7.8",
+          "name": "UC7 - MindBuddy: AI-powered companion system for adolescent mental health",
+          "phases": [
+            {
+              "monthFrom": 19,
+              "monthTo": 33
+            }
+          ]
+        },
+        {
+          "id": "T7.9",
+          "name": "Cross-pilot validation and societal impact assessment",
+          "phases": [
+            {
+              "monthFrom": 19,
+              "monthTo": 33
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "WP8",
+      "name": "Dissemination, communication and exploitation",
+      "lead": "VIL",
+      "monthFrom": 1,
+      "monthTo": 36,
+      "milestoneIds": [
+        "MS3",
+        "MS6"
+      ],
+      "tasks": [
+        {
+          "id": "T8.1",
+          "name": "Communication and dissemination plan and activities",
+          "phases": [
+            {
+              "monthFrom": 1,
+              "monthTo": 36
+            }
+          ]
+        },
+        {
+          "id": "T8.2",
+          "name": "Exploitation plan and market strategy",
+          "phases": [
+            {
+              "monthFrom": 7,
+              "monthTo": 36
+            }
+          ]
+        },
+        {
+          "id": "T8.3",
+          "name": "Establishment of synergies with relevant AI, data and robotics initiatives and stakeholders",
+          "phases": [
+            {
+              "monthFrom": 1,
+              "monthTo": 36
+            }
+          ]
+        },
+        {
+          "id": "T8.4",
+          "name": "Training and capacity building for stakeholders on Trustworthy agentic AI",
+          "phases": [
+            {
+              "monthFrom": 1,
+              "monthTo": 36
+            }
+          ]
+        },
+        {
+          "id": "T8.5",
+          "name": "Standardization activities, policy recommendations, transferability of outcomes and impact assessment",
+          "phases": [
+            {
+              "monthFrom": 1,
+              "monthTo": 36
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "WP9",
+      "name": "Ethics requirements",
+      "lead": "MAG",
+      "monthFrom": 1,
+      "monthTo": 36,
+      "milestoneIds": [],
+      "tasks": []
+    }
+  ],
+  "deliverables": [
+    {
+      "id": "D1.1",
+      "title": "Project management manual, quality assurance and risk management plan",
+      "wp": "WP1",
+      "leadBeneficiary": "MAG",
+      "type": "R",
+      "disseminationLevel": "SEN",
+      "dueMonth": 3
+    },
+    {
+      "id": "D1.2",
+      "title": "Data management plan v1",
+      "wp": "WP1",
+      "leadBeneficiary": "NVCR",
+      "type": "DMP",
+      "disseminationLevel": "PU",
+      "dueMonth": 6
+    },
+    {
+      "id": "D1.3",
+      "title": "Data management plan v2",
+      "wp": "WP1",
+      "leadBeneficiary": "NVCR",
+      "type": "DMP",
+      "disseminationLevel": "PU",
+      "dueMonth": 18
+    },
+    {
+      "id": "D1.4",
+      "title": "Data management plan v3",
+      "wp": "WP1",
+      "leadBeneficiary": "NVCR",
+      "type": "DMP",
+      "disseminationLevel": "PU",
+      "dueMonth": 36
+    },
+    {
+      "id": "D1.5",
+      "title": "Ethics compliance and risk assessment report v1",
+      "wp": "WP1",
+      "leadBeneficiary": "ERC",
+      "type": "R",
+      "disseminationLevel": "SEN",
+      "dueMonth": 6
+    },
+    {
+      "id": "D1.6",
+      "title": "Ethics compliance and risk assessment report v2",
+      "wp": "WP1",
+      "leadBeneficiary": "ERC",
+      "type": "R",
+      "disseminationLevel": "SEN",
+      "dueMonth": 18
+    },
+    {
+      "id": "D1.7",
+      "title": "Ethics compliance and risk assessment report v3",
+      "wp": "WP1",
+      "leadBeneficiary": "ERC",
+      "type": "R",
+      "disseminationLevel": "SEN",
+      "dueMonth": 36
+    },
+    {
+      "id": "D2.1",
+      "title": "Use case requirements and continuum scenarios",
+      "wp": "WP2",
+      "leadBeneficiary": "UTU",
+      "type": "R",
+      "disseminationLevel": "PU",
+      "dueMonth": 12
+    },
+    {
+      "id": "D2.2",
+      "title": "Reference architecture and compliance blueprint for distributed agentic intelligence",
+      "wp": "WP2",
+      "leadBeneficiary": "NVCR",
+      "type": "R",
+      "disseminationLevel": "PU",
+      "dueMonth": 12
+    },
+    {
+      "id": "D3.1",
+      "title": "Prototype framework for Lightweight edge agents",
+      "wp": "WP3",
+      "leadBeneficiary": "UTU",
+      "type": "OTHER",
+      "disseminationLevel": "SEN",
+      "dueMonth": 18,
+      "taskId": "T3.1"
+    },
+    {
+      "id": "D3.2",
+      "title": "Multi-agent collaboration and task delegation engine",
+      "wp": "WP3",
+      "leadBeneficiary": "NVCR",
+      "type": "OTHER",
+      "disseminationLevel": "SEN",
+      "dueMonth": 24,
+      "taskId": "T3.3"
+    },
+    {
+      "id": "D3.3",
+      "title": "Hardware-software co-design toolkit for sovereign agents",
+      "wp": "WP3",
+      "leadBeneficiary": "SQD",
+      "type": "R",
+      "disseminationLevel": "PU",
+      "dueMonth": 30,
+      "taskId": "T3.5"
+    },
+    {
+      "id": "D4.1",
+      "title": "Local Knowledge Graph framework and RAG 2.0 integration",
+      "wp": "WP4",
+      "leadBeneficiary": "UNIGE",
+      "type": "OTHER",
+      "disseminationLevel": "SEN",
+      "dueMonth": 18,
+      "taskId": "T4.1"
+    },
+    {
+      "id": "D4.2",
+      "title": "Federated knowledge orchestration layer and access control mechanisms",
+      "wp": "WP4",
+      "leadBeneficiary": "UOULU",
+      "type": "OTHER",
+      "disseminationLevel": "SEN",
+      "dueMonth": 24,
+      "taskId": "T4.2"
+    },
+    {
+      "id": "D4.3",
+      "title": "Ontology alignment and privacy contracts for federated AI agents",
+      "wp": "WP4",
+      "leadBeneficiary": "ERC",
+      "type": "OTHER",
+      "disseminationLevel": "SEN",
+      "dueMonth": 30,
+      "taskId": "T4.4"
+    },
+    {
+      "id": "D5.1",
+      "title": "Reinforcement Learning-based orchestration engine",
+      "wp": "WP5",
+      "leadBeneficiary": "SQD",
+      "type": "OTHER",
+      "disseminationLevel": "SEN",
+      "dueMonth": 18,
+      "taskId": "T5.1"
+    },
+    {
+      "id": "D5.2",
+      "title": "Human-in-the-Loop governance and explainability framework v1",
+      "wp": "WP5",
+      "leadBeneficiary": "SQD",
+      "type": "R",
+      "disseminationLevel": "SEN",
+      "dueMonth": 24,
+      "taskId": "T5.2"
+    },
+    {
+      "id": "D5.3",
+      "title": "Human-in-the-Loop governance and explainability framework v2",
+      "wp": "WP5",
+      "leadBeneficiary": "XLAB",
+      "type": "OTHER",
+      "disseminationLevel": "SEN",
+      "dueMonth": 33,
+      "taskId": "T5.4"
+    },
+    {
+      "id": "D6.1",
+      "title": "Secure lifecycle automation and RLHF integration",
+      "wp": "WP6",
+      "leadBeneficiary": "SQD",
+      "type": "OTHER",
+      "disseminationLevel": "SEN",
+      "dueMonth": 20,
+      "taskId": "T6.2"
+    },
+    {
+      "id": "D6.2",
+      "title": "Evaluation framework for robustness, bias, and energy efficiency",
+      "wp": "WP6",
+      "leadBeneficiary": "UM",
+      "type": "R",
+      "disseminationLevel": "SEN",
+      "dueMonth": 28,
+      "taskId": "T6.3"
+    },
+    {
+      "id": "D6.3",
+      "title": "Provenance and compliance verification toolkit",
+      "wp": "WP6",
+      "leadBeneficiary": "UM",
+      "type": "OTHER",
+      "disseminationLevel": "SEN",
+      "dueMonth": 33,
+      "taskId": "T6.5"
+    },
+    {
+      "id": "D7.1",
+      "title": "Pilot case strategy and planning report",
+      "wp": "WP7",
+      "leadBeneficiary": "MAG",
+      "type": "R",
+      "disseminationLevel": "PU",
+      "dueMonth": 18,
+      "taskId": "T7.1"
+    },
+    {
+      "id": "D7.2",
+      "title": "Cross-pilot validation and impact report",
+      "wp": "WP7",
+      "leadBeneficiary": "MAG",
+      "type": "R",
+      "disseminationLevel": "PU",
+      "dueMonth": 36,
+      "taskId": "T7.9"
+    },
+    {
+      "id": "D8.1",
+      "title": "Communication & dissemination strategy",
+      "wp": "WP8",
+      "leadBeneficiary": "VIL",
+      "type": "R",
+      "disseminationLevel": "PU",
+      "dueMonth": 6,
+      "taskId": "T8.1"
+    },
+    {
+      "id": "D8.2",
+      "title": "Communication & dissemination activities report",
+      "wp": "WP8",
+      "leadBeneficiary": "VIL",
+      "type": "R",
+      "disseminationLevel": "PU",
+      "dueMonth": 36,
+      "taskId": "T8.1"
+    },
+    {
+      "id": "D8.3",
+      "title": "Exploitation Strategy",
+      "wp": "WP8",
+      "leadBeneficiary": "NVCR",
+      "type": "R",
+      "disseminationLevel": "SEN",
+      "dueMonth": 12,
+      "taskId": "T8.2"
+    },
+    {
+      "id": "D8.4",
+      "title": "Exploitation Plan",
+      "wp": "WP8",
+      "leadBeneficiary": "NVCR",
+      "type": "R",
+      "disseminationLevel": "SEN",
+      "dueMonth": 36,
+      "taskId": "T8.2"
+    },
+    {
+      "id": "D8.5",
+      "title": "Collaboration and synergies report v1",
+      "wp": "WP8",
+      "leadBeneficiary": "28D",
+      "type": "R",
+      "disseminationLevel": "PU",
+      "dueMonth": 18,
+      "taskId": "T8.3"
+    },
+    {
+      "id": "D8.6",
+      "title": "Collaboration and synergies report v2",
+      "wp": "WP8",
+      "leadBeneficiary": "28D",
+      "type": "R",
+      "disseminationLevel": "PU",
+      "dueMonth": 36,
+      "taskId": "T8.3"
+    },
+    {
+      "id": "D8.7",
+      "title": "Training and capacity-building toolkit v1",
+      "wp": "WP8",
+      "leadBeneficiary": "28D",
+      "type": "R",
+      "disseminationLevel": "PU",
+      "dueMonth": 18,
+      "taskId": "T8.4"
+    },
+    {
+      "id": "D8.8",
+      "title": "Training and capacity-building toolkit v2",
+      "wp": "WP8",
+      "leadBeneficiary": "28D",
+      "type": "R",
+      "disseminationLevel": "PU",
+      "dueMonth": 36,
+      "taskId": "T8.4"
+    },
+    {
+      "id": "D8.9",
+      "title": "Standardisation, policy recommendations, and transferability report v1",
+      "wp": "WP8",
+      "leadBeneficiary": "VIL",
+      "type": "R",
+      "disseminationLevel": "PU",
+      "dueMonth": 18,
+      "taskId": "T8.5"
+    },
+    {
+      "id": "D8.10",
+      "title": "Standardisation, policy recommendations, and transferability report v2",
+      "wp": "WP8",
+      "leadBeneficiary": "VIL",
+      "type": "R",
+      "disseminationLevel": "PU",
+      "dueMonth": 36,
+      "taskId": "T8.5"
+    },
+    {
+      "id": "D8.11",
+      "title": "Policy brief 1",
+      "wp": "WP8",
+      "leadBeneficiary": "VIL",
+      "type": "R",
+      "disseminationLevel": "PU",
+      "dueMonth": 12,
+      "taskId": "T8.5"
+    },
+    {
+      "id": "D8.12",
+      "title": "Policy brief 2",
+      "wp": "WP8",
+      "leadBeneficiary": "VIL",
+      "type": "R",
+      "disseminationLevel": "PU",
+      "dueMonth": 24,
+      "taskId": "T8.5"
+    },
+    {
+      "id": "D8.13",
+      "title": "Policy brief 3",
+      "wp": "WP8",
+      "leadBeneficiary": "VIL",
+      "type": "R",
+      "disseminationLevel": "PU",
+      "dueMonth": 36,
+      "taskId": "T8.5"
+    },
+    {
+      "id": "D9.1",
+      "title": "OEI - Requirement No. 1",
+      "wp": "WP9",
+      "leadBeneficiary": "MAG",
+      "type": "ETHICS",
+      "disseminationLevel": "SEN",
+      "dueMonth": 3
+    }
+  ],
+  "milestones": [
+    {
+      "id": "MS1",
+      "name": "Project kick-off and governance structures established",
+      "wp": "WP1",
+      "leadBeneficiary": "MAG",
+      "dueMonth": 1,
+      "meansOfVerification": "D1.1"
+    },
+    {
+      "id": "MS2",
+      "name": "Advisory board established",
+      "wp": "WP1",
+      "leadBeneficiary": "MAG",
+      "dueMonth": 1,
+      "meansOfVerification": "D1.1"
+    },
+    {
+      "id": "MS3",
+      "name": "Communication, dissemination, and exploitation strategy defined",
+      "wp": "WP8",
+      "leadBeneficiary": "VIL",
+      "dueMonth": 6,
+      "meansOfVerification": "D8.1"
+    },
+    {
+      "id": "MS4",
+      "name": "Use case requirements and reference architecture validated",
+      "wp": "WP2",
+      "leadBeneficiary": "NVCR",
+      "dueMonth": 12,
+      "meansOfVerification": "D2.1, D2.2"
+    },
+    {
+      "id": "MS5",
+      "name": "First agentic orchestration prototype operational",
+      "wp": "WP5",
+      "leadBeneficiary": "SQD",
+      "dueMonth": 18,
+      "meansOfVerification": "D3.1, D5.1"
+    },
+    {
+      "id": "MS6",
+      "name": "Exploitation and business strategy defined",
+      "wp": "WP8",
+      "leadBeneficiary": "NVCR",
+      "dueMonth": 18,
+      "meansOfVerification": "D8.3"
+    },
+    {
+      "id": "MS7",
+      "name": "Pilot strategy defined and deployments launched",
+      "wp": "WP7",
+      "leadBeneficiary": "MAG",
+      "dueMonth": 18,
+      "meansOfVerification": "D7.1"
+    },
+    {
+      "id": "MS8",
+      "name": "Operational ARGENTIC platform validated in pilots",
+      "wp": "WP5",
+      "leadBeneficiary": "MAG",
+      "dueMonth": 36,
+      "meansOfVerification": "D4.3, D6.2"
+    },
+    {
+      "id": "MS9",
+      "name": "Final release of ARGENTIC platform",
+      "wp": "WP6",
+      "leadBeneficiary": "NVCR",
+      "dueMonth": 36,
+      "meansOfVerification": "D5.3, D6.3"
+    },
+    {
+      "id": "MS10",
+      "name": "Final cross-pilot validation and evaluation completed",
+      "wp": "WP7",
+      "leadBeneficiary": "MAG",
+      "dueMonth": 36,
+      "meansOfVerification": "D7.2"
+    }
+  ]
+}

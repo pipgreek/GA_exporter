@@ -1,0 +1,518 @@
+{
+  "projectAcronym": "ARGENTIC",
+  "projectStartDate": "2026-06-01",
+  "totalMonths": 36,
+  "categories": [
+    {
+      "name": "EXPECTED OUTCOME #1",
+      "groups": [
+        {
+          "kpis": [
+            {
+              "label": "# of cloud/edge platforms with validated ARGENTIC architecture",
+              "target": "≥3",
+              "unit": "count"
+            },
+            {
+              "label": "% reduction in latency vs. cloud-only baselines",
+              "target": "≥4",
+              "unit": "percent"
+            },
+            {
+              "label": "% energy savings via orchestration & EcoMode",
+              "target": "≥6",
+              "unit": "percent"
+            },
+            {
+              "label": "# of pilots demonstrating Cloud-Edge-IoT orchestration",
+              "target": "≥7",
+              "unit": "count"
+            },
+            {
+              "label": "% compliance with EU interoperability frameworks",
+              "target": "≥85%"
+            },
+            {
+              "label": "# of open-source assets (SDKs, toolkits, orchestration engines) released",
+              "target": "≥4",
+              "unit": "count"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "EXPECTED OUTCOME #2",
+      "groups": [
+        {
+          "kpis": [
+            {
+              "label": "# of cross-industry cooperation agreements or joint pilots",
+              "target": "tbd"
+            },
+            {
+              "label": "# of SMEs/startups integrated into cooperative pilots",
+              "target": "tbd"
+            },
+            {
+              "label": "# of industrial stakeholders actively reusing ARGENTIC assets",
+              "target": "tbd"
+            },
+            {
+              "label": "% interoperability achieved across pilot domains",
+              "target": "≥85%"
+            },
+            {
+              "label": "# of contributions to EU-level cooperation initiatives (Gaia-X, IPCEI-CIS, Data Spaces)",
+              "target": "tbd"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "EXPECTED OUTCOME #3",
+      "groups": [
+        {
+          "kpis": [
+            {
+              "label": "% of workload portability across heterogeneous platforms",
+              "target": "≥85%"
+            },
+            {
+              "label": "# of standards-based connectors/APIs implemented",
+              "target": "tbd"
+            },
+            {
+              "label": "# of interoperability testbeds validated across pilots",
+              "target": "tbd"
+            },
+            {
+              "label": "# of federated ontology alignments across domains",
+              "target": "tbd"
+            },
+            {
+              "label": "# of policy/standards contributions submitted",
+              "target": "tbd"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "EXPECTED OUTCOME #4",
+      "groups": [
+        {
+          "kpis": [
+            {
+              "label": "# of pilots demonstrating sovereign and open AI infrastructures",
+              "target": "tbd"
+            },
+            {
+              "label": "# of datasets and knowledge graphs shared via AI-on-Demand/EOSC",
+              "target": "tbd"
+            },
+            {
+              "label": "% of pilots incorporating sovereign European hardware (RISC-V, EPI)",
+              "target": "tbd"
+            },
+            {
+              "label": "# of citizen/SME co-creation workshops held in pilot domains",
+              "target": "tbd"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "EXPECTED OUTCOME #5",
+      "groups": [
+        {
+          "kpis": [
+            {
+              "label": "# of conformance test-suites released for cross-platform portability",
+              "target": "tbd"
+            },
+            {
+              "label": "# of joint exploitation agreements with non-EU markets",
+              "target": "tbd"
+            },
+            {
+              "label": "% of open APIs adopted in at least one non-EU deployment",
+              "target": "tbd"
+            },
+            {
+              "label": "# of EU-origin technologies integrated into non-EU data/AI ecosystems",
+              "target": "tbd"
+            },
+            {
+              "label": "# of trade/standardisation events showcasing ARGENTIC solutions internationally",
+              "target": "tbd"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Communication & Dissemination Strategy",
+      "groups": [
+        {
+          "label": "ARGENTIC visual identity, promo kit & public image",
+          "kpis": [
+            {
+              "label": "# of brochures",
+              "target": "≥1"
+            },
+            {
+              "label": "# of posters",
+              "target": "≥4"
+            },
+            {
+              "label": "# of newsletters",
+              "target": "6"
+            },
+            {
+              "label": "# of subscribers to newsletters",
+              "target": ">200"
+            },
+            {
+              "label": "# of flyers",
+              "target": "≥3"
+            },
+            {
+              "label": "# of press releases",
+              "target": "≥3"
+            }
+          ]
+        },
+        {
+          "label": "Website",
+          "kpis": [
+            {
+              "label": "# of website visitors",
+              "target": "≥6000",
+              "unit": "count"
+            },
+            {
+              "label": "# of blog posts per year",
+              "target": "≥8"
+            },
+            {
+              "label": "# of downloads of dissemination material",
+              "target": "≥200",
+              "unit": "count"
+            }
+          ]
+        },
+        {
+          "label": "Social Media Strategy",
+          "kpis": [
+            {
+              "label": "Cumulative reach across all platforms",
+              "target": "≥2000"
+            },
+            {
+              "label": "# of different content types per month",
+              "target": "≥3"
+            },
+            {
+              "label": "# of videos by year-end",
+              "target": "≥5"
+            }
+          ]
+        },
+        {
+          "label": "Scientific & Technical Publications, Events and Conferences",
+          "kpis": [
+            {
+              "label": "# of popularised publications",
+              "target": "≥6"
+            },
+            {
+              "label": "# of scientific publications",
+              "target": "≥14"
+            },
+            {
+              "label": "# of white papers",
+              "target": "≥1"
+            },
+            {
+              "label": "# of conference participations",
+              "target": "≥12"
+            }
+          ]
+        },
+        {
+          "label": "Workshops & Scientific events participation",
+          "kpis": [
+            {
+              "label": "# of project-organised workshops",
+              "target": "≥12"
+            },
+            {
+              "label": "# of participants per workshop (internal + external)",
+              "target": "≥30"
+            },
+            {
+              "label": "# of streamed/recorded events",
+              "target": "≥3"
+            },
+            {
+              "label": "Cumulative participants",
+              "target": "≥400"
+            },
+            {
+              "label": "# of researchers trained",
+              "target": "≥400"
+            }
+          ]
+        },
+        {
+          "label": "European Commission (EC) Dissemination Mechanisms and events",
+          "kpis": [
+            {
+              "label": "# of written dissemination contributions (policy briefs, white papers, press releases)",
+              "target": "≥10"
+            }
+          ]
+        },
+        {
+          "label": "Liaisons to relevant initiatives and challenges",
+          "kpis": [
+            {
+              "label": "# of liaisons with other projects",
+              "target": "≥8"
+            },
+            {
+              "label": "# of joint publications or position papers",
+              "target": "≥2"
+            },
+            {
+              "label": "# of shared workshops or events",
+              "target": "≥3"
+            },
+            {
+              "label": "# of benchmarks extended to or validated in underserved regions",
+              "target": "≥3"
+            },
+            {
+              "label": "# of engaged researchers",
+              "target": "≥100"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Use Case #1: Bedside agentic AI monitoring for proactive hospital care",
+      "groups": [
+        {
+          "kpis": [
+            {
+              "label": "Latency reduction for bedside decision-making",
+              "target": "<200 ms"
+            },
+            {
+              "label": "% clinician satisfaction with explainability outputs",
+              "target": "≥90%"
+            },
+            {
+              "label": "Ability to support increasing number of patients/wards without cloud dependency",
+              "target": "Y1: validated"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Use Case #2: Mangrovia IOT",
+      "groups": [
+        {
+          "kpis": [
+            {
+              "label": "% reduction in power consumption across monitored facilities",
+              "target": "≥12%"
+            },
+            {
+              "label": "% reduction in downtime due to predictive maintenance alerts",
+              "target": "≥15%"
+            },
+            {
+              "label": "Average latency for IoT-to-edge decision-making loops",
+              "target": "≤200 ms"
+            },
+            {
+              "label": "% reduction in CO₂ equivalent emissions from pilot sites",
+              "target": "≥8%"
+            },
+            {
+              "label": "% of sensor data processed locally at the edge",
+              "target": "≥70%"
+            },
+            {
+              "label": "% reduction in time needed to complete SME energy audits",
+              "target": "≥30%"
+            },
+            {
+              "label": "% reduction in audit costs for SMEs",
+              "target": "≥15%"
+            },
+            {
+              "label": "% energy savings demonstrated in pilot deployments",
+              "target": "≥10%"
+            },
+            {
+              "label": "% compliance coverage with EU energy reporting directives",
+              "target": "≥90%"
+            },
+            {
+              "label": "# of transferable federated AI protocols for SME energy audits",
+              "target": "≥2"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Use Case #3: Digital marketing optimization",
+      "groups": [
+        {
+          "kpis": [
+            {
+              "label": "% reduction in CPA (cost per acquisition)",
+              "target": "≥15%"
+            },
+            {
+              "label": "% increment in ROAS (Return on Ad Spend)",
+              "target": "≥10%"
+            },
+            {
+              "label": "% compliance in privacy audits (GDPR/AI Act)",
+              "target": "≥95%"
+            },
+            {
+              "label": "% improvement in attribution accuracy vs traditional models",
+              "target": "≥20%"
+            },
+            {
+              "label": "% improvement in GEO positioning",
+              "target": "≥25%"
+            },
+            {
+              "label": "# of validated GenAI-first brand optimisation strategies",
+              "target": "≥2"
+            },
+            {
+              "label": "# of federated marketing knowledge graph prototypes",
+              "target": "≥1"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Use Case #4: Immersive AR/VR cultural heritage personalized guide",
+      "groups": [
+        {
+          "kpis": [
+            {
+              "label": "Average response time",
+              "target": "≤2.5 sec"
+            },
+            {
+              "label": "% improvement in contextual accuracy of retrieval-augmented answers",
+              "target": "≥90%"
+            },
+            {
+              "label": "% user-reported satisfaction with personalization and trust",
+              "target": "≥80%"
+            },
+            {
+              "label": "% improvement in energy efficiency",
+              "target": "≥30%"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Use Case #5: AI-driven strawberry breeding and cultivation optimisation",
+      "groups": [
+        {
+          "kpis": [
+            {
+              "label": "% reduction in reliance on Fortuna in nursery output",
+              "target": "≥50%"
+            },
+            {
+              "label": "# of Kallisti plants deployed by end of project",
+              "target": "≥5M"
+            },
+            {
+              "label": "% reduction in water and fertiliser inputs",
+              "target": "≥20%"
+            },
+            {
+              "label": "# of new variety-specific AI protocols validated",
+              "target": "≥3"
+            },
+            {
+              "label": "# of external nurseries/growers adopting protocols",
+              "target": "≥5"
+            },
+            {
+              "label": "# of federated knowledge graph instances validated for agriculture",
+              "target": "≥1"
+            },
+            {
+              "label": "# of cross-border data-sharing pilots enabled without raw data transfer",
+              "target": "≥1"
+            },
+            {
+              "label": "% reduction in energy consumption of irrigation/fertigation systems",
+              "target": "≥10%"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Use Case #6: Recruitment with Agentic AI: Efficiency, oversight & fairness",
+      "groups": [
+        {
+          "kpis": [
+            {
+              "label": "% increase in the adoption of AI-generated interview kits",
+              "target": "≥10%"
+            },
+            {
+              "label": "% increase in the self-service rate of the AI assistant",
+              "target": "≥10%"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Use Case #7: MindBuddy - Multi-modal mental health companion & robot system",
+      "groups": [
+        {
+          "kpis": [
+            {
+              "label": "% patient and family satisfaction scores across all interaction modalities",
+              "target": "≥80%"
+            },
+            {
+              "label": "% explainability coverage for all therapeutic recommendations",
+              "target": "≥90%"
+            },
+            {
+              "label": "% improvement in standardized therapy engagement scores",
+              "target": "≥10%"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}
