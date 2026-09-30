@@ -14,7 +14,7 @@
 Όλη η ροή γίνεται στην αρχική σελίδα `/` (απόφαση 6):
 
 1. **Upload:** dropzone μόνο για PDF, κλειδώνει μετά το upload· μικρογραφία αρχείου με «Χ» (ξεκλειδώνει)· **Start** disabled μέχρι upload → `POST /upload` (FormData).
-2. **Progress:** polling `GET /status/{requestId}` ανά 2–3", progress bar + μήνυμα ανά status, fallback rotation μηνυμάτων όταν το status δεν αλλάζει, timeout 90".
+2. **Progress:** polling `GET /status/{requestId}` ανά 2–3", progress bar + μήνυμα ανά status, fallback rotation μηνυμάτων όταν το status δεν αλλάζει, timeout 150".
 3. **Αρχεία:** μόλις έρθει `done`, εμφανίζονται κατευθείαν 3 κάρτες (INFO/Word, Gantt/Excel, KPI/Excel) κάτω από το upload, χωρίς να καθαρίζει η οθόνη. Κάθε κάρτα έχει **Download** και **Preview**.
 4. **Preview (προαιρετικό, read-only):** modal 90% με εσωτερικό scroll και «Χ». Word = HTML από backend + `DOMPurify.sanitize`· Excel = read-only πίνακας, μία καρτέλα ανά sheet. Το `GET /preview` καλείται μόνο στο πρώτο άνοιγμα.
 5. **Downloads:** Download ανά αρχείο, **Download all (.zip)**, **Process another Grant Agreement**.
@@ -52,12 +52,21 @@ Logo ViLabs (επιστροφή στην αρχική), animated background, toa
 
 ## Mock backend (μέχρι να στηθεί το πραγματικό)
 
-Το frontend δεν έχει ακόμα πρόσβαση σε API. Γι' αυτό υπάρχει **mock backend μέσα στο Next.js** (`frontend/src/app/api/mock`), με τα ίδια endpoints/σχήματα με το contract §6. Όλες οι κλήσεις περνούν από το `frontend/src/lib/api/client.ts`:
+Το πραγματικό backend υπάρχει πλέον στο `backend/` (από το merge του `main`, 2026-09-30), αλλά για να τρέξει τοπικά χρειάζεται κλειδιά/υποδομές (βλ. «Τοπική σύνδεση με το πραγματικό backend»). Για ανάπτυξη χωρίς αυτά υπάρχει **mock backend μέσα στο Next.js** (`frontend/src/app/api/mock`), με τα ίδια endpoints/σχήματα με το contract §6. Όλες οι κλήσεις περνούν από το `frontend/src/lib/api/client.ts`:
 
 - `NEXT_PUBLIC_API_URL` κενό → mock (`/api/mock/*`)
 - `NEXT_PUBLIC_API_URL=<url backend>` → πραγματικό backend, **χωρίς αλλαγή κώδικα**
 
-Σενάρια (από το όνομα του PDF): κανονικό (~15"), `error` (αποτυχία στο `analyzing`), `slow` (κολλάει στο `analyzing` → έλεγχος timeout 90"), `preview-error` (το preview αποτυγχάνει τα πρώτα 20"). Λεπτομέρειες στο `frontend/README.md`.
+Σενάρια (από το όνομα του PDF): κανονικό (~15"), `error` (αποτυχία στο `analyzing`), `slow` (κολλάει στο `analyzing` → έλεγχος timeout 150"), `preview-error` (το preview αποτυγχάνει τα πρώτα 20"). Λεπτομέρειες στο `frontend/README.md`.
+
+## Τοπική σύνδεση με το πραγματικό backend
+
+Το `run-local.bat` (ρίζα του repo) στήνει backend (θύρα 3001) + frontend (θύρα 3000) και δημιουργεί το `frontend/.env.local` με `NEXT_PUBLIC_API_URL=http://localhost:3001`. Χρειάζεται:
+
+- `backend/.env` (αντίγραφο του `backend/.env.example`) με `ANTHROPIC_API_KEY`, `SUPABASE_URL`, `SUPABASE_SERVICE_ROLE_KEY`, `SUPABASE_BUCKET`, `REDIS_URL` — τα κλειδιά δίνονται από την ομάδα backend και **δεν** μπαίνουν ποτέ στο git.
+- Python (για το PDF parsing, `PDF_PYTHON_EXECUTABLE`) με τα πακέτα του `backend/requirements.txt`.
+- Redis: τοπικό μέσω Docker (`backend/docker-compose.yml`) ή URL του Upstash.
+- Στον υπολογιστή της Θεοδώρας (2026-09-30): **δεν** υπάρχουν ακόμα Python (μόνο το stub του Microsoft Store), Docker, `backend/.env`.
 
 ## API contract v1 — κλειδωμένο
 
@@ -86,6 +95,12 @@ Logo ViLabs (επιστροφή στην αρχική), animated background, toa
 ## Ημερολόγιο προόδου
 
 Νεότερα πάνω. Ενημερώνεται μετά από κάθε ολοκληρωμένο βήμα.
+
+### 2026-09-30 — Merge `main` → `frontend` ✅
+- Το `frontend` πήρε από το `main` το ολοκληρωμένο backend, τα LLM schemas/prompts, τα templates, το `run-local.bat` και τις αλλαγές της ομάδας στο frontend (timeout 90" → **150"**, `.claude/launch.json`). Χωρίς conflicts.
+- Ενημερώθηκαν οι αναφορές στο timeout (plan, αυτό το αρχείο, `frontend/README.md`) και προστέθηκε η ενότητα «Τοπική σύνδεση με το πραγματικό backend».
+- Lint + TypeScript καθαρά μετά το merge.
+- **Επόμενο βήμα:** δοκιμή του frontend με το πραγματικό backend (χρειάζεται `backend/.env` με τα κλειδιά από την ομάδα, Python και Redis — βλ. παραπάνω).
 
 ### 2026-09-28 — Κλείδωμα HTTP API contract v1 ✅
 - Καταγράφηκαν routes, payloads, status semantics, multi-sheet previews, filenames/download headers, error body, 25 MiB όριο upload, CORS allowlist και retention στο `docs/api-contract.md`.
