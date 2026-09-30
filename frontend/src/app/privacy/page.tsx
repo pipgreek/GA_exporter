@@ -7,20 +7,33 @@ export const metadata: Metadata = {
   title: "Privacy Policy — ViLabs",
 };
 
-// Written from the data flow in docs/implementation-plan.md (§1–§3).
-// Values marked "to confirm" in docs/frontend-notes.md must match the backend
-// (cleanup job / Redis TTL) and be reviewed by VILABS before going live.
-const LAST_UPDATED = "25/09/2026";
+// Written from the actual backend implementation (backend/src/processing,
+// backend/src/llm, backend/src/pdf-parsing) and docs/api-contract.md, 2026-09-30.
+// Items that must be confirmed or implemented before publishing are listed in
+// docs/frontend-notes.md ("Privacy Policy — προς επιβεβαίωση").
+const LAST_UPDATED = "30/09/2026";
 const RETENTION_HOURS = 24;
 
 const PROCESSORS = [
-  { name: "Vercel", role: "Hosting of the web application (user interface)." },
-  { name: "Render", role: "Hosting of the processing server (backend)." },
-  { name: "Supabase", role: "Temporary storage of the uploaded PDF and the generated files." },
-  { name: "Upstash (Redis)", role: "Temporary storage of the processing status of each request." },
+  {
+    name: "Vercel",
+    role: "Hosts the web pages of the Application. Your documents are not sent through Vercel: your browser sends them directly to our processing server.",
+  },
+  {
+    name: "Render",
+    role: "Runs our processing server, which receives your PDF, extracts its text and generates the files.",
+  },
+  {
+    name: "Supabase",
+    role: "Stores your uploaded PDF, the extracted text and the generated files temporarily.",
+  },
+  {
+    name: "Upstash (Redis)",
+    role: "Holds the processing queue and the status of each request. It does not contain the content of your documents.",
+  },
   {
     name: "Anthropic",
-    role: "AI model (Claude) that analyses the text extracted from the Grant Agreement and returns the structured data used to fill the files.",
+    role: "Provides the AI model (Claude) that receives the extracted text and returns the structured data used to fill the files.",
   },
 ];
 
@@ -35,6 +48,10 @@ function Section({ title, children }: { title: string; children: ReactNode }) {
 
 function List({ children }: { children: ReactNode }) {
   return <ul className="list-disc space-y-1 pl-5">{children}</ul>;
+}
+
+function Term({ children }: { children: ReactNode }) {
+  return <strong className="font-semibold text-slate-700">{children}</strong>;
 }
 
 export default function PrivacyPage() {
@@ -74,30 +91,39 @@ export default function PrivacyPage() {
       <Section title="2. No Accounts, No History">
         <p>
           The Application does not require an account or login, and it does not keep a history of
-          your requests. It has no database: data is kept only temporarily, for as long as needed to
-          produce your files and let you download them (see section 7).
+          your requests. Your data is kept only temporarily, for as long as needed to produce your
+          files and let you download them (see section 7).
         </p>
       </Section>
 
       <Section title="3. What Data We Process">
+        <p>For each request, we process and temporarily store:</p>
         <List>
           <li>
-            <strong className="font-semibold text-slate-700">The Grant Agreement PDF you upload.</strong>{" "}
-            Grant Agreements may contain personal data, such as the names, roles and contact details of
-            project staff and partner organisations.
+            <Term>The Grant Agreement PDF you upload.</Term> It is stored as received, under a random
+            request identifier. Your file name is not stored. Grant Agreements may contain personal
+            data, such as the names, roles and contact details of project staff and partner
+            organisations.
           </li>
           <li>
-            <strong className="font-semibold text-slate-700">The generated files</strong> (INFO document,
-            Gantt chart, KPI monitoring) and their previews, which contain data extracted from your PDF.
+            <Term>Text extracted from the PDF.</Term> We keep the parts needed to generate the files
+            (such as the project data sheet and the description of the action); standard legal terms
+            and budget annexes are left out.
           </li>
           <li>
-            <strong className="font-semibold text-slate-700">Processing status</strong> of your request
-            (e.g. &ldquo;analysing&rdquo;, &ldquo;done&rdquo;), linked to a random request identifier.
+            <Term>The generated files</Term> (INFO document, Gantt chart, KPI monitoring) and a preview
+            file used to show you the previews.
           </li>
           <li>
-            <strong className="font-semibold text-slate-700">Technical data</strong> that our hosting
-            providers record to operate and secure the service, such as IP address, browser type and
-            request logs.
+            <Term>Request records:</Term> the random request identifier, the processing status and
+            progress messages, and technical counts such as the number of pages. These records do not
+            contain the content of your documents.
+          </li>
+          <li>
+            <Term>Technical data</Term> recorded by our hosting providers to operate and secure the
+            service, such as IP address, browser type and request logs. Our server logs contain
+            technical messages about processing errors and are not intended to include the content of
+            your documents.
           </li>
         </List>
         <p>
@@ -108,18 +134,19 @@ export default function PrivacyPage() {
 
       <Section title="4. How Your Data Is Processed">
         <List>
-          <li>Your PDF is uploaded over an encrypted (HTTPS) connection and stored temporarily.</li>
+          <li>Your PDF is uploaded over an encrypted (HTTPS) connection to our processing server and stored temporarily.</li>
           <li>Text and tables are extracted from the PDF automatically on our server.</li>
           <li>
-            The extracted text is sent to an AI model (Claude, provided by Anthropic) to identify the
-            project information, work packages, deliverables, milestones and KPIs.
+            The extracted text (not the PDF file itself) is sent to an AI model (Claude, provided by
+            Anthropic) through its API, in three requests: one for the INFO document, one for the Gantt
+            chart and one for the KPI file. The model returns structured data.
           </li>
-          <li>The results are used to fill predefined Word and Excel templates.</li>
-          <li>You can preview the files and download them individually or as a .zip.</li>
+          <li>The structured data is checked and used to fill predefined Word and Excel templates.</li>
+          <li>You can preview the files and download them individually or as a .zip. Previews and downloads are served through our server.</li>
         </List>
         <p>
-          The files are generated automatically. They may contain errors, so please review them before
-          using them.
+          The files are generated automatically and are not reviewed by a person. They may contain
+          errors, so please review them before using them.
         </p>
       </Section>
 
@@ -128,7 +155,7 @@ export default function PrivacyPage() {
         <List>
           {PROCESSORS.map((p) => (
             <li key={p.name}>
-              <strong className="font-semibold text-slate-700">{p.name}:</strong> {p.role}
+              <Term>{p.name}:</Term> {p.role}
             </li>
           ))}
         </List>
@@ -136,6 +163,8 @@ export default function PrivacyPage() {
           We do not sell your data and we do not use it for marketing. Some of these providers may
           process data outside the European Economic Area; in that case the transfer is covered by
           appropriate safeguards, such as the European Commission&rsquo;s Standard Contractual Clauses.
+          The AI provider processes the text we send under the terms of its API service, which may
+          include keeping it for a limited period.
         </p>
       </Section>
 
@@ -150,16 +179,16 @@ export default function PrivacyPage() {
       <Section title="7. Data Retention">
         <List>
           <li>
-            The uploaded PDF, the generated files and their previews are deleted automatically within{" "}
-            {RETENTION_HOURS} hours.
+            The uploaded PDF, the extracted text, the generated files and the preview file are deleted
+            automatically within {RETENTION_HOURS} hours.
           </li>
-          <li>The processing status of each request expires automatically within the same period.</li>
+          <li>
+            The request records expire within the same period. After that, your request can no longer
+            be found and your files can no longer be downloaded.
+          </li>
           <li>Technical logs are kept by our hosting providers according to their own retention periods.</li>
         </List>
-        <p>
-          Once deleted, your files can no longer be downloaded, so please download them when they are
-          ready.
-        </p>
+        <p>Please download your files as soon as they are ready.</p>
       </Section>
 
       <Section title="8. Cookies and Tracking">
@@ -195,10 +224,19 @@ export default function PrivacyPage() {
       </Section>
 
       <Section title="10. Security">
-        <p>
-          Data is transmitted over HTTPS, stored only temporarily, accessible only to the systems that
-          process your request, and deleted automatically.
-        </p>
+        <List>
+          <li>Data is transmitted over HTTPS.</li>
+          <li>
+            Files are kept in a storage service that only our server can access, using a secret key that
+            is never exposed to your browser.
+          </li>
+          <li>Data is stored only temporarily and deleted automatically.</li>
+          <li>
+            There is no login. The download links of a request contain a random, hard-to-guess
+            identifier, and anyone who obtains a link can download that request&rsquo;s files until
+            they are deleted. Please do not share your download links.
+          </li>
+        </List>
       </Section>
 
       <Section title="11. Children">

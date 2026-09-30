@@ -84,18 +84,34 @@ Logo ViLabs (επιστροφή στην αρχική), animated background, toa
 
 ## Privacy Policy — προς επιβεβαίωση πριν τη δημοσίευση
 
-Το κείμενο (`src/app/privacy/page.tsx`) γράφτηκε με βάση τη ροή δεδομένων του plan (§1–§3). Πριν πάει live χρειάζεται επιβεβαίωση:
+Το κείμενο (`src/app/privacy/page.tsx`, ενημερώθηκε 2026-09-30) γράφτηκε με βάση τον **πραγματικό κώδικα του backend** (`backend/src/processing`, `llm`, `pdf-parsing`) και το `docs/api-contract.md`. Τι αποθηκεύεται πραγματικά:
 
-- **Διάρκεια διατήρησης** (24 ώρες) = cleanup job / Redis TTL του backend.
+| Πού | Τι | Πηγή |
+|---|---|---|
+| Supabase Storage | `{requestId}/input/original.pdf` (το PDF, χωρίς το όνομα αρχείου) · `{requestId}/intermediate/grant-agreement.md` (εξαγόμενο κείμενο: Preamble + Data Sheet + Annex 1) · `{requestId}/output/*.docx, *.xlsx, preview.json` | `processing.service.ts`, `pdf-processing.processor.ts` |
+| Upstash Redis | Εγγραφές BullMQ: requestId, paths αρχείων, status/progress/μηνύματα, πλήθη σελίδων/πινάκων/χαρακτήρων — **χωρίς περιεχόμενο εγγράφων** | `processing.types.ts` |
+| Anthropic API | Μόνο το εξαγόμενο κείμενο (όχι το PDF), σε 3 κλήσεις (INFO / Gantt / KPI) | `llm.service.ts` |
+| Logs (Render κ.λπ.) | Μόνο warnings σφαλμάτων LLM (`llm.service.ts`)· όχι σώμα αιτημάτων | — |
+| Browser | Τίποτα (χωρίς cookies/localStorage/analytics) | έλεγχος στον κώδικα frontend |
+
+**Πριν πάει live χρειάζεται:**
+
+- ⚠️ **Το cleanup των αρχείων ΔΕΝ είναι υλοποιημένο στο backend.** Το `JOB_RETENTION_SECONDS=86400` λήγει μόνο τις εγγραφές του Redis (μετά από 24 ώρες το `/status` δίνει 404). Τα αρχεία στο Supabase (PDF, εξαγόμενο κείμενο, παραγόμενα) **δεν διαγράφονται πουθενά στον κώδικα** (plan §5.I: «Cron/job που διαγράφει αρχεία» είναι ακόμα ανοιχτό). Το κείμενο της ενότητας 7 υπόσχεται διαγραφή σε 24 ώρες — **πρέπει να υλοποιηθεί πριν δημοσιευτεί η Policy**, αλλιώς η δήλωση δεν ισχύει. Θέμα για τον pipgreek.
+- **Το bucket του Supabase να είναι private** (δεν φαίνεται από τον κώδικα)· η ενότητα 10 λέει ότι μόνο ο server έχει πρόσβαση.
+- **Ενότητα 10 / πρόσβαση:** το API δεν έχει authentication (contract v1) — όποιος έχει το download link (με τυχαίο UUID) κατεβάζει τα αρχεία. Η Policy το δηλώνει ρητά. Αν θέλετε αυστηρότερη προστασία, χρειάζεται αλλαγή στο backend.
 - **Περιοχές (regions) των παρόχων** (Vercel, Render, Supabase, Upstash, Anthropic) και αν υπάρχουν συμβάσεις επεξεργασίας (DPA) / Standard Contractual Clauses — η ενότητα 5 λέει ότι οι μεταφορές εκτός ΕΟΧ καλύπτονται από SCCs.
-- **Όροι του Anthropic API** για χρήση/διατήρηση των δεδομένων που στέλνονται.
+- **Όροι του Anthropic API** για χρήση/διατήρηση των δεδομένων που στέλνονται (η Policy λέει γενικά «may include keeping it for a limited period»).
 - **Νομικός έλεγχος** από υπεύθυνο της VILABS (δεν είναι νομικό κείμενο εγκεκριμένο από νομικό).
-- Αν στο μέλλον προστεθούν cookies/analytics (π.χ. Vercel Analytics), να ενημερωθεί η ενότητα 8.
-- Οι περιοχές/όροι των παρόχων και η νομική επιβεβαίωση της Privacy Policy παραμένουν πριν τη δημοσίευση.
+- Αν στο μέλλον προστεθούν cookies/analytics (π.χ. Vercel Analytics) ή αλλάξουν τα δεδομένα που αποθηκεύονται, να ενημερωθεί το κείμενο (ενότητες 3, 5, 7, 8).
 
 ## Ημερολόγιο προόδου
 
 Νεότερα πάνω. Ενημερώνεται μετά από κάθε ολοκληρωμένο βήμα.
+
+### 2026-09-30 — Privacy Policy με βάση την πραγματική υλοποίηση ✅
+- Το κείμενο ξαναγράφτηκε από τον κώδικα του backend: τα 4 είδη αρχείων στο Supabase (PDF, εξαγόμενο κείμενο, παραγόμενα, preview.json), τι κρατά το Redis, ότι το Claude παίρνει μόνο το εξαγόμενο κείμενο (όχι το PDF), ότι το όνομα αρχείου δεν αποθηκεύεται, ότι τα uploads πάνε απευθείας στο Render (όχι μέσω Vercel).
+- Διορθώθηκε προηγούμενη ανακρίβεια: η ενότητα «Security» έγραφε ότι τα δεδομένα είναι προσβάσιμα μόνο στα συστήματα επεξεργασίας — στην πράξη δεν υπάρχει login, οπότε όποιος έχει το download link μπορεί να κατεβάσει τα αρχεία. Τώρα το δηλώνει.
+- **Βρέθηκε κενό στο backend:** δεν υπάρχει διαγραφή αρχείων από το Supabase (μόνο λήξη εγγραφών Redis). Βλ. «Privacy Policy — προς επιβεβαίωση».
 
 ### 2026-09-30 — Εκκρεμότητες frontend (κατάσταση)
 - Το `main` ενημερώθηκε στο `d9ff2f3` (ίδιο με `frontend`).
