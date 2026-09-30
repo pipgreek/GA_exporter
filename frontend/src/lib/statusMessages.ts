@@ -11,11 +11,11 @@ export const STATUS_MESSAGES: Record<ProcessingStatus, string> = {
 };
 
 /**
- * Secondary line shown under the progress bar when nothing has changed for a
- * while, so the UI never looks frozen. It never replaces the real status
- * message and makes no claim about how close the end is.
+ * Our own messages, shown on the same line as the backend's message when a step
+ * takes long without any update, so the UI never looks frozen. They make no
+ * claim about how close the end is before the last step.
  */
-export const STALL_HINTS = [
+export const STALL_MESSAGES = [
   "This step can take a minute. Please keep this page open.",
   "Large agreements take a little longer.",
   "Still working on it...",
@@ -24,8 +24,8 @@ export const STALL_HINTS = [
 /** From this progress on, the remaining work is only file generation. */
 export const NEAR_END_PROGRESS = 75;
 
-/** Used instead of STALL_HINTS once progress >= NEAR_END_PROGRESS. */
-export const NEAR_END_HINTS = ["Almost there, generating your files...", "Still working on it..."];
+/** Used instead of STALL_MESSAGES once progress >= NEAR_END_PROGRESS. */
+export const NEAR_END_MESSAGES = ["Almost there, generating your files...", "Still working on it..."];
 
 export const TIMEOUT_MESSAGE =
   "Processing is taking longer than expected. Please try again.";

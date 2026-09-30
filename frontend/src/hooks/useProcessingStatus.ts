@@ -5,18 +5,18 @@ import { ApiError, getStatus } from "@/lib/api/client";
 import type { ProcessingStatus } from "@/lib/api/types";
 import {
   CONNECTION_ERROR_MESSAGE,
-  NEAR_END_HINTS,
+  NEAR_END_MESSAGES,
   NEAR_END_PROGRESS,
-  STALL_HINTS,
+  STALL_MESSAGES,
   STATUS_MESSAGES,
   TIMEOUT_MESSAGE,
 } from "@/lib/statusMessages";
 
 export const POLL_INTERVAL_MS = 2500;
-/** No change in status/progress for this long → show a reassuring hint line. */
-export const STALL_HINT_AFTER_MS = 20_000;
-/** The hint changes at most this often. */
-export const HINT_ROTATION_MS = 12_000;
+/** No change in status/progress for this long → our own messages join the line. */
+export const STALL_AFTER_MS = 20_000;
+/** While stalled, the displayed message changes at most this often. */
+export const MESSAGE_ROTATION_MS = 12_000;
 // 90s was too tight: real backend runs (PDF parse + 3 parallel LLM calls +
 // document generation) measured 2026-09-30 range from ~40s (small GA) to
 // ~90-100s (larger GA / slower system load) - the frontend timed out and
@@ -30,10 +30,8 @@ export interface ProcessingView {
   status: ProcessingStatus;
   /** 0–100 */
   progress: number;
-  /** The backend's current status message; always shown as is. */
+  /** The single line shown next to the percentage. */
   message: string;
-  /** Optional secondary line, only while progress has stalled for a while. */
-  hint: string | null;
 }
 
 interface Handlers {
@@ -41,21 +39,25 @@ interface Handlers {
   onError: (message: string) => void;
 }
 
-/** Picks the hint for how long progress has been unchanged (null while it is recent). */
-function hintFor(progress: number, stalledForMs: number): string | null {
-  if (stalledForMs < STALL_HINT_AFTER_MS) return null;
-  const pool = progress >= NEAR_END_PROGRESS ? NEAR_END_HINTS : STALL_HINTS;
-  const step = Math.floor((stalledForMs - STALL_HINT_AFTER_MS) / HINT_ROTATION_MS);
-  return pool[step % pool.length];
+/**
+ * The line to display. Normally the backend's own message. If nothing has
+ * changed for STALL_AFTER_MS, our messages take turns on the same line, and
+ * the backend's message comes back at the end of each cycle.
+ */
+function displayMessage(backendMessage: string, progress: number, stalledForMs: number): string {
+  if (stalledForMs < STALL_AFTER_MS) return backendMessage;
+  const ours = progress >= NEAR_END_PROGRESS ? NEAR_END_MESSAGES : STALL_MESSAGES;
+  const cycle = [...ours, backendMessage];
+  const step = Math.floor((stalledForMs - STALL_AFTER_MS) / MESSAGE_ROTATION_MS);
+  return cycle[step % cycle.length];
 }
 
 /**
  * Polls GET /status/{requestId} until the backend reports done/error.
  *
  * - Polls every 2.5s; the first poll runs immediately.
- * - The real status message is always returned unchanged. If neither the status
- *   nor the progress has changed for 20s, `hint` carries a secondary line that
- *   changes every 12s (it never claims the end is near before the last step).
+ * - Shows the backend's message. If neither status nor progress changes for
+ *   20s, our own messages alternate with it on the same line (every 12s).
  * - Gives up with an error after 150s without "done", or after 3 consecutive
  *   failed requests.
  *
@@ -67,7 +69,6 @@ export function useProcessingStatus(requestId: string, handlers: Handlers): Proc
     status: "scanning",
     progress: 0,
     message: STATUS_MESSAGES.scanning,
-    hint: null,
   });
 
   const notifyDone = useEffectEvent(() => handlers.onDone());
@@ -88,7 +89,7 @@ export function useProcessingStatus(requestId: string, handlers: Handlers): Proc
 
     const fail = (message: string) => {
       stop();
-      setView((v) => ({ ...v, status: "error", message, hint: null }));
+      setView((v) => ({ ...v, status: "error", message }));
       notifyError(message);
     };
 
@@ -104,7 +105,7 @@ export function useProcessingStatus(requestId: string, handlers: Handlers): Proc
         }
         if (res.status === "done") {
           stop();
-          setView({ status: "done", progress: 100, message: res.message || STATUS_MESSAGES.done, hint: null });
+          setView({ status: "done", progress: 100, message: res.message || STATUS_MESSAGES.done });
           notifyDone();
           return;
         }
@@ -118,8 +119,7 @@ export function useProcessingStatus(requestId: string, handlers: Handlers): Proc
         setView({
           status: res.status,
           progress,
-          message: res.message || STATUS_MESSAGES[res.status],
-          hint: hintFor(progress, Date.now() - changedAt),
+          message: displayMessage(res.message || STATUS_MESSAGES[res.status], progress, Date.now() - changedAt),
         });
       } catch (err) {
         if (stopped) return;
