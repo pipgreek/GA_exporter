@@ -11,7 +11,7 @@ interface ProgressIndicatorProps {
 
 /** Progress bar + status message. Mount with `key={requestId}`. */
 export function ProgressIndicator({ requestId, onDone, onError }: ProgressIndicatorProps) {
-  const { status, progress, message } = useProcessingStatus(requestId, { onDone, onError });
+  const { status, progress, message, hint } = useProcessingStatus(requestId, { onDone, onError });
 
   if (status === "error") {
     return (
@@ -55,6 +55,11 @@ export function ProgressIndicator({ requestId, onDone, onError }: ProgressIndica
           style={{ width: `${progress}%` }}
         />
       </div>
+      {hint && (
+        <p key={hint} className="fade-in mt-3 text-center text-xs text-slate-500">
+          {hint}
+        </p>
+      )}
     </div>
   );
 }

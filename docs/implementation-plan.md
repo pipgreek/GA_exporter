@@ -142,7 +142,7 @@ Upload PDF
 - [x] `UploadDropzone` component (react-dropzone, μόνο PDF, disabled μετά το upload)
 - [x] Preview μικρογραφίας ανεβασμένου αρχείου + κουμπί διαγραφής (X)
 - [x] Κουμπί **Start** (disabled μέχρι upload), `POST /upload` μέσω FormData
-- [x] `ProgressIndicator` component — polling `GET /status/{requestId}` (setInterval 2-3s), μηνύματα ανά status, fallback rotation μηνυμάτων, timeout 150s (αυξήθηκε από 90s στις 2026-09-28)
+- [x] `ProgressIndicator` component — polling `GET /status/{requestId}` (setInterval 2-3s), μηνύματα ανά status, δεύτερη γραμμή-υπενθύμιση μετά από 20" χωρίς αλλαγή (χωρίς να αντικαθιστά το πραγματικό μήνυμα), timeout 150s (αυξήθηκε από 90s στις 2026-09-28)
 
 > **Απόφαση 2026-09-25 (επιλογή B):** χωρίς edit, το βήμα Confirm δεν προσέφερε κάτι. Μόλις ολοκληρωθεί η επεξεργασία, τα 3 αρχεία εμφανίζονται κατευθείαν στην αρχική ως κάρτες με Download και **προαιρετικό** Preview. Η ξεχωριστή σελίδα `/result` και το Confirm καταργήθηκαν.
 

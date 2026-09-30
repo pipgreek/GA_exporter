@@ -5,13 +5,18 @@ import { ApiError, getStatus } from "@/lib/api/client";
 import type { ProcessingStatus } from "@/lib/api/types";
 import {
   CONNECTION_ERROR_MESSAGE,
-  FALLBACK_MESSAGES,
+  NEAR_END_HINTS,
+  NEAR_END_PROGRESS,
+  STALL_HINTS,
   STATUS_MESSAGES,
   TIMEOUT_MESSAGE,
 } from "@/lib/statusMessages";
 
 export const POLL_INTERVAL_MS = 2500;
-export const FALLBACK_ROTATION_MS = 2500;
+/** No change in status/progress for this long → show a reassuring hint line. */
+export const STALL_HINT_AFTER_MS = 20_000;
+/** The hint changes at most this often. */
+export const HINT_ROTATION_MS = 12_000;
 // 90s was too tight: real backend runs (PDF parse + 3 parallel LLM calls +
 // document generation) measured 2026-09-30 range from ~40s (small GA) to
 // ~90-100s (larger GA / slower system load) - the frontend timed out and
@@ -25,7 +30,10 @@ export interface ProcessingView {
   status: ProcessingStatus;
   /** 0–100 */
   progress: number;
+  /** The backend's current status message; always shown as is. */
   message: string;
+  /** Optional secondary line, only while progress has stalled for a while. */
+  hint: string | null;
 }
 
 interface Handlers {
@@ -33,13 +41,22 @@ interface Handlers {
   onError: (message: string) => void;
 }
 
+/** Picks the hint for how long progress has been unchanged (null while it is recent). */
+function hintFor(progress: number, stalledForMs: number): string | null {
+  if (stalledForMs < STALL_HINT_AFTER_MS) return null;
+  const pool = progress >= NEAR_END_PROGRESS ? NEAR_END_HINTS : STALL_HINTS;
+  const step = Math.floor((stalledForMs - STALL_HINT_AFTER_MS) / HINT_ROTATION_MS);
+  return pool[step % pool.length];
+}
+
 /**
  * Polls GET /status/{requestId} until the backend reports done/error.
  *
  * - Polls every 2.5s; the first poll runs immediately.
- * - If two consecutive polls return the same status, rotates fallback
- *   messages ("Almost there..." etc.) until the status changes.
- * - Gives up with an error after 90s without "done", or after 3 consecutive
+ * - The real status message is always returned unchanged. If neither the status
+ *   nor the progress has changed for 20s, `hint` carries a secondary line that
+ *   changes every 12s (it never claims the end is near before the last step).
+ * - Gives up with an error after 150s without "done", or after 3 consecutive
  *   failed requests.
  *
  * Mount the consuming component with `key={requestId}` so each request starts
@@ -50,35 +67,28 @@ export function useProcessingStatus(requestId: string, handlers: Handlers): Proc
     status: "scanning",
     progress: 0,
     message: STATUS_MESSAGES.scanning,
+    hint: null,
   });
-  const [stalled, setStalled] = useState(false);
-  const [fallbackIndex, setFallbackIndex] = useState(0);
 
   const notifyDone = useEffectEvent(() => handlers.onDone());
   const notifyError = useEffectEvent((message: string) => handlers.onError(message));
 
   useEffect(() => {
     let stopped = false;
-    let lastStatus: ProcessingStatus | null = null;
     let failures = 0;
-    let rotation: ReturnType<typeof setInterval> | undefined;
-
-    const stopRotation = () => {
-      clearInterval(rotation);
-      rotation = undefined;
-    };
+    /** status:progress of the last poll, and when it last changed. */
+    let lastKey = "";
+    let changedAt = Date.now();
 
     const stop = () => {
       stopped = true;
       clearInterval(poll);
       clearTimeout(timeout);
-      stopRotation();
     };
 
     const fail = (message: string) => {
       stop();
-      setStalled(false);
-      setView((v) => ({ ...v, status: "error", message }));
+      setView((v) => ({ ...v, status: "error", message, hint: null }));
       notifyError(message);
     };
 
@@ -94,24 +104,22 @@ export function useProcessingStatus(requestId: string, handlers: Handlers): Proc
         }
         if (res.status === "done") {
           stop();
-          setStalled(false);
-          setView({ status: "done", progress: 100, message: res.message || STATUS_MESSAGES.done });
+          setView({ status: "done", progress: 100, message: res.message || STATUS_MESSAGES.done, hint: null });
           notifyDone();
           return;
         }
 
-        const sameAsBefore = res.status === lastStatus;
-        lastStatus = res.status;
-        if (sameAsBefore && !rotation) {
-          rotation = setInterval(() => setFallbackIndex((i) => i + 1), FALLBACK_ROTATION_MS);
-        } else if (!sameAsBefore) {
-          stopRotation();
+        const progress = Math.max(0, Math.min(100, Math.round(res.progress)));
+        const key = `${res.status}:${progress}`;
+        if (key !== lastKey) {
+          lastKey = key;
+          changedAt = Date.now();
         }
-        setStalled(sameAsBefore);
         setView({
           status: res.status,
-          progress: Math.max(0, Math.min(100, Math.round(res.progress))),
+          progress,
           message: res.message || STATUS_MESSAGES[res.status],
+          hint: hintFor(progress, Date.now() - changedAt),
         });
       } catch (err) {
         if (stopped) return;
@@ -129,8 +137,5 @@ export function useProcessingStatus(requestId: string, handlers: Handlers): Proc
     return stop;
   }, [requestId]);
 
-  if (stalled) {
-    return { ...view, message: FALLBACK_MESSAGES[fallbackIndex % FALLBACK_MESSAGES.length] };
-  }
   return view;
 }
