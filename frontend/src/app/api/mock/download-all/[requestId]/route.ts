@@ -1,3 +1,4 @@
+import { mockDisabled } from "@/mocks/mockGuard";
 import { computeStatus, parseRequestId } from "@/mocks/mockBackend";
 import { buildMockZip, fileResponse } from "@/mocks/mockFiles";
 
@@ -6,6 +7,9 @@ export async function GET(
   _request: Request,
   ctx: RouteContext<"/api/mock/download-all/[requestId]">,
 ) {
+  const blocked = mockDisabled();
+  if (blocked) return blocked;
+
   const { requestId } = await ctx.params;
   const parsed = parseRequestId(requestId);
   if (!parsed) {

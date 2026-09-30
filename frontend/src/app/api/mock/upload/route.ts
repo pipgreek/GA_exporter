@@ -1,8 +1,12 @@
+import { mockDisabled } from "@/mocks/mockGuard";
 import { createRequestId, scenarioFromFileName } from "@/mocks/mockBackend";
 import { MAX_PDF_UPLOAD_BYTES } from "@/lib/files";
 
 // Mock of POST /upload — accepts a single PDF as multipart/form-data.
 export async function POST(request: Request) {
+  const blocked = mockDisabled();
+  if (blocked) return blocked;
+
   let formData: FormData;
   try {
     formData = await request.formData();

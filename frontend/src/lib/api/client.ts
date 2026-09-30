@@ -5,17 +5,10 @@ import type {
   StatusResponse,
   UploadResponse,
 } from "./types";
+import { API_BASE_URL, API_CONFIG_ERROR } from "./config";
 
-/**
- * Base URL of the backend. When NEXT_PUBLIC_API_URL is not set, the app talks to
- * the built-in mock backend (src/app/api/mock), so the UI can be developed and
- * tested before the real backend exists. Switching to the real backend only
- * requires setting the env var — no code changes.
- */
-export const API_BASE_URL =
-  process.env.NEXT_PUBLIC_API_URL?.replace(/\/+$/, "") || "/api/mock";
-
-export const isMockApi = !process.env.NEXT_PUBLIC_API_URL;
+// Backend selection (real / mock / misconfigured) lives in ./config.
+export { API_BASE_URL, API_CONFIG_ERROR, isMockApi } from "./config";
 
 export class ApiError extends Error {
   constructor(
@@ -28,6 +21,8 @@ export class ApiError extends Error {
 }
 
 async function request<T>(path: string, init?: RequestInit): Promise<T> {
+  if (API_CONFIG_ERROR) throw new ApiError(API_CONFIG_ERROR, 0);
+
   let res: Response;
   try {
     res = await fetch(`${API_BASE_URL}${path}`, { cache: "no-store", ...init });

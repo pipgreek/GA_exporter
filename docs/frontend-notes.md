@@ -54,7 +54,7 @@ Logo ViLabs (επιστροφή στην αρχική), animated background, toa
 
 Το πραγματικό backend υπάρχει πλέον στο `backend/` (από το merge του `main`, 2026-09-30), αλλά για να τρέξει τοπικά χρειάζεται κλειδιά/υποδομές (βλ. «Τοπική σύνδεση με το πραγματικό backend»). Για ανάπτυξη χωρίς αυτά υπάρχει **mock backend μέσα στο Next.js** (`frontend/src/app/api/mock`), με τα ίδια endpoints/σχήματα με το contract §6. Όλες οι κλήσεις περνούν από το `frontend/src/lib/api/client.ts`:
 
-- `NEXT_PUBLIC_API_URL` κενό → mock (`/api/mock/*`)
+- `NEXT_PUBLIC_API_URL` κενό → mock (`/api/mock/*`) **μόνο σε development** (ή με `NEXT_PUBLIC_USE_MOCK_API=true`)· σε production εμφανίζεται μήνυμα «not connected»
 - `NEXT_PUBLIC_API_URL=<url backend>` → πραγματικό backend, **χωρίς αλλαγή κώδικα**
 
 Σενάρια (από το όνομα του PDF): κανονικό (~15"), `error` (αποτυχία στο `analyzing`), `slow` (κολλάει στο `analyzing` → έλεγχος timeout 150"), `preview-error` (το preview αποτυγχάνει τα πρώτα 20"). Λεπτομέρειες στο `frontend/README.md`.
@@ -95,6 +95,13 @@ Logo ViLabs (επιστροφή στην αρχική), animated background, toa
 ## Ημερολόγιο προόδου
 
 Νεότερα πάνω. Ενημερώνεται μετά από κάθε ολοκληρωμένο βήμα.
+
+### 2026-09-30 — Προστασία production από το mock ✅
+- Νέο `src/lib/api/config.ts`: σε **production build** χωρίς `NEXT_PUBLIC_API_URL` το mock **δεν** χρησιμοποιείται — εμφανίζεται μήνυμα «not connected», το Start είναι ανενεργό και τα `/api/mock/*` επιστρέφουν 404 (`src/mocks/mockGuard.ts`). Για demo deploy: `NEXT_PUBLIC_USE_MOCK_API=true`.
+- Όταν τρέχει το mock (dev ή demo), η αρχική δείχνει «Demo mode: simulated backend, files contain sample data» (`ApiModeNotice`).
+- `.env.example` και `frontend/README.md` ενημερώθηκαν (πίνακας συμπεριφοράς).
+- Δοκιμασμένα με πραγματικά production builds (`next build` + `next start`): (α) χωρίς ρυθμίσεις → μήνυμα + Start ανενεργό + mock 404· (β) `NEXT_PUBLIC_USE_MOCK_API=true` → mock + Demo mode· (γ) `NEXT_PUBLIC_API_URL=http://localhost:3001/` → το upload πάει στο `localhost:3001/upload` (όχι στο mock)· (δ) `npm run dev` → mock + Demo mode. Lint + TypeScript καθαρά.
+- Για το deploy στο Vercel: ορισμός `NEXT_PUBLIC_API_URL` στα Environment Variables + η διεύθυνση του Vercel στο `CORS_ORIGINS` του backend.
 
 ### 2026-09-30 — Merge `main` → `frontend` ✅
 - Το `frontend` πήρε από το `main` το ολοκληρωμένο backend, τα LLM schemas/prompts, τα templates, το `run-local.bat` και τις αλλαγές της ομάδας στο frontend (timeout 90" → **150"**, `.claude/launch.json`). Χωρίς conflicts.

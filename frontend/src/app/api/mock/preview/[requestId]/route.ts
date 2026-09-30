@@ -1,7 +1,11 @@
+import { mockDisabled } from "@/mocks/mockGuard";
 import { computeStatus, MOCK_PREVIEW, parseRequestId } from "@/mocks/mockBackend";
 
 // Mock of GET /preview/{requestId} — only available once processing is done.
 export async function GET(_request: Request, ctx: RouteContext<"/api/mock/preview/[requestId]">) {
+  const blocked = mockDisabled();
+  if (blocked) return blocked;
+
   const { requestId } = await ctx.params;
   const parsed = parseRequestId(requestId);
   if (!parsed) {
