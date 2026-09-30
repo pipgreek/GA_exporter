@@ -1,0 +1,440 @@
+{
+  "gaNumber": "101298599",
+  "projectAcronym": "ARGENTIC",
+  "projectName": "Agentic Reasoning for the Generative AI-Enabled Cognitive Continuum",
+  "callTopic": "HORIZON-CL4-2025-04 / HORIZON-CL4-2025-04-DATA-02",
+  "typeOfAction": "HORIZON Research and Innovation Actions",
+  "duration": {
+    "startDate": "tbd",
+    "endDate": "tbd",
+    "totalMonths": 36
+  },
+  "coordinator": {
+    "shortName": "MAG",
+    "legalName": "MAGGIOLI SPA",
+    "country": "IT"
+  },
+  "ownEntity": {
+    "shortName": "VIL",
+    "legalName": "VILABS (CY) LTD",
+    "pic": "917943205",
+    "role": "BEN",
+    "country": "CY"
+  },
+  "projectSummary": "ARGENTIC is a European project that develops a sovereign, trustworthy, and energy-aware ecosystem for agentic AI across the Cloud–Edge–IoT continuum. The project addresses fragmentation in today's AI deployments by delivering a modular reference architecture, SDK, and edge-optimised AI models that ensure workload portability, interoperability, and alignment with EU priorities for sovereignty and trust. ARGENTIC aims to empower autonomous yet human-aligned AI agents that operate across distributed infrastructures while guaranteeing explainability, compliance with the AI Act and GDPR, and measurable reductions in energy consumption compared to cloud-centric baselines. To achieve these goals, ARGENTIC integrates federated learning and knowledge graphs for cross-domain collaboration without raw data sharing, energy-aware orchestration algorithms and swarm/gossip scheduling to optimise inference latency and resource efficiency, human-in-the-loop governance workflows validated by an ethics board to safeguard fairness, oversight, and transparency, and digital twins for real-time monitoring and feedback loops in critical sectors. Validation is carried out through seven large-scale pilots spanning healthcare, energy, marketing, tourism, agriculture, recruitment, and virtual companions. Each pilot provides sector-specific evidence of impact, while a cross-pilot assessment evaluates scalability, social acceptability, and EU-wide applicability. In conclusion, ARGENTIC is a cornerstone initiative to advance sovereign, trustworthy, and energy-efficient agentic AI, ensuring Europe's leadership in the safe deployment of generative and agentic AI across strategic domains.",
+  "reportingPeriods": [
+    {
+      "id": "RP1",
+      "monthFrom": 1,
+      "monthTo": 18
+    },
+    {
+      "id": "RP2",
+      "monthFrom": 19,
+      "monthTo": 36
+    }
+  ],
+  "workPackages": [
+    {
+      "id": "WP1",
+      "name": "Project Coordination",
+      "leadBeneficiary": "MAG",
+      "monthFrom": 1,
+      "monthTo": 36,
+      "personMonths": 89.5,
+      "tasks": [
+        {
+          "id": "T1.1",
+          "name": "Project management",
+          "monthFrom": 1,
+          "monthTo": 36,
+          "leader": "MAG"
+        },
+        {
+          "id": "T1.2",
+          "name": "Technical and scientific coordination",
+          "monthFrom": 1,
+          "monthTo": 36,
+          "leader": "UTU"
+        },
+        {
+          "id": "T1.3",
+          "name": "Data management, risk management and quality assurance",
+          "monthFrom": 1,
+          "monthTo": 36,
+          "leader": "NVCR"
+        },
+        {
+          "id": "T1.4",
+          "name": "Social impact, ethical and legal compliance",
+          "monthFrom": 1,
+          "monthTo": 36,
+          "leader": "ERC"
+        }
+      ]
+    },
+    {
+      "id": "WP2",
+      "name": "Agentic and sovereign architecture for the cognitive continuum",
+      "leadBeneficiary": "NVCR",
+      "monthFrom": 1,
+      "monthTo": 12,
+      "personMonths": 131.5,
+      "tasks": [
+        {
+          "id": "T2.1",
+          "name": "Use case-driven requirements and cognitive continuum scenarios",
+          "monthFrom": 1,
+          "monthTo": 12,
+          "leader": "UTU"
+        },
+        {
+          "id": "T2.2",
+          "name": "Reference architecture for distributed agentic intelligence",
+          "monthFrom": 1,
+          "monthTo": 12,
+          "leader": "NVCR"
+        },
+        {
+          "id": "T2.3",
+          "name": "Compliance blueprint for sovereignty, privacy and energy constraints",
+          "monthFrom": 1,
+          "monthTo": 12,
+          "leader": "UM"
+        },
+        {
+          "id": "T2.4",
+          "name": "Federated interoperability and agentic collaboration protocols",
+          "monthFrom": 3,
+          "monthTo": 12,
+          "leader": "SQD"
+        },
+        {
+          "id": "T2.5",
+          "name": "Digital Twin integration layer",
+          "monthFrom": 3,
+          "monthTo": 12,
+          "leader": "MAG"
+        }
+      ]
+    },
+    {
+      "id": "WP3",
+      "name": "Distributed agentic intelligence for Edge-Cloud-HPC systems",
+      "leadBeneficiary": "UTU",
+      "monthFrom": 4,
+      "monthTo": 30,
+      "personMonths": 90.0,
+      "tasks": [
+        {
+          "id": "T3.1",
+          "name": "Lightweight Language Model integration for edge agents",
+          "monthFrom": 4,
+          "monthTo": 30,
+          "leader": "UTU"
+        },
+        {
+          "id": "T3.2",
+          "name": "Agent lifecycle, goal resolution and auto-evolution mechanisms",
+          "monthFrom": 4,
+          "monthTo": 30,
+          "leader": "UTU"
+        },
+        {
+          "id": "T3.3",
+          "name": "Multi-agent collaboration and dynamic task delegation",
+          "monthFrom": 4,
+          "monthTo": 30,
+          "leader": "NVCR"
+        },
+        {
+          "id": "T3.4",
+          "name": "Agentic intent-handling and self-optimisation",
+          "monthFrom": 4,
+          "monthTo": 30,
+          "leader": "SQD"
+        },
+        {
+          "id": "T3.5",
+          "name": "Hardware-Software Co-design for Sovereign Agents",
+          "monthFrom": 4,
+          "monthTo": 30,
+          "leader": "SQD"
+        }
+      ]
+    },
+    {
+      "id": "WP4",
+      "name": "Federated knowledge and contextual data infrastructure",
+      "leadBeneficiary": "UOULU",
+      "monthFrom": 4,
+      "monthTo": 30,
+      "personMonths": 81.5,
+      "tasks": [
+        {
+          "id": "T4.1",
+          "name": "Local Knowledge Graphs and memory embeddings per agent",
+          "monthFrom": 4,
+          "monthTo": 30,
+          "leader": "UNIGE"
+        },
+        {
+          "id": "T4.2",
+          "name": "Federated knowledge orchestration and role-based access",
+          "monthFrom": 4,
+          "monthTo": 30,
+          "leader": "UOULU"
+        },
+        {
+          "id": "T4.3",
+          "name": "Next-generation retrieval-augmented generation (RAG 2.0) interfaces for secure contextual retrieval and external data fusion",
+          "monthFrom": 4,
+          "monthTo": 30,
+          "leader": "NVCR"
+        },
+        {
+          "id": "T4.4",
+          "name": "Federated ontology alignment and privacy contracts",
+          "monthFrom": 4,
+          "monthTo": 30,
+          "leader": "ERC"
+        }
+      ]
+    },
+    {
+      "id": "WP5",
+      "name": "Agentic orchestration and human-governed autonomy",
+      "leadBeneficiary": "SQD",
+      "monthFrom": 6,
+      "monthTo": 33,
+      "personMonths": 85.5,
+      "tasks": [
+        {
+          "id": "T5.1",
+          "name": "AI-orchestrated task placement for the cognitive continuum",
+          "monthFrom": 6,
+          "monthTo": 33,
+          "leader": "UOULU"
+        },
+        {
+          "id": "T5.2",
+          "name": "Human-in-the-loop control points and decision escalation",
+          "monthFrom": 6,
+          "monthTo": 33,
+          "leader": "SQD"
+        },
+        {
+          "id": "T5.3",
+          "name": "Explainability, auditing and policy-aligned agent behaviour logging",
+          "monthFrom": 6,
+          "monthTo": 33,
+          "leader": "SQD"
+        },
+        {
+          "id": "T5.4",
+          "name": "Agentic-aware scheduling and EcoMode governance",
+          "monthFrom": 6,
+          "monthTo": 33,
+          "leader": "XLAB"
+        }
+      ]
+    },
+    {
+      "id": "WP6",
+      "name": "Sustainable agent lifecycle, RLHF, and evaluation pipelines",
+      "leadBeneficiary": "UM",
+      "monthFrom": 13,
+      "monthTo": 33,
+      "personMonths": 95.0,
+      "tasks": [
+        {
+          "id": "T6.1",
+          "name": "Continuous integration and secure model lifecycle automation",
+          "monthFrom": 13,
+          "monthTo": 28,
+          "leader": "NVCR"
+        },
+        {
+          "id": "T6.2",
+          "name": "Reinforcement learning from Human Feedback (RLHF) integration",
+          "monthFrom": 13,
+          "monthTo": 28,
+          "leader": "SQD"
+        },
+        {
+          "id": "T6.3",
+          "name": "Evaluation framework for robustness, efficiency and bias auditing",
+          "monthFrom": 13,
+          "monthTo": 33,
+          "leader": "UM"
+        },
+        {
+          "id": "T6.4",
+          "name": "Energy-aware fine-tuning and model switching",
+          "monthFrom": 13,
+          "monthTo": 33,
+          "leader": "XLAB"
+        },
+        {
+          "id": "T6.5",
+          "name": "Provenance and compliance verification pipeline",
+          "monthFrom": 13,
+          "monthTo": 33,
+          "leader": "UM"
+        }
+      ]
+    },
+    {
+      "id": "WP7",
+      "name": "Continuum-scale deployment and pilot validation",
+      "leadBeneficiary": "MAG",
+      "monthFrom": 13,
+      "monthTo": 36,
+      "personMonths": 224.0,
+      "tasks": [
+        {
+          "id": "T7.1",
+          "name": "Pilot case strategy, preparation and planning",
+          "monthFrom": 13,
+          "monthTo": 18,
+          "leader": "MAG"
+        },
+        {
+          "id": "T7.2",
+          "name": "UC1 - Bedside agentic AI monitoring for proactive hospital care",
+          "monthFrom": 19,
+          "monthTo": 33,
+          "leader": "UNIGE"
+        },
+        {
+          "id": "T7.3",
+          "name": "UC2 - Mangrovia IoT",
+          "monthFrom": 19,
+          "monthTo": 33,
+          "leader": "SORINT"
+        },
+        {
+          "id": "T7.4",
+          "name": "UC3 - Digital marketing optimization",
+          "monthFrom": 19,
+          "monthTo": 33,
+          "leader": "WARDEM"
+        },
+        {
+          "id": "T7.5",
+          "name": "UC4 - Immersive AR/VR cultural heritage personalized guide",
+          "monthFrom": 19,
+          "monthTo": 33,
+          "leader": "MOPTIL"
+        },
+        {
+          "id": "T7.6",
+          "name": "UC5 - AI-driven strawberry breeding and cultivation optimisation",
+          "monthFrom": 19,
+          "monthTo": 33,
+          "leader": "INDUST"
+        },
+        {
+          "id": "T7.7",
+          "name": "UC6 - Recruitment with Agentic AI: Efficiency, oversight & fairness",
+          "monthFrom": 19,
+          "monthTo": 33,
+          "leader": "WORKABLE"
+        },
+        {
+          "id": "T7.8",
+          "name": "UC7 - MindBuddy: AI-powered companion system for adolescent mental health",
+          "monthFrom": 19,
+          "monthTo": 33,
+          "leader": "UM"
+        },
+        {
+          "id": "T7.9",
+          "name": "Cross-pilot validation and societal impact assessment",
+          "monthFrom": 19,
+          "monthTo": 33,
+          "leader": "MAG"
+        }
+      ]
+    },
+    {
+      "id": "WP8",
+      "name": "Dissemination, communication and exploitation",
+      "leadBeneficiary": "VIL",
+      "monthFrom": 1,
+      "monthTo": 36,
+      "personMonths": 84.0,
+      "tasks": [
+        {
+          "id": "T8.1",
+          "name": "Communication and dissemination plan and activities",
+          "monthFrom": 1,
+          "monthTo": 36,
+          "leader": "VIL"
+        },
+        {
+          "id": "T8.2",
+          "name": "Exploitation plan and market strategy",
+          "monthFrom": 7,
+          "monthTo": 36,
+          "leader": "NVCR"
+        },
+        {
+          "id": "T8.3",
+          "name": "Establishment of synergies with relevant AI, data and robotics initiatives and stakeholders",
+          "monthFrom": 1,
+          "monthTo": 36,
+          "leader": "28D"
+        },
+        {
+          "id": "T8.4",
+          "name": "Training and capacity building for stakeholders on Trustworthy agentic AI",
+          "monthFrom": 1,
+          "monthTo": 36,
+          "leader": "28D"
+        },
+        {
+          "id": "T8.5",
+          "name": "Standardization activities, policy recommendations, transferability of outcomes and impact assessment",
+          "monthFrom": 1,
+          "monthTo": 36,
+          "leader": "VIL"
+        }
+      ]
+    },
+    {
+      "id": "WP9",
+      "name": "Ethics requirements",
+      "leadBeneficiary": "MAG",
+      "monthFrom": 1,
+      "monthTo": 36,
+      "personMonths": 0.0,
+      "tasks": [
+        {
+          "id": "T9.1",
+          "name": "Ethics requirements",
+          "monthFrom": 1,
+          "monthTo": 36
+        }
+      ]
+    }
+  ],
+  "roles": [
+    {
+      "name": "tbd",
+      "title": "tbd",
+      "periodFrom": "tbd"
+    }
+  ],
+  "website": "tbd",
+  "socialMedia": {
+    "facebook": "tbd",
+    "linkedin": "tbd",
+    "youtube": "tbd",
+    "twitter": "tbd",
+    "instagram": "tbd"
+  },
+  "repository": "tbd",
+  "mailingLists": "tbd",
+  "ownEffortSummary": "VIL leads WP8 (Dissemination, communication and exploitation) and is assigned to all WPs and tasks of the project except WP2 and WP4. VIL is specifically involved in T8.1, T8.5 and contributes to task leadership and collaborative efforts across multiple work packages and use cases."
+}

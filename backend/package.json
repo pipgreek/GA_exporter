@@ -1,0 +1,48 @@
+{
+  "name": "ga-exporter-backend",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Backend API and processing pipeline for GA Exporter",
+  "packageManager": "pnpm@11.25.0",
+  "engines": {
+    "node": ">=20.19.0"
+  },
+  "scripts": {
+    "build": "nest build",
+    "start": "nest start",
+    "start:dev": "nest start --watch",
+    "start:prod": "node dist/main.js"
+  },
+  "dependencies": {
+    "@anthropic-ai/sdk": "^0.68.0",
+    "@nestjs/bullmq": "^11.0.5",
+    "@nestjs/common": "^11.1.28",
+    "@nestjs/config": "^4.0.2",
+    "@nestjs/core": "^11.1.28",
+    "@nestjs/platform-express": "^11.1.28",
+    "@supabase/supabase-js": "^2.117.1",
+    "archiver": "^7.0.1",
+    "bullmq": "^6.3.8",
+    "docxtemplater": "^3.66.3",
+    "exceljs": "^4.4.0",
+    "ioredis": "^5.4.1",
+    "joi": "^17.13.3",
+    "mammoth": "^1.11.0",
+    "multer": "^2.4.0",
+    "pizzip": "^3.2.0",
+    "reflect-metadata": "^0.2.2",
+    "rxjs": "^7.8.2",
+    "zod": "^3.24.1"
+  },
+  "devDependencies": {
+    "@nestjs/cli": "^11.0.24",
+    "@nestjs/schematics": "^11.1.0",
+    "@types/archiver": "^6.0.3",
+    "@types/express": "^5.0.6",
+    "@types/multer": "^2.2.0",
+    "@types/node": "^22.18.9",
+    "docx": "^9.5.1",
+    "ts-node": "^10.9.2",
+    "typescript": "^5.9.3"
+  }
+}

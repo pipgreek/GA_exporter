@@ -1,0 +1,464 @@
+{
+  "gaNumber": "101249737",
+  "projectAcronym": "VIGILANCE",
+  "projectName": "Versatile Intelligent aGents for Interconnected Ledgers and Autonomous Next-gen Cybersecurity Ecosystems",
+  "callTopic": "DIGITAL-ECCC-2024-DEPLOY-CYBER-07 / DIGITAL-ECCC-2024-DEPLOY-CYBER-07-KEYTECH",
+  "typeOfAction": "DIGITAL JU SME Support Actions",
+  "duration": {
+    "startDate": "2025-12-01",
+    "endDate": "2028-11-30",
+    "totalMonths": 36
+  },
+  "reportingPeriods": [
+    {
+      "id": "RP1",
+      "monthFrom": 1,
+      "monthTo": 18
+    },
+    {
+      "id": "RP2",
+      "monthFrom": 19,
+      "monthTo": 36
+    }
+  ],
+  "coordinator": {
+    "shortName": "GFT",
+    "legalName": "GFT ITALIA SRL",
+    "country": "IT"
+  },
+  "ownEntity": {
+    "shortName": "VIL",
+    "legalName": "VILABS OE",
+    "pic": "955444375",
+    "role": "BEN",
+    "country": "EL"
+  },
+  "ownEffortSummary": "VIL leads WP8 (Dissemination, Exploitation & Ecosystem Building) and is assigned to WP1, WP3, WP5, WP6, and WP7. The organization contributes to project management and coordination, ecosystem building, community engagement, training activities, and pilot system evaluation across telecommunications, logistics, finance, and industry sectors.",
+  "workPackages": [
+    {
+      "id": "WP1",
+      "name": "Project Management and Coordination",
+      "leadBeneficiary": "GFT",
+      "monthFrom": 1,
+      "monthTo": 36,
+      "personMonths": 143.0,
+      "tasks": [
+        {
+          "id": "T1.1",
+          "name": "Project Coordination, Administrative and Financial Management",
+          "leader": "GFT",
+          "monthFrom": 1,
+          "monthTo": 36
+        },
+        {
+          "id": "T1.2",
+          "name": "Technical Management",
+          "leader": "D-VISOR",
+          "monthFrom": 1,
+          "monthTo": 36
+        },
+        {
+          "id": "T1.3",
+          "name": "Quality and Risk Management",
+          "leader": "ETRA",
+          "monthFrom": 1,
+          "monthTo": 36
+        },
+        {
+          "id": "T1.4",
+          "name": "Data Governance and Management",
+          "leader": "IANUS",
+          "monthFrom": 1,
+          "monthTo": 36
+        },
+        {
+          "id": "T1.5",
+          "name": "Ethical Management and Regulatory Compliance",
+          "leader": "SED",
+          "monthFrom": 1,
+          "monthTo": 36
+        }
+      ]
+    },
+    {
+      "id": "WP2",
+      "name": "Specifications of Framework and Technologies for Agentic ZTA",
+      "leadBeneficiary": "UPRC",
+      "monthFrom": 1,
+      "monthTo": 24,
+      "personMonths": 121.0,
+      "tasks": [
+        {
+          "id": "T2.1",
+          "name": "Analysis of Applicable Regulations, Policies and Standards",
+          "leader": "SED",
+          "monthFrom": 1,
+          "monthTo": 24
+        },
+        {
+          "id": "T2.2",
+          "name": "Analysis of Requirements and References Scenarios",
+          "leader": "IANUS",
+          "monthFrom": 1,
+          "monthTo": 24
+        },
+        {
+          "id": "T2.3",
+          "name": "Specification and Inventory of Cybersecurity Technologies",
+          "leader": "INNOV",
+          "monthFrom": 1,
+          "monthTo": 24
+        },
+        {
+          "id": "T2.4",
+          "name": "Reference Framework and Architecture of Agentic ZTA Mesh",
+          "leader": "UPRC",
+          "monthFrom": 1,
+          "monthTo": 24
+        }
+      ]
+    },
+    {
+      "id": "WP3",
+      "name": "Incident and Vulnerability Assessment and Management",
+      "leadBeneficiary": "D-VISOR",
+      "monthFrom": 2,
+      "monthTo": 30,
+      "personMonths": 134.0,
+      "tasks": [
+        {
+          "id": "T3.1",
+          "name": "Game-theory Based Strategies for Incident and Vulnerability Assessment",
+          "leader": "STAM",
+          "monthFrom": 2,
+          "monthTo": 30
+        },
+        {
+          "id": "T3.2",
+          "name": "Simulation Tool for Security Vulnerability Assessment",
+          "leader": "D-VISOR",
+          "monthFrom": 2,
+          "monthTo": 30
+        },
+        {
+          "id": "T3.3",
+          "name": "Adversarial Simulation, PenTesting, and Red Teaming Framework",
+          "leader": "UBI",
+          "monthFrom": 2,
+          "monthTo": 30
+        },
+        {
+          "id": "T3.4",
+          "name": "Analysis and Reporting of PenTesting Outcomes",
+          "leader": "AEGIS",
+          "monthFrom": 2,
+          "monthTo": 30
+        }
+      ]
+    },
+    {
+      "id": "WP4",
+      "name": "Trusted and Secure Data and Services Sharing",
+      "leadBeneficiary": "UBI",
+      "monthFrom": 2,
+      "monthTo": 30,
+      "personMonths": 126.0,
+      "tasks": [
+        {
+          "id": "T4.1",
+          "name": "Quantum-Secured Biometric Sovereign Identity Chain (Q-BSIC)",
+          "leader": "INT",
+          "monthFrom": 2,
+          "monthTo": 30
+        },
+        {
+          "id": "T4.2",
+          "name": "Security/Privacy-Preserving Technologies for Information Exchange",
+          "leader": "ETRA",
+          "monthFrom": 2,
+          "monthTo": 30
+        },
+        {
+          "id": "T4.3",
+          "name": "Context-Aware Security-by-Design Recommendations System",
+          "leader": "D-VISOR",
+          "monthFrom": 2,
+          "monthTo": 30
+        },
+        {
+          "id": "T4.4",
+          "name": "Proactive Intelligence for Data Security and Threat Anomaly Detection",
+          "leader": "IANUS",
+          "monthFrom": 2,
+          "monthTo": 30
+        },
+        {
+          "id": "T4.5",
+          "name": "Quantum Security for Data Sharing and Transfer Services",
+          "leader": "UBI",
+          "monthFrom": 2,
+          "monthTo": 30
+        }
+      ]
+    },
+    {
+      "id": "WP5",
+      "name": "AI-based Agentic Platform for ZTA Mesh",
+      "leadBeneficiary": "INNOV",
+      "monthFrom": 3,
+      "monthTo": 36,
+      "personMonths": 167.0,
+      "tasks": [
+        {
+          "id": "T5.1",
+          "name": "Data and Knowledge Modelling (Semantics, Embedded)",
+          "leader": "GFT",
+          "monthFrom": 3,
+          "monthTo": 36
+        },
+        {
+          "id": "T5.2",
+          "name": "Repository of Cybersecurity Agents",
+          "leader": "AEGIS",
+          "monthFrom": 3,
+          "monthTo": 36
+        },
+        {
+          "id": "T5.3",
+          "name": "Agentic Wrappers for Cybersecurity Technologies",
+          "leader": "INNOV",
+          "monthFrom": 3,
+          "monthTo": 36
+        },
+        {
+          "id": "T5.4",
+          "name": "CyberSec Agents Orchestration and Coordination Layers",
+          "leader": "GFT",
+          "monthFrom": 3,
+          "monthTo": 36
+        },
+        {
+          "id": "T5.5",
+          "name": "Industry Specific Agentic Security Blueprints",
+          "leader": "STAM",
+          "monthFrom": 3,
+          "monthTo": 36
+        },
+        {
+          "id": "T5.6",
+          "name": "Agentic ZTA Platform Integration",
+          "leader": "ETRA",
+          "monthFrom": 3,
+          "monthTo": 36
+        }
+      ]
+    },
+    {
+      "id": "WP6",
+      "name": "Pilots Implementations & Evaluation",
+      "leadBeneficiary": "OTE",
+      "monthFrom": 1,
+      "monthTo": 36,
+      "personMonths": 177.0,
+      "tasks": [
+        {
+          "id": "T6.1",
+          "name": "Multi-party Piloting Environments Preparations",
+          "leader": "OTE",
+          "monthFrom": 1,
+          "monthTo": 36
+        },
+        {
+          "id": "T6.2",
+          "name": "VIGILANCE for Logistics and Mobility Value Chains",
+          "leader": "HROT",
+          "monthFrom": 1,
+          "monthTo": 36
+        },
+        {
+          "id": "T6.3",
+          "name": "VIGILANCE for Telecommunication Value Chains",
+          "leader": "OTE",
+          "monthFrom": 1,
+          "monthTo": 36
+        },
+        {
+          "id": "T6.4",
+          "name": "VIGILANCE for Banking and Finance Value Chains",
+          "leader": "CXB",
+          "monthFrom": 1,
+          "monthTo": 36
+        },
+        {
+          "id": "T6.5",
+          "name": "VIGILANCE for Essential Services in Industry 4.0 Value Chains",
+          "leader": "SIE",
+          "monthFrom": 1,
+          "monthTo": 36
+        },
+        {
+          "id": "T6.6",
+          "name": "Pilot Systems Evaluation and Stakeholders' Feedback",
+          "leader": "VIL",
+          "monthFrom": 1,
+          "monthTo": 36
+        }
+      ]
+    },
+    {
+      "id": "WP7",
+      "name": "VIGILANCE Cybersecurity Academy",
+      "leadBeneficiary": "STAM",
+      "monthFrom": 1,
+      "monthTo": 36,
+      "personMonths": 134.0,
+      "tasks": [
+        {
+          "id": "T7.1",
+          "name": "Training Platform Development and Integration",
+          "leader": "IANUS",
+          "monthFrom": 1,
+          "monthTo": 36
+        },
+        {
+          "id": "T7.2",
+          "name": "Cybersecurity Content Development and Integration",
+          "leader": "OTE",
+          "monthFrom": 1,
+          "monthTo": 36
+        },
+        {
+          "id": "T7.3",
+          "name": "Training Demonstrators and Simulation",
+          "leader": "STAM",
+          "monthFrom": 1,
+          "monthTo": 36
+        },
+        {
+          "id": "T7.4",
+          "name": "Stakeholders Training Activities",
+          "leader": "VIL",
+          "monthFrom": 1,
+          "monthTo": 36
+        }
+      ]
+    },
+    {
+      "id": "WP8",
+      "name": "Dissemination, Exploitation & Ecosystem Building",
+      "leadBeneficiary": "VIL",
+      "monthFrom": 1,
+      "monthTo": 36,
+      "personMonths": 155.0,
+      "tasks": [
+        {
+          "id": "T8.1",
+          "name": "Dissemination, Communication, and Premarketing",
+          "leader": "VIL",
+          "monthFrom": 1,
+          "monthTo": 36
+        },
+        {
+          "id": "T8.2",
+          "name": "Contributions to Standards and Cybersecurity Clusters/Associations",
+          "leader": "GFT",
+          "monthFrom": 1,
+          "monthTo": 36
+        },
+        {
+          "id": "T8.3",
+          "name": "Community and Ecosystem Building",
+          "leader": "OTE",
+          "monthFrom": 1,
+          "monthTo": 36
+        },
+        {
+          "id": "T8.4",
+          "name": "Innovation Management and Exploitation Planning",
+          "leader": "INNOV",
+          "monthFrom": 1,
+          "monthTo": 36
+        },
+        {
+          "id": "T8.5",
+          "name": "Business Modelling and Sustainability Planning",
+          "leader": "ETRA",
+          "monthFrom": 1,
+          "monthTo": 36
+        }
+      ]
+    }
+  ],
+  "roles": [
+    {
+      "name": "Vasiliki Moumtzi",
+      "title": "Executive Manager / Co-founder",
+      "periodFrom": "M1",
+      "periodTo": "Present",
+      "responsibilities": [
+        "Co-founder and Executive Manager of VILABS",
+        "Project coordination and management",
+        "EU project management"
+      ],
+      "deliverableAuthorship": []
+    },
+    {
+      "name": "Apostolos Vontas",
+      "title": "Technician / Senior Expert / Researcher",
+      "periodFrom": "M1",
+      "periodTo": "Present",
+      "responsibilities": [
+        "Innovation management",
+        "Business development",
+        "Web applications and services development within European research projects"
+      ],
+      "deliverableAuthorship": []
+    },
+    {
+      "name": "Vasilis Voulgarakis",
+      "title": "Project Manager / Researcher / Communication and Dissemination",
+      "periodFrom": "M1",
+      "periodTo": "Present",
+      "responsibilities": [
+        "Communications Manager for VILABS projects",
+        "Dissemination planning and implementation",
+        "Stakeholder engagement"
+      ],
+      "deliverableAuthorship": []
+    },
+    {
+      "name": "Danai Kyrkou",
+      "title": "Project Manager / Researcher",
+      "periodFrom": "M1",
+      "periodTo": "Present",
+      "responsibilities": [
+        "Assistant Project Manager",
+        "Communication manager",
+        "Impact assessment activities"
+      ],
+      "deliverableAuthorship": []
+    },
+    {
+      "name": "Filippos Mbakirtzoglou",
+      "title": "ICT Developer / Project Manager",
+      "periodFrom": "M1",
+      "periodTo": "Present",
+      "responsibilities": [
+        "ICT development",
+        "Project team participation",
+        "Application development for research projects"
+      ],
+      "deliverableAuthorship": []
+    }
+  ],
+  "website": "tbd",
+  "repository": "tbd",
+  "mailingLists": "tbd",
+  "socialMedia": {
+    "facebook": "tbd",
+    "linkedin": "tbd",
+    "youtube": "tbd",
+    "twitter": "tbd",
+    "instagram": "tbd"
+  }
+}
