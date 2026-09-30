@@ -97,6 +97,15 @@ Logo ViLabs (επιστροφή στην αρχική), animated background, toa
 
 Νεότερα πάνω. Ενημερώνεται μετά από κάθε ολοκληρωμένο βήμα.
 
+### 2026-09-30 — Εκκρεμότητες frontend (κατάσταση)
+- Το `main` ενημερώθηκε στο `d9ff2f3` (ίδιο με `frontend`).
+- **Έλεγχος με πραγματικό backend** (Gantt Overview με μήνες σε στήλες, INFO HTML, μηνύματα/χρόνοι): θα γίνει από τη Θεοδώρα αργότερα.
+- **Error/retry UX σε αποτυχία LLM** (plan §7): απόφαση ομάδας· αν χρειαστεί retry χωρίς νέο upload → endpoint στο backend + μικρή αλλαγή στο frontend.
+- **Privacy Policy**: έλεγχος με τον pipgreek (βλ. «Privacy Policy — προς επιβεβαίωση»).
+- **Αυτόματα tests**: αναβλήθηκαν. Πρόταση όταν γίνει deploy: λίστα χειροκίνητου ελέγχου και/ή 1–2 end-to-end tests (Playwright) για τη βασική ροή.
+- **Deploy**: χωρίς ημερομηνία. Σειρά: backend στο Render → frontend στο Vercel (`NEXT_PUBLIC_API_URL`) → `CORS_ORIGINS` στο backend με τη διεύθυνση του Vercel.
+- **KPIs** (στοιχεία από τον Βασίλη): αλλαγές σε backend/LLM· το frontend δεν αναμένεται να αλλάξει.
+
 ### 2026-09-30 — Χωρίς demo mode, έλεγχος backend στο άνοιγμα ✅ (απόφαση 7)
 - Αφαιρέθηκαν: η ένδειξη «Demo mode» (`ApiModeNotice`), η ρύθμιση `NEXT_PUBLIC_USE_MOCK_API` και η αυτόματη χρήση του mock (αντικαθιστούν την αμέσως προηγούμενη καταχώριση).
 - Νέο `BackendGate` στην αρχική: `GET /health` (νέο `checkHealth()` στο `client.ts`) → εφαρμογή· αλλιώς «Service unavailable» + «Try again». Αναμονή έως 60" (Render free tier), με μήνυμα «The server is starting up…» μετά από 5".
