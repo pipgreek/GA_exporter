@@ -161,6 +161,7 @@ Upload PDF
 #### E. Error states
 - [x] UI για σφάλμα upload (λάθος τύπος αρχείου)
 - [x] UI για σφάλμα processing (timeout/αποτυχία LLM μετά τα retries)
+- [x] Έλεγχος backend στο άνοιγμα της σελίδας (`GET /health`) → «Service unavailable» αν δεν απαντά· χωρίς demo mode (προστέθηκε 2026-09-30)
 
 #### F. Στοιχεία από το UI/UX mockup (προστέθηκε μετά το αρχικό plan)
 - [x] Logo ViLabs → επιστροφή στην αρχική σελίδα (με confirm modal «Return to Home?» όταν υπάρχει ανεβασμένο αρχείο)

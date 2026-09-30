@@ -20,19 +20,29 @@ npm run dev
 | `npm run build` | Production build (ελέγχει και τους τύπους) |
 | `npm run lint` | ESLint |
 
-## Backend: mock ή πραγματικό
+## Σύνδεση με το backend
 
 Όλες οι κλήσεις περνούν από το [`src/lib/api/client.ts`](src/lib/api/client.ts), με τους τύπους στο [`src/lib/api/types.ts`](src/lib/api/types.ts). Το canonical v1 contract είναι στο [`../docs/api-contract.md`](../docs/api-contract.md) (implementation plan §6).
 
-Η επιλογή backend γίνεται στο [`src/lib/api/config.ts`](src/lib/api/config.ts):
+Η εφαρμογή συνδέεται **πάντα** με το backend του `NEXT_PUBLIC_API_URL` ([`src/lib/api/config.ts`](src/lib/api/config.ts)) — **δεν υπάρχει demo mode**. Στο άνοιγμα της αρχικής, το [`BackendGate`](src/components/home/BackendGate.tsx) καλεί `GET /health`:
 
-| Ρύθμιση | `npm run dev` | Production build (`npm run build`, Vercel) |
-|---|---|---|
-| `NEXT_PUBLIC_API_URL=<url>` | Πραγματικό backend | Πραγματικό backend |
-| Χωρίς `NEXT_PUBLIC_API_URL` | Mock (`/api/mock/*`) + ένδειξη «Demo mode» | **Κανένα**: μήνυμα «not connected», κουμπί Start ανενεργό, τα `/api/mock/*` δίνουν 404 |
-| + `NEXT_PUBLIC_USE_MOCK_API=true` | Mock + «Demo mode» | Mock + «Demo mode» (για επίδειξη) |
+| Κατάσταση | Τι βλέπει ο χρήστης |
+|---|---|
+| Το backend απαντά `{ status: "ok" }` | Κανονικά την εφαρμογή |
+| Αναμονή απάντησης | «Connecting to the server...»· μετά από 5" και «The server is starting up…» (Render free tier) |
+| Δεν απαντά / σφάλμα / πάνω από 60" / λείπει το `NEXT_PUBLIC_API_URL` | Σελίδα **«Service unavailable»** με κουμπί «Try again» |
 
-Έτσι ένα deploy με ξεχασμένο `NEXT_PUBLIC_API_URL` δεν δείχνει ποτέ σιωπηλά ψεύτικα δεδομένα. Οι μεταβλητές `NEXT_PUBLIC_*` «ψήνονται» στο build — μετά από αλλαγή χρειάζεται νέο build. Mock: [`src/app/api/mock`](src/app/api/mock), λογική στο [`src/mocks/mockBackend.ts`](src/mocks/mockBackend.ts). Ρυθμίσεις: [`.env.example`](.env.example).
+Οι μεταβλητές `NEXT_PUBLIC_*` «ψήνονται» στο build — μετά από αλλαγή χρειάζεται νέο build. Ρυθμίσεις: [`.env.example`](.env.example).
+
+### Mock backend (μόνο για ανάπτυξη)
+
+Για δουλειά στο UI χωρίς backend υπάρχει mock στο [`src/app/api/mock`](src/app/api/mock) (λογική στο [`src/mocks/mockBackend.ts`](src/mocks/mockBackend.ts)). **Δεν ενεργοποιείται ποτέ αυτόματα**· χρησιμοποιείται μόνο αν οριστεί ρητά στο `.env.local`:
+
+```
+NEXT_PUBLIC_API_URL=http://localhost:3000/api/mock
+```
+
+Λειτουργεί μόνο με `npm run dev`· σε production build τα `/api/mock/*` επιστρέφουν 404.
 
 Για τοπική εκτέλεση, το frontend στο `http://localhost:3000` συνδέεται με backend στο `http://localhost:3001` μέσω `NEXT_PUBLIC_API_URL`.
 

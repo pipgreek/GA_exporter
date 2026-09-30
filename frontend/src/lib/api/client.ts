@@ -7,8 +7,8 @@ import type {
 } from "./types";
 import { API_BASE_URL, API_CONFIG_ERROR } from "./config";
 
-// Backend selection (real / mock / misconfigured) lives in ./config.
-export { API_BASE_URL, API_CONFIG_ERROR, isMockApi } from "./config";
+// Backend URL / configuration check lives in ./config.
+export { API_BASE_URL, API_CONFIG_ERROR } from "./config";
 
 export class ApiError extends Error {
   constructor(
@@ -42,6 +42,15 @@ async function request<T>(path: string, init?: RequestInit): Promise<T> {
   }
 
   return (await res.json()) as T;
+}
+
+/**
+ * GET /health — resolves when the backend answers `{ status: "ok" }`.
+ * Throws ApiError otherwise (not configured, unreachable, aborted, bad reply).
+ */
+export async function checkHealth(signal?: AbortSignal): Promise<void> {
+  const body = await request<{ status?: string }>("/health", { signal });
+  if (body.status !== "ok") throw new ApiError("The server is not healthy.", 503);
 }
 
 /** POST /upload — sends the Grant Agreement PDF as multipart/form-data. */

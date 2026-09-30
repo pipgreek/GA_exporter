@@ -2,7 +2,6 @@
 
 import { LoaderCircle, RefreshCw, TriangleAlert } from "lucide-react";
 import { useRef, useState } from "react";
-import { ApiModeNotice } from "@/components/home/ApiModeNotice";
 import { HomeIntro } from "@/components/home/HomeIntro";
 import { useRegisterWorkGuard } from "@/components/layout/NavigationGuard";
 import { ResultsSection } from "@/components/results/ResultsSection";
@@ -11,7 +10,7 @@ import { ConfirmDialog } from "@/components/ui/ConfirmDialog";
 import { Toaster, useToasts } from "@/components/ui/Toaster";
 import { FileThumbnail } from "@/components/upload/FileThumbnail";
 import { UploadDropzone } from "@/components/upload/UploadDropzone";
-import { API_CONFIG_ERROR, ApiError, uploadGrantAgreement } from "@/lib/api/client";
+import { ApiError, uploadGrantAgreement } from "@/lib/api/client";
 
 /**
  * idle       → no processing started (file may or may not be selected)
@@ -36,8 +35,7 @@ export function HomeView() {
   useRegisterWorkGuard({ hasWork: () => file !== null, reset });
 
   const busy = phase === "uploading" || phase === "processing";
-  const canStart =
-    file !== null && (phase === "idle" || phase === "failed") && API_CONFIG_ERROR === null;
+  const canStart = file !== null && (phase === "idle" || phase === "failed");
 
   function reset() {
     attempt.current++;
@@ -70,8 +68,6 @@ export function HomeView() {
       <h1 className="mb-8 text-center text-3xl font-extrabold tracking-tight text-slate-900">
         Grant Agreement Processing
       </h1>
-
-      <ApiModeNotice />
 
       <div className="mb-8 flex items-start gap-6">
         <UploadDropzone

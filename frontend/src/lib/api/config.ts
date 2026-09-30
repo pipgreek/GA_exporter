@@ -1,28 +1,20 @@
 /**
- * Which backend the app talks to.
+ * The app always talks to the backend at NEXT_PUBLIC_API_URL; there is no demo
+ * mode and no automatic fallback (decision 7, docs/frontend-notes.md). Without
+ * the variable, the home page shows the "service unavailable" screen.
  *
- * - NEXT_PUBLIC_API_URL set          → the real backend.
- * - not set, development (next dev)  → the built-in mock backend (/api/mock).
- * - not set, production build        → nothing: the mock is disabled so a
- *   deployment with a missing env var can never silently show sample data.
- *   Set NEXT_PUBLIC_USE_MOCK_API=true to deploy the mock on purpose (demo).
+ * For local UI work without a backend, point it at the built-in mock
+ * explicitly: NEXT_PUBLIC_API_URL=http://localhost:3000/api/mock (development
+ * only — the mock routes are disabled in production builds).
  *
  * NEXT_PUBLIC_* values are inlined at build time, so changing them requires a rebuild.
  */
 
-const apiUrl = process.env.NEXT_PUBLIC_API_URL?.trim().replace(/\/+$/, "") || "";
+export const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL?.trim().replace(/\/+$/, "") || "";
 
-/** Whether the mock backend may be used at all (also guards the /api/mock routes). */
-export const MOCK_API_ALLOWED =
-  process.env.NODE_ENV !== "production" || process.env.NEXT_PUBLIC_USE_MOCK_API === "true";
-
-export const isMockApi = !apiUrl && MOCK_API_ALLOWED;
-
-/** Base URL for API calls; empty when the deployment is misconfigured. */
-export const API_BASE_URL = apiUrl || (MOCK_API_ALLOWED ? "/api/mock" : "");
-
-/** Set when a production build has no backend configured. */
+/** Set when no backend is configured. */
 export const API_CONFIG_ERROR: string | null =
-  API_BASE_URL === ""
-    ? "This application is not connected to a server yet. Please contact the ViLabs team."
-    : null;
+  API_BASE_URL === "" ? "No backend is configured (NEXT_PUBLIC_API_URL is not set)." : null;
+
+/** The /api/mock routes exist only in development (`next dev`). */
+export const MOCK_ROUTES_ENABLED = process.env.NODE_ENV !== "production";

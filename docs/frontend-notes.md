@@ -37,6 +37,7 @@ Logo ViLabs (επιστροφή στην αρχική), animated background, toa
 | 3 | Result page | ~~Ξεχωριστό route `/result?requestId=...`~~ → **αντικαταστάθηκε από την απόφαση 6** (δεν υπάρχει πια `/result`). |
 | 4 | Logo | **Μετονομάστηκε σε `vilabs-logo.png`** (lowercase, ταιριάζει με το mockup, ασφαλές σε case-sensitive hosting όπως το Vercel). |
 | 5 | Excel previews με πολλά sheets | **Συμφωνήθηκε με το backend:** `gantt`/`kpi` = `{ sheets: [{ name, headers, rows }] }`, με τη σειρά του workbook. Το `ExcelViewer` δείχνει μία καρτέλα ανά sheet. |
+| 7 | Σύνδεση με backend (2026-09-30) | **Χωρίς demo mode.** Η εφαρμογή συνδέεται μόνο με το backend του `NEXT_PUBLIC_API_URL`. Στο άνοιγμα της αρχικής γίνεται `GET /health`· αν αποτύχει (ή λείπει η ρύθμιση, ή περάσουν 60") εμφανίζεται σελίδα «Service unavailable» με «Try again», σαν να έχει πέσει το σύστημα. Το mock μένει μόνο ως εργαλείο ανάπτυξης, με ρητή ρύθμιση. |
 | 6 | Ροή αποτελεσμάτων (επιλογή **B**) | Αφού δεν υπάρχει edit, το Confirm δεν προσέφερε κάτι. Μόλις έρθει `done`, τα 3 αρχεία εμφανίζονται **κατευθείαν στην αρχική** ως κάρτες με **Download** + **προαιρετικό Preview**. Καταργήθηκαν το Confirm και η σελίδα `/result`· το «Return to Home Page» γίνεται «Process another Grant Agreement». |
 
 Αντιστοίχιση status → μήνυμα UI:
@@ -54,8 +55,8 @@ Logo ViLabs (επιστροφή στην αρχική), animated background, toa
 
 Το πραγματικό backend υπάρχει πλέον στο `backend/` (από το merge του `main`, 2026-09-30), αλλά για να τρέξει τοπικά χρειάζεται κλειδιά/υποδομές (βλ. «Τοπική σύνδεση με το πραγματικό backend»). Για ανάπτυξη χωρίς αυτά υπάρχει **mock backend μέσα στο Next.js** (`frontend/src/app/api/mock`), με τα ίδια endpoints/σχήματα με το contract §6. Όλες οι κλήσεις περνούν από το `frontend/src/lib/api/client.ts`:
 
-- `NEXT_PUBLIC_API_URL` κενό → mock (`/api/mock/*`) **μόνο σε development** (ή με `NEXT_PUBLIC_USE_MOCK_API=true`)· σε production εμφανίζεται μήνυμα «not connected»
-- `NEXT_PUBLIC_API_URL=<url backend>` → πραγματικό backend, **χωρίς αλλαγή κώδικα**
+- Η εφαρμογή χρησιμοποιεί **μόνο** το `NEXT_PUBLIC_API_URL` (απόφαση 7) — δεν υπάρχει demo mode ούτε αυτόματη χρήση του mock.
+- Για τοπική ανάπτυξη χωρίς backend: `NEXT_PUBLIC_API_URL=http://localhost:3000/api/mock` στο `.env.local` (μόνο `npm run dev`· σε production τα `/api/mock/*` δίνουν 404).
 
 Σενάρια (από το όνομα του PDF): κανονικό (~15"), `error` (αποτυχία στο `analyzing`), `slow` (κολλάει στο `analyzing` → έλεγχος timeout 150"), `preview-error` (το preview αποτυγχάνει τα πρώτα 20"). Λεπτομέρειες στο `frontend/README.md`.
 
@@ -95,6 +96,13 @@ Logo ViLabs (επιστροφή στην αρχική), animated background, toa
 ## Ημερολόγιο προόδου
 
 Νεότερα πάνω. Ενημερώνεται μετά από κάθε ολοκληρωμένο βήμα.
+
+### 2026-09-30 — Χωρίς demo mode, έλεγχος backend στο άνοιγμα ✅ (απόφαση 7)
+- Αφαιρέθηκαν: η ένδειξη «Demo mode» (`ApiModeNotice`), η ρύθμιση `NEXT_PUBLIC_USE_MOCK_API` και η αυτόματη χρήση του mock (αντικαθιστούν την αμέσως προηγούμενη καταχώριση).
+- Νέο `BackendGate` στην αρχική: `GET /health` (νέο `checkHealth()` στο `client.ts`) → εφαρμογή· αλλιώς «Service unavailable» + «Try again». Αναμονή έως 60" (Render free tier), με μήνυμα «The server is starting up…» μετά από 5".
+- Mock: μόνο με ρητό `NEXT_PUBLIC_API_URL=http://localhost:3000/api/mock` και μόνο σε `npm run dev`· νέο mock `GET /health`.
+- Το `GET /health` προστέθηκε στο `docs/api-contract.md` (υπήρχε ήδη στο backend, `backend/src/health`).
+- Δοκιμασμένα: (α) χωρίς `NEXT_PUBLIC_API_URL` → «Service unavailable»· (β) backend κάτω (`localhost:3001`) → «Service unavailable» αμέσως, «Try again» ξαναδοκιμάζει· (γ) backend που δεν απαντά → «starting up» και «Service unavailable» στα 60"· (δ) backend που απαντά (mock ρητά) → κανονική ροή ως τα previews/downloads· (ε) production build χωρίς ρύθμιση → «Service unavailable», mock 404. Lint + TypeScript καθαρά.
 
 ### 2026-09-30 — Προστασία production από το mock ✅
 - Νέο `src/lib/api/config.ts`: σε **production build** χωρίς `NEXT_PUBLIC_API_URL` το mock **δεν** χρησιμοποιείται — εμφανίζεται μήνυμα «not connected», το Start είναι ανενεργό και τα `/api/mock/*` επιστρέφουν 404 (`src/mocks/mockGuard.ts`). Για demo deploy: `NEXT_PUBLIC_USE_MOCK_API=true`.

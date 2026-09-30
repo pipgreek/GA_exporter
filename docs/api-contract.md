@@ -2,6 +2,12 @@
 
 This is the canonical contract shared by `backend`, `frontend`, and `llm`. Routes are relative to the backend origin; there is no `/api` or version prefix. JSON is UTF-8. The service is unauthenticated in v1, consistent with the product plan's no-login scope.
 
+## Health
+
+`GET /health` → `200 { "status": "ok" }` when the backend is up.
+
+The frontend calls it when the home page opens and shows a "Service unavailable" screen if it fails, returns anything else, or does not answer within 60 seconds (to allow for a Render free-tier cold start). Implemented in `backend/src/health/health.module.ts`.
+
 ## Upload
 
 `POST /upload`
