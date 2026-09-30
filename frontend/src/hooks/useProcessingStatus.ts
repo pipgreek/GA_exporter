@@ -14,7 +14,7 @@ import {
 
 export const POLL_INTERVAL_MS = 2500;
 /** No change in status/progress for this long → our own messages join the line. */
-export const STALL_AFTER_MS = 20_000;
+export const STALL_AFTER_MS = 10_000;
 /** While stalled, the displayed message changes at most this often. */
 export const MESSAGE_ROTATION_MS = 12_000;
 // 90s was too tight: real backend runs (PDF parse + 3 parallel LLM calls +
@@ -57,7 +57,7 @@ function displayMessage(backendMessage: string, progress: number, stalledForMs: 
  *
  * - Polls every 2.5s; the first poll runs immediately.
  * - Shows the backend's message. If neither status nor progress changes for
- *   20s, our own messages alternate with it on the same line (every 12s).
+ *   10s, our own messages alternate with it on the same line (every 12s).
  * - Gives up with an error after 150s without "done", or after 3 consecutive
  *   failed requests.
  *
