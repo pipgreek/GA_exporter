@@ -10,6 +10,7 @@ import { ApiError, getDownloadAllUrl, getDownloadUrl, getPreview } from "@/lib/a
 import type { FileType, PreviewResponse } from "@/lib/api/types";
 import { GENERATED_FILES, getGeneratedFile, ZIP_FILE_NAME } from "@/lib/files";
 import { FileCard } from "./FileCard";
+import { ResultsDisclaimer } from "./ResultsDisclaimer";
 
 type PreviewState =
   | { kind: "idle" }
@@ -113,6 +114,8 @@ export function ResultsSection({
           />
         ))}
       </div>
+
+      <ResultsDisclaimer />
 
       <div className="mt-8 flex flex-col items-center gap-4">
         <a
