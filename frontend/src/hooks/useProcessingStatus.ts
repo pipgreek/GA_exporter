@@ -9,7 +9,6 @@ import {
   NEAR_END_PROGRESS,
   STALL_MESSAGES,
   STATUS_MESSAGES,
-  TIMEOUT_MESSAGE,
 } from "@/lib/statusMessages";
 
 export const POLL_INTERVAL_MS = 2500;
@@ -17,12 +16,11 @@ export const POLL_INTERVAL_MS = 2500;
 export const STALL_AFTER_MS = 10_000;
 /** While stalled, the displayed message changes at most this often. */
 export const MESSAGE_ROTATION_MS = 12_000;
-// 90s was too tight: real backend runs (PDF parse + 3 parallel LLM calls +
-// document generation) measured 2026-09-30 range from ~40s (small GA) to
-// ~90-100s (larger GA / slower system load) - the frontend timed out and
-// showed an error once even though the backend went on to finish
-// successfully seconds later. 150s gives real runs headroom.
-export const MAX_WAIT_MS = 150_000;
+// There is deliberately no overall time limit: real runs take ~40s to 100s+
+// (PDF parse + 3 parallel LLM calls + document generation) and a fixed limit
+// (90s, then 150s) made the UI show an error although the backend went on to
+// finish successfully. We keep polling until the backend itself reports
+// done/error, or the connection is lost.
 /** Transient network errors tolerated before giving up. */
 const MAX_CONSECUTIVE_POLL_FAILURES = 3;
 
@@ -58,8 +56,9 @@ function displayMessage(backendMessage: string, progress: number, stalledForMs: 
  * - Polls every 2.5s; the first poll runs immediately.
  * - Shows the backend's message. If neither status nor progress changes for
  *   10s, our own messages alternate with it on the same line (every 12s).
- * - Gives up with an error after 150s without "done", or after 3 consecutive
- *   failed requests.
+ * - No overall time limit: it keeps polling until the backend reports
+ *   done/error. It only gives up after 3 consecutive failed requests (server
+ *   down, connection lost, or the request no longer exists).
  *
  * Mount the consuming component with `key={requestId}` so each request starts
  * from a clean state.
@@ -84,7 +83,6 @@ export function useProcessingStatus(requestId: string, handlers: Handlers): Proc
     const stop = () => {
       stopped = true;
       clearInterval(poll);
-      clearTimeout(timeout);
     };
 
     const fail = (message: string) => {
@@ -131,7 +129,6 @@ export function useProcessingStatus(requestId: string, handlers: Handlers): Proc
     };
 
     const poll = setInterval(tick, POLL_INTERVAL_MS);
-    const timeout = setTimeout(() => fail(TIMEOUT_MESSAGE), MAX_WAIT_MS);
     void tick();
 
     return stop;

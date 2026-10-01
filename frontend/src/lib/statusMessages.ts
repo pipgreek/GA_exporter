@@ -27,8 +27,5 @@ export const NEAR_END_PROGRESS = 75;
 /** Used instead of STALL_MESSAGES once progress >= NEAR_END_PROGRESS. */
 export const NEAR_END_MESSAGES = ["Almost there, generating your files...", "Still working on it..."];
 
-export const TIMEOUT_MESSAGE =
-  "Processing is taking longer than expected. Please try again.";
-
 export const CONNECTION_ERROR_MESSAGE =
   "We lost connection to the server. Please try again.";
