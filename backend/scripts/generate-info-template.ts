@@ -14,6 +14,10 @@ function tag(text: string): Paragraph {
   return new Paragraph({ children: [new TextRun(text)] });
 }
 
+function boldTag(text: string): Paragraph {
+  return new Paragraph({ children: [new TextRun({ text, bold: true })] });
+}
+
 function label(text: string): Paragraph {
   return new Paragraph({ children: [new TextRun({ text, bold: true })] });
 }
@@ -57,43 +61,44 @@ const doc = new Document({
         tag('{/reportingPeriods}'),
         blank(),
 
-        label('Website'),
-        tag('{website}'),
-        blank(),
-
-        label('Social Media'),
-        tag('{#socialMedia}'),
-        tag('Facebook: {facebook}'),
-        tag('LinkedIn: {linkedin}'),
-        tag('YouTube: {youtube}'),
-        tag('{/socialMedia}'),
-        blank(),
-
-        label('Repository'),
-        tag('{repository}'),
-        blank(),
-
-        label('Mailing lists'),
-        tag('{mailingLists}'),
-        blank(),
-
         label('VIL Efforts'),
         tag('{ownEffortSummary}'),
-        blank(),
-
-        new Paragraph({ children: [new TextRun('Work Packages')], heading: HeadingLevel.HEADING_2 }),
+        tag('Total: {ownEntityTotalPersonMonths} person-months'),
         tag('{#workPackages}'),
-        tag('{id} - {name} [{leadBeneficiary} | M{monthFrom}-M{monthTo}]'),
+        tag('{#isOwnEntityInvolved}'),
+        boldTag('{id} - {name}: {ownEntityPersonMonths} person-months'),
+        tag('{/isOwnEntityInvolved}'),
+        tag('{^isOwnEntityInvolved}'),
+        tag('{id} - {name}: {ownEntityPersonMonths} person-months'),
+        tag('{/isOwnEntityInvolved}'),
         tag('{#tasks}'),
-        tag('Task {id} - {name} [{leader} | M{monthFrom}-M{monthTo}]'),
+        tag('{#isOwnEntityInvolved}'),
+        boldTag('Task {id} - {name} [{leader} | {durationLabel} | participants: {participantsLabel}]'),
+        tag('{/isOwnEntityInvolved}'),
+        tag('{^isOwnEntityInvolved}'),
+        tag('Task {id} - {name} [{leader} | {durationLabel} | participants: {participantsLabel}]'),
+        tag('{/isOwnEntityInvolved}'),
         tag('{/tasks}'),
         tag('{/workPackages}'),
         blank(),
 
-        new Paragraph({ children: [new TextRun('Roles')], heading: HeadingLevel.HEADING_2 }),
-        tag('{#roles}'),
-        tag('{title}: {name} (M{periodFrom} - {periodTo})'),
-        tag('{/roles}'),
+        new Paragraph({ children: [new TextRun('Work Packages')], heading: HeadingLevel.HEADING_2 }),
+        tag('{#workPackages}'),
+        tag('{#isOwnEntityInvolved}'),
+        boldTag('{id} - {name} [{leadBeneficiary} | {durationLabel}]'),
+        tag('{/isOwnEntityInvolved}'),
+        tag('{^isOwnEntityInvolved}'),
+        tag('{id} - {name} [{leadBeneficiary} | {durationLabel}]'),
+        tag('{/isOwnEntityInvolved}'),
+        tag('{#tasks}'),
+        tag('{#isOwnEntityInvolved}'),
+        boldTag('Task {id} - {name} [{leader} | {durationLabel}]'),
+        tag('{/isOwnEntityInvolved}'),
+        tag('{^isOwnEntityInvolved}'),
+        tag('Task {id} - {name} [{leader} | {durationLabel}]'),
+        tag('{/isOwnEntityInvolved}'),
+        tag('{/tasks}'),
+        tag('{/workPackages}'),
       ],
     },
   ],
