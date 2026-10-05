@@ -17,8 +17,8 @@ export function mapGanttToPreviewSheets(gantt: GanttJson): PreviewSheet[] {
 }
 
 function buildOverviewSheet(gantt: GanttJson): PreviewSheet {
-  const { totalMonths, workPackages, milestones } = gantt;
-  const headers = ['', ...monthLabels(totalMonths)];
+  const { totalMonths, workPackages, milestones, projectStartDate } = gantt;
+  const headers = ['', ...monthLabels(totalMonths, projectStartDate)];
   const milestonesById = new Map(milestones.map((m) => [m.id, m]));
 
   const rows: (string | number | null)[][] = [];

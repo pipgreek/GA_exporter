@@ -11,6 +11,7 @@ import {
 } from './excel-render-utils';
 import {
   deliverableStyle,
+  HEADER_BAND_FILL,
   HEADER_FONT_COLOR,
   LABEL_COLUMN_WIDTH,
   MILESTONE_FILL,
@@ -21,6 +22,7 @@ import {
   YEAR_BAND_COLORS,
 } from './excel-style';
 import { mapGanttToPreviewSheets } from './gantt-mapping';
+import { monthLabel, yearBandLabel } from './month-labels';
 import { PreviewSheet } from './preview.types';
 import { assertGanttWithinRenderLimits } from './render-limits';
 
@@ -61,14 +63,15 @@ export async function renderGanttExcel(gantt: GanttJson): Promise<RenderedGanttE
 }
 
 function buildOverviewSheet(workbook: Workbook, gantt: GanttJson): Worksheet {
-  const { totalMonths, workPackages, milestones, deliverables } = gantt;
+  const { totalMonths, workPackages, milestones, deliverables, reportingPeriods, projectStartDate } = gantt;
   const ws = workbook.addWorksheet(sanitizeSheetName(`M1-M${totalMonths} Overview`));
 
   ws.getColumn(1).width = LABEL_COLUMN_WIDTH;
   for (let m = 1; m <= totalMonths; m++) ws.getColumn(1 + m).width = MONTH_COLUMN_WIDTH;
 
   writeLegendRows(ws);
-  writeYearAndMonthHeaders(ws, totalMonths);
+  writeYearAndMonthHeaders(ws, totalMonths, projectStartDate);
+  writeReportingPeriodsRow(ws, totalMonths, reportingPeriods);
 
   const milestonesById = new Map(milestones.map((m) => [m.id, m]));
   const deliverablesByWp = new Map<string, GanttJson['deliverables']>();
@@ -78,7 +81,7 @@ function buildOverviewSheet(workbook: Workbook, gantt: GanttJson): Worksheet {
     deliverablesByWp.set(d.wp, list);
   }
 
-  let rowIndex = 5;
+  let rowIndex = 6;
   for (const wp of workPackages) {
     const wpRow = ws.getRow(rowIndex);
     const wpLabelCell = wpRow.getCell(1);
@@ -156,6 +159,7 @@ function buildOverviewSheet(workbook: Workbook, gantt: GanttJson): Worksheet {
   }
 
   applyGridBorders(ws, 4, 1 + totalMonths, rowIndex - 1);
+  applyReportingPeriodSeparators(ws, totalMonths, reportingPeriods, 3, rowIndex - 1);
   return ws;
 }
 
@@ -179,16 +183,18 @@ function writeLegendRows(ws: Worksheet): void {
   ws.getCell(2, 1).font = { bold: true };
 }
 
-function writeYearAndMonthHeaders(ws: Worksheet, totalMonths: number): void {
+function writeYearAndMonthHeaders(ws: Worksheet, totalMonths: number, projectStartDate?: string): void {
   const yearCount = Math.ceil(totalMonths / 12);
   for (let y = 0; y < yearCount; y++) {
     const startCol = 2 + y * 12;
     const endCol = Math.min(2 + (y + 1) * 12 - 1, 1 + totalMonths);
     const color = YEAR_BAND_COLORS[y % YEAR_BAND_COLORS.length];
+    const firstMonth = y * 12 + 1;
+    const lastMonth = Math.min((y + 1) * 12, totalMonths);
 
     if (endCol > startCol) ws.mergeCells(3, startCol, 3, endCol);
     const yearCell = ws.getCell(3, startCol);
-    yearCell.value = `YEAR ${y + 1}`;
+    yearCell.value = yearBandLabel(y, firstMonth, lastMonth, projectStartDate);
     yearCell.font = { bold: true, color: { argb: HEADER_FONT_COLOR } };
     yearCell.alignment = { horizontal: 'center' };
     for (let c = startCol; c <= endCol; c++) setFill(ws.getCell(3, c), color);
@@ -199,8 +205,56 @@ function writeYearAndMonthHeaders(ws: Worksheet, totalMonths: number): void {
     const year = Math.floor((m - 1) / 12);
     const color = YEAR_BAND_COLORS[year % YEAR_BAND_COLORS.length];
     const cell = ws.getCell(4, col);
-    cell.value = `M${m}`;
+    cell.value = monthLabel(m, projectStartDate);
     cell.font = { bold: true, color: { argb: HEADER_FONT_COLOR } };
     setFill(cell, color);
+  }
+}
+
+/** A dedicated header row (row 5) showing each reporting period's span and duration, e.g. "REPORTING PERIOD 1 (M1-M12)". */
+function writeReportingPeriodsRow(
+  ws: Worksheet,
+  totalMonths: number,
+  reportingPeriods: GanttJson['reportingPeriods'],
+): void {
+  const row = 5;
+  const labelCell = ws.getCell(row, 1);
+  labelCell.value = 'Reporting Periods';
+  labelCell.font = { bold: true };
+
+  reportingPeriods.forEach((period, index) => {
+    const from = Math.max(1, period.monthFrom);
+    const to = Math.min(totalMonths, period.monthTo);
+    if (to < from) return;
+    const startCol = 1 + from;
+    const endCol = 1 + to;
+
+    if (endCol > startCol) ws.mergeCells(row, startCol, row, endCol);
+    const cell = ws.getCell(row, startCol);
+    cell.value = `REPORTING PERIOD ${index + 1} (M${period.monthFrom}-M${period.monthTo})`;
+    cell.alignment = { horizontal: 'center' };
+    cell.font = { bold: true, color: { argb: HEADER_FONT_COLOR } };
+    for (let c = startCol; c <= endCol; c++) setFill(ws.getCell(row, c), HEADER_BAND_FILL);
+  });
+}
+
+/** A visible vertical separator (medium black border) at the last month column of every reporting period but the last, across the whole grid — the explicit "διαχωριστικές γραμμές ανάμεσα στα Reporting Periods" request. */
+function applyReportingPeriodSeparators(
+  ws: Worksheet,
+  totalMonths: number,
+  reportingPeriods: GanttJson['reportingPeriods'],
+  fromRow: number,
+  toRow: number,
+): void {
+  const SEPARATOR_BORDER = { style: 'medium' as const, color: { argb: 'FF000000' } };
+  const boundaryMonths = new Set(
+    reportingPeriods.map((p) => Math.min(p.monthTo, totalMonths)).filter((m) => m > 0 && m < totalMonths),
+  );
+  for (const m of boundaryMonths) {
+    const col = 1 + m;
+    for (let r = fromRow; r <= toRow; r++) {
+      const cell = ws.getCell(r, col);
+      cell.border = { ...cell.border, right: SEPARATOR_BORDER };
+    }
   }
 }

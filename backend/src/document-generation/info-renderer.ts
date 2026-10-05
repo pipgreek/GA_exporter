@@ -40,8 +40,13 @@ export async function renderInfoDoc(info: InfoJson): Promise<RenderedInfoDoc> {
 
 function normalizeInfo(info: InfoJson) {
   const ownEntityShortName = info.ownEntity?.shortName;
-  const isOwnEntityParticipant = (participants: string[]) =>
-    participants.some((p) => p.toUpperCase() === 'ALL' || (ownEntityShortName && p === ownEntityShortName));
+  // Bold is reserved for WPs/tasks ownEntity actually LEADS — not merely
+  // participates in (that would bold almost everything once "Partners
+  // involved: ALL" is factored in, per explicit request 2026-10).
+  // participantsLabel (below) still shows participation for context; it's
+  // just no longer what drives emphasis.
+  const isOwnEntityLead = (leadOrLeader: string | undefined) =>
+    !!ownEntityShortName && leadOrLeader === ownEntityShortName;
 
   return {
     ...info,
@@ -54,8 +59,7 @@ function normalizeInfo(info: InfoJson) {
       ...wp,
       ownEntityPersonMonths: formatPersonMonths(wp.ownEntityPersonMonths),
       durationLabel: formatDuration(wp.monthFrom, wp.monthTo),
-      isOwnEntityInvolved:
-        wp.ownEntityPersonMonths > 0 || wp.tasks.some((task) => isOwnEntityParticipant(task.participants)),
+      isOwnEntityInvolved: isOwnEntityLead(wp.leadBeneficiary),
       tasks: wp.tasks.map((t) => ({
         ...t,
         leader: t.leader ?? 'tbd',
@@ -63,7 +67,7 @@ function normalizeInfo(info: InfoJson) {
         monthTo: t.monthTo ?? 'tbd',
         durationLabel: t.monthFrom && t.monthTo ? formatDuration(t.monthFrom, t.monthTo) : 'tbd',
         participantsLabel: t.participants.length > 0 ? t.participants.join(', ') : 'tbd',
-        isOwnEntityInvolved: isOwnEntityParticipant(t.participants),
+        isOwnEntityInvolved: isOwnEntityLead(t.leader),
       })),
     })),
   };
