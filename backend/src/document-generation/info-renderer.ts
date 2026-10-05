@@ -38,41 +38,41 @@ export async function renderInfoDoc(info: InfoJson): Promise<RenderedInfoDoc> {
   return { buffer, html };
 }
 
-/**
- * The template's tags reference optional/nested fields (e.g. ownEntity.*,
- * socialMedia.*) that Zod validation intentionally leaves undefined when
- * absent (implementation-plan.md §5.E validates LLM output shape, it doesn't
- * inject "tbd" placeholders — that would mask genuine extraction gaps at the
- * wrong layer). Rendering a document, unlike validating one, genuinely needs
- * a concrete printable value for every tag, so the schema's own "default":
- * "tbd" hints (llm/schemas/info.schema.json) are applied here instead.
- */
 function normalizeInfo(info: InfoJson) {
+  const ownEntityShortName = info.ownEntity?.shortName;
+  const isOwnEntityParticipant = (participants: string[]) =>
+    participants.some((p) => p.toUpperCase() === 'ALL' || (ownEntityShortName && p === ownEntityShortName));
+
   return {
     ...info,
     coordinator: info.coordinator ?? { shortName: 'tbd', legalName: 'tbd', country: 'tbd' },
     ownEntity: info.ownEntity ?? { shortName: 'tbd', legalName: 'tbd', pic: 'tbd', role: 'tbd', country: 'tbd' },
     projectSummary: info.projectSummary ?? 'tbd',
-    website: info.website ?? 'tbd',
-    socialMedia: info.socialMedia ?? {
-      facebook: 'tbd',
-      linkedin: 'tbd',
-      youtube: 'tbd',
-      twitter: 'tbd',
-      instagram: 'tbd',
-    },
-    repository: info.repository ?? 'tbd',
-    mailingLists: info.mailingLists ?? 'tbd',
+    ownEntityTotalPersonMonths: formatPersonMonths(info.ownEntityTotalPersonMonths),
     ownEffortSummary: info.ownEffortSummary ?? 'tbd',
     workPackages: info.workPackages.map((wp) => ({
       ...wp,
+      ownEntityPersonMonths: formatPersonMonths(wp.ownEntityPersonMonths),
+      durationLabel: formatDuration(wp.monthFrom, wp.monthTo),
+      isOwnEntityInvolved:
+        wp.ownEntityPersonMonths > 0 || wp.tasks.some((task) => isOwnEntityParticipant(task.participants)),
       tasks: wp.tasks.map((t) => ({
         ...t,
         leader: t.leader ?? 'tbd',
         monthFrom: t.monthFrom ?? 'tbd',
         monthTo: t.monthTo ?? 'tbd',
+        durationLabel: t.monthFrom && t.monthTo ? formatDuration(t.monthFrom, t.monthTo) : 'tbd',
+        participantsLabel: t.participants.length > 0 ? t.participants.join(', ') : 'tbd',
+        isOwnEntityInvolved: isOwnEntityParticipant(t.participants),
       })),
     })),
-    roles: info.roles.map((r) => ({ ...r, periodTo: r.periodTo ?? 'Present' })),
   };
+}
+
+function formatDuration(monthFrom: number, monthTo: number): string {
+  return `M${monthFrom}-M${monthTo}`;
+}
+
+function formatPersonMonths(value: number): string {
+  return Number.isInteger(value) ? value.toString() : value.toFixed(2).replace(/0+$/, '').replace(/\.$/, '');
 }

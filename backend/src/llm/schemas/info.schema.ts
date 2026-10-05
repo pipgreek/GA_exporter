@@ -26,22 +26,13 @@ const ReportingPeriodSchema = z.object({
   monthTo: z.number().int().min(1),
 });
 
-const SocialMediaSchema = z
-  .object({
-    facebook: z.string(),
-    linkedin: z.string(),
-    youtube: z.string(),
-    twitter: z.string().optional(),
-    instagram: z.string().optional(),
-  })
-  .strict();
-
 const TaskSchema = z.object({
   id: z.string().regex(/^T[0-9]+\.[0-9]+$/),
   name: z.string(),
   leader: z.string().optional(),
   monthFrom: z.number().int().min(1).optional(),
   monthTo: z.number().int().min(1).optional(),
+  participants: z.array(z.string()),
 });
 
 const WorkPackageSchema = z.object({
@@ -51,16 +42,8 @@ const WorkPackageSchema = z.object({
   monthFrom: z.number().int().min(1),
   monthTo: z.number().int().min(1),
   personMonths: z.number().min(0).optional(),
+  ownEntityPersonMonths: z.number().min(0).default(0),
   tasks: z.array(TaskSchema),
-});
-
-const RoleSchema = z.object({
-  name: z.string(),
-  title: z.string(),
-  periodFrom: z.string(),
-  periodTo: z.string().optional(),
-  responsibilities: z.array(z.string()).optional(),
-  deliverableAuthorship: z.array(z.string()).optional(),
 });
 
 // Mirrors llm/schemas/info.schema.json (required/optional per that schema's own
@@ -73,18 +56,14 @@ export const InfoSchema = z
     projectName: z.string(),
     coordinator: CoordinatorSchema.optional(),
     ownEntity: OwnEntitySchema.optional(),
+    ownEntityTotalPersonMonths: z.number().min(0).default(0),
     callTopic: z.string(),
     typeOfAction: z.string(),
     projectSummary: z.string().optional(),
     duration: DurationSchema,
     reportingPeriods: z.array(ReportingPeriodSchema).min(1),
-    website: z.string().optional(),
-    socialMedia: SocialMediaSchema.optional(),
-    repository: z.string().optional(),
-    mailingLists: z.string().optional(),
     ownEffortSummary: z.string().optional(),
     workPackages: z.array(WorkPackageSchema).min(1),
-    roles: z.array(RoleSchema),
   })
   .strict();
 

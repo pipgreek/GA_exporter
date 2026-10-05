@@ -87,7 +87,7 @@
           "taskId": {
             "type": "string",
             "pattern": "^T[0-9]+\\.[0-9]+$",
-            "description": "The specific task (within this deliverable's own WP) that produces it, if and only if that can be determined with confidence from the text - either an explicit statement in the task's own description (e.g. 'the task will produce the project's DMP as a deliverable') or an unambiguous thematic match between the deliverable's title and exactly one task's description in that WP. Omit entirely rather than guess when the text doesn't support a confident choice - the render engine falls back to placing an un-attributed deliverable on the WP's own row, which is always correct, just less precise."
+            "description": "The specific task (within this deliverable's own WP) whose row this deliverable is rendered on — the Gantt Overview sheet places every deliverable on a task row, never on a WP row, so this should be set whenever the WP has at least one task. Two-tier rule: (1) textual match — the task's own description explicitly names this deliverable (e.g. 'the task will produce the project's DMP as a deliverable') or the deliverable's title unambiguously matches exactly one task's theme in that WP; (2) temporal fallback — when no textual match exists, pick the task in this WP whose phases[] cover this deliverable's dueMonth (if several qualify, the one with the lowest task id); if none of the WP's tasks cover that month either, pick the WP's last task by id. Omit only if the WP genuinely has zero tasks (e.g. a WP with no task breakdown at all) — that is the one case the render engine must fall back to the WP's own row."
           },
           "type": {
             "type": "string",
