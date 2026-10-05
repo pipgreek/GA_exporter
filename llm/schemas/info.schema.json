@@ -12,8 +12,8 @@
     "typeOfAction",
     "duration",
     "reportingPeriods",
-    "workPackages",
-    "roles"
+    "ownEntityTotalPersonMonths",
+    "workPackages"
   ],
   "properties": {
     "gaNumber": {
@@ -47,6 +47,12 @@
         "country": { "type": "string", "default": "tbd" }
       },
       "required": ["shortName", "legalName", "pic", "role", "country"]
+    },
+    "ownEntityTotalPersonMonths": {
+      "type": "number",
+      "minimum": 0,
+      "default": 0,
+      "description": "ownEntity's total person-months across the whole project. Source: the 'Total Person-Months' value for ownEntity's row in Annex 1 Part A's 'Staff effort per participant' table (a WP-by-participant matrix). 0 if ownEntity isn't a participant in this GA at all (see ownEntity), not if it simply has low effort — a genuinely low but nonzero value must be copied as-is, not rounded to 0."
     },
     "callTopic": {
       "type": "string",
@@ -85,30 +91,10 @@
         }
       }
     },
-    "website": {
-      "type": "string",
-      "default": "tbd",
-      "description": "Not present in the Grant Agreement text. Always 'tbd' unless supplied from another source."
-    },
-    "socialMedia": {
-      "type": "object",
-      "description": "Not present in the Grant Agreement text. Every sub-field defaults to 'tbd' unless supplied from another source.",
-      "properties": {
-        "facebook": { "type": "string", "default": "tbd" },
-        "linkedin": { "type": "string", "default": "tbd" },
-        "youtube": { "type": "string", "default": "tbd" },
-        "twitter": { "type": "string", "default": "tbd" },
-        "instagram": { "type": "string", "default": "tbd" }
-      },
-      "required": ["facebook", "linkedin", "youtube"],
-      "additionalProperties": false
-    },
-    "repository": { "type": "string", "default": "tbd" },
-    "mailingLists": { "type": "string", "default": "tbd" },
     "ownEffortSummary": {
       "type": "string",
       "default": "tbd",
-      "description": "Free-text summary of which WPs/tasks ownEntity is assigned to (source: 'VIL Efforts' block). 'tbd' if the GA text gives no WP-level detail for ownEntity."
+      "description": "One short free-text intro sentence for the 'VIL Efforts' section, e.g. 'VILABS leads WP4.' The detailed, renderable effort breakdown is the structured ownEntityTotalPersonMonths / workPackages[].ownEntityPersonMonths / workPackages[].tasks[].participants fields below, not this sentence — this is flavor text only, never the primary data source for rendering."
     },
     "workPackages": {
       "type": "array",
@@ -123,43 +109,29 @@
           "monthFrom": { "type": "integer", "minimum": 1 },
           "monthTo": { "type": "integer", "minimum": 1 },
           "personMonths": { "type": "number", "minimum": 0 },
+          "ownEntityPersonMonths": {
+            "type": "number",
+            "minimum": 0,
+            "default": 0,
+            "description": "ownEntity's own person-months for this specific WP, read from its column/row in the same 'Staff effort per participant' matrix as ownEntityTotalPersonMonths. 0 if ownEntity has no effort recorded against this WP."
+          },
           "tasks": {
             "type": "array",
             "items": {
               "type": "object",
-              "required": ["id", "name"],
+              "required": ["id", "name", "participants"],
               "properties": {
                 "id": { "type": "string", "pattern": "^T[0-9]+\\.[0-9]+$" },
                 "name": { "type": "string" },
                 "leader": { "type": "string", "default": "tbd" },
                 "monthFrom": { "type": "integer", "minimum": 1 },
-                "monthTo": { "type": "integer", "minimum": 1 }
-              },
-              "required": ["id", "name"]
+                "monthTo": { "type": "integer", "minimum": 1 },
+                "participants": {
+                  "type": "array",
+                  "description": "Short names from this task's own 'Partners involved: ...' annotation in its Annex 1 Part A description (e.g. 'T1.1. ... | Leader: Sploro | Partners involved: ALL'). Copy verbatim: either the literal single-element list [\"ALL\"] when the text says 'ALL', or the exact short names listed (which may or may not include the leader again). Empty array only if this task's description truly has no 'Partners involved' annotation at all — do not default to just [leader]."
+                }
+              }
             }
-          }
-        }
-      }
-    },
-    "roles": {
-      "type": "array",
-      "description": "Named personnel of ownEntity and their responsibilities. Only extractable when the GA's DoA §3.2 consortium description names individuals for ownEntity specifically (common for the coordinator, not guaranteed for other beneficiaries) — return an empty array rather than inventing names.",
-      "items": {
-        "type": "object",
-        "required": ["name", "title", "periodFrom"],
-        "properties": {
-          "name": { "type": "string", "default": "tbd" },
-          "title": { "type": "string", "description": "e.g. 'Project Manager', 'Financial Manager'.", "default": "tbd" },
-          "periodFrom": { "type": "string", "description": "e.g. 'M1'.", "default": "tbd" },
-          "periodTo": { "type": "string", "description": "e.g. 'Present' or 'M24'.", "default": "Present" },
-          "responsibilities": {
-            "type": "array",
-            "items": { "type": "string" }
-          },
-          "deliverableAuthorship": {
-            "type": "array",
-            "description": "Deliverable IDs + titles this person leads, e.g. 'D4.1 - ... (M4)'.",
-            "items": { "type": "string" }
           }
         }
       }

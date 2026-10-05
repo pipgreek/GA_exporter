@@ -26,6 +26,8 @@ Project duration: 24 months
 
 ### Work package WP1
 T1.1. Drivers and Barriers for the development of innovations [M1-M4, M19-M24] | Leader: Sploro
+T1.2. Definition of Stakeholders' requirements and KPI framework [M1-M6, M15-M19] | Leader: AUTH
+T1.3. Specification of Use Cases, Marketplace Architecture and Action Plan [M1-M9, M17-M19] | Leader: AUTH
 
 ### Work package WP2
 T2.1. EVOLVE2CARE Experimentation Space infrastructure [M7-M24] Leader: AUTH
@@ -73,7 +75,9 @@ T2.4 Training Program for Innovators and Researchers [M4-M14] Leader: AV
       "lead": "AUTH", "monthFrom": 1, "monthTo": 24,
       "milestoneIds": ["MS1"],
       "tasks": [
-        { "id": "T1.1", "name": "Drivers and Barriers for the development of innovations", "phases": [{ "monthFrom": 1, "monthTo": 4 }, { "monthFrom": 19, "monthTo": 24 }] }
+        { "id": "T1.1", "name": "Drivers and Barriers for the development of innovations", "phases": [{ "monthFrom": 1, "monthTo": 4 }, { "monthFrom": 19, "monthTo": 24 }] },
+        { "id": "T1.2", "name": "Definition of Stakeholders' requirements and KPI framework", "phases": [{ "monthFrom": 1, "monthTo": 6 }, { "monthFrom": 15, "monthTo": 19 }] },
+        { "id": "T1.3", "name": "Specification of Use Cases, Marketplace Architecture and Action Plan", "phases": [{ "monthFrom": 1, "monthTo": 9 }, { "monthFrom": 17, "monthTo": 19 }] }
       ]
     },
     {
@@ -89,17 +93,17 @@ T2.4 Training Program for Innovators and Researchers [M4-M14] Leader: AV
     }
   ],
   "deliverables": [
-    { "id": "D1.1", "title": "Roadmap on navigating the complexities of enabling innovative technologies in transitional care", "wp": "WP1", "leadBeneficiary": "SPLORO", "type": "R", "disseminationLevel": "PU", "dueMonth": 4 },
-    { "id": "D1.2", "title": "Stakeholder Needs Analysis and KPI framework", "wp": "WP1", "leadBeneficiary": "AUTH", "type": "R", "disseminationLevel": "PU", "dueMonth": 6 },
-    { "id": "D1.3", "title": "EVOVLE2CARE Action Plan", "wp": "WP1", "leadBeneficiary": "AUTH", "type": "R", "disseminationLevel": "PU", "dueMonth": 9 },
-    { "id": "D1.4", "title": "Roadmap ... - Final", "wp": "WP1", "leadBeneficiary": "SPLORO", "type": "R", "disseminationLevel": "PU", "dueMonth": 24 },
-    { "id": "D1.5", "title": "Stakeholder Needs Analysis and KPI framework - Final", "wp": "WP1", "leadBeneficiary": "AUTH", "type": "R", "disseminationLevel": "PU", "dueMonth": 19 },
-    { "id": "D1.6", "title": "EVOVLE2CARE Action Plan - Final", "wp": "WP1", "leadBeneficiary": "AUTH", "type": "R", "disseminationLevel": "PU", "dueMonth": 19 },
-    { "id": "D2.1", "title": "AccelUP Experimentation Space infrastructure", "wp": "WP2", "leadBeneficiary": "AUTH", "type": "OTHER", "disseminationLevel": "PU", "dueMonth": 12 },
-    { "id": "D2.2", "title": "LLs, Innovators and Researchers Scouting and selection Report", "wp": "WP2", "leadBeneficiary": "SPLORO", "type": "R", "disseminationLevel": "PU", "dueMonth": 12 },
-    { "id": "D2.3", "title": "Training Program for Living Labs", "wp": "WP2", "leadBeneficiary": "ENoLL IVZW", "type": "OTHER", "disseminationLevel": "PU", "dueMonth": 14 },
-    { "id": "D2.4", "title": "Training Program for Innovators/Researchers", "wp": "WP2", "leadBeneficiary": "AV", "type": "OTHER", "disseminationLevel": "PU", "dueMonth": 14 },
-    { "id": "D2.5", "title": "AccelUP Experimentation Space infrastructure - Final", "wp": "WP2", "leadBeneficiary": "AUTH", "type": "OTHER", "disseminationLevel": "PU", "dueMonth": 24 }
+    { "id": "D1.1", "title": "Roadmap on navigating the complexities of enabling innovative technologies in transitional care", "wp": "WP1", "leadBeneficiary": "SPLORO", "taskId": "T1.1", "type": "R", "disseminationLevel": "PU", "dueMonth": 4 },
+    { "id": "D1.2", "title": "Stakeholder Needs Analysis and KPI framework", "wp": "WP1", "leadBeneficiary": "AUTH", "taskId": "T1.2", "type": "R", "disseminationLevel": "PU", "dueMonth": 6 },
+    { "id": "D1.3", "title": "EVOVLE2CARE Action Plan", "wp": "WP1", "leadBeneficiary": "AUTH", "taskId": "T1.3", "type": "R", "disseminationLevel": "PU", "dueMonth": 9 },
+    { "id": "D1.4", "title": "Roadmap ... - Final", "wp": "WP1", "leadBeneficiary": "SPLORO", "taskId": "T1.1", "type": "R", "disseminationLevel": "PU", "dueMonth": 24 },
+    { "id": "D1.5", "title": "Stakeholder Needs Analysis and KPI framework - Final", "wp": "WP1", "leadBeneficiary": "AUTH", "taskId": "T1.2", "type": "R", "disseminationLevel": "PU", "dueMonth": 19 },
+    { "id": "D1.6", "title": "EVOVLE2CARE Action Plan - Final", "wp": "WP1", "leadBeneficiary": "AUTH", "taskId": "T1.3", "type": "R", "disseminationLevel": "PU", "dueMonth": 19 },
+    { "id": "D2.1", "title": "AccelUP Experimentation Space infrastructure", "wp": "WP2", "leadBeneficiary": "AUTH", "taskId": "T2.1", "type": "OTHER", "disseminationLevel": "PU", "dueMonth": 12 },
+    { "id": "D2.2", "title": "LLs, Innovators and Researchers Scouting and selection Report", "wp": "WP2", "leadBeneficiary": "SPLORO", "taskId": "T2.2", "type": "R", "disseminationLevel": "PU", "dueMonth": 12 },
+    { "id": "D2.3", "title": "Training Program for Living Labs", "wp": "WP2", "leadBeneficiary": "ENoLL IVZW", "taskId": "T2.3", "type": "OTHER", "disseminationLevel": "PU", "dueMonth": 14 },
+    { "id": "D2.4", "title": "Training Program for Innovators/Researchers", "wp": "WP2", "leadBeneficiary": "AV", "taskId": "T2.4", "type": "OTHER", "disseminationLevel": "PU", "dueMonth": 14 },
+    { "id": "D2.5", "title": "AccelUP Experimentation Space infrastructure - Final", "wp": "WP2", "leadBeneficiary": "AUTH", "taskId": "T2.1", "type": "OTHER", "disseminationLevel": "PU", "dueMonth": 24 }
   ],
   "milestones": [
     { "id": "MS1", "name": "Holistic ACCELUP architectural blueprints, functional specifications, and integration roadmap available (first version)", "wp": "WP1", "leadBeneficiary": "AUTH", "meansOfVerification": "D1.3(v1)", "dueMonth": 9 },
@@ -123,3 +127,12 @@ T2.4 Training Program for Innovators and Researchers [M4-M14] Leader: AV
   (it already is, implicitly, via "Copy IDs ... verbatim as they appear" combined with the
   schema's `pattern: "^MS[0-9]+$"`; worth double-checking this actually works once tested
   live).
+- **Every deliverable here has a `taskId`**, per the rendering requirement that the Gantt
+  Overview sheet places milestones on WP rows and deliverables on task rows only, never a
+  deliverable on a WP row. All 11 of them resolved via tier-1 **textual/thematic matching**
+  (e.g. D1.2 "Stakeholder Needs Analysis and KPI framework" ↔ T1.2 "Definition of
+  Stakeholders' requirements and KPI framework"; each "- Final" deliverable maps to the
+  same task as its non-final counterpart) — none needed the tier-2 temporal fallback (pick
+  the task whose `phases[]` cover the deliverable's `dueMonth`) that the schema also
+  defines for cases with no clear thematic match. Worth verifying both tiers trigger
+  correctly once this is tested live on a GA where titles don't line up this cleanly.
