@@ -2,7 +2,7 @@
   "$comment": "Ready-to-send Anthropic Messages API request pieces for generateInfoJson(). Backend substitutes {{grant_agreement_markdown}} in user_message.content with the parsed GA markdown, then sends: {model, system, tools: [tool], tool_choice: {type:'tool', name: tool.name}, messages: [user_message]}. Regenerate with build_requests.py after editing the schema.",
   "model": "claude-haiku-4-5-20251001",
   "max_tokens": 16384,
-  "system": "You are the extraction engine for VILABS' GA Exporter tool. You receive the full text of an EU Horizon Europe/Euratom Grant Agreement (Preamble, Terms & Conditions, Data Sheet, Annex 1 Part A and Part B), already converted from PDF to Markdown, and must extract the fields needed to fill VILABS' internal \"INFO\" project document.\n\nRULES (apply to every field):\n1. Use only information explicitly present in the Grant Agreement text below. Never infer, guess, or use outside/general knowledge about this project.\n2. Any field you cannot find a value for in the text must be set to the literal string \"tbd\" (for arrays with nothing found, return an empty array [] — not an array containing \"tbd\"). Do not fabricate a plausible-looking value under any circumstance.\n3. Express all schedules/durations as month numbers relative to project start (M1, M2, ...) exactly as the Grant Agreement does. Never invent or convert to calendar dates yourself.\n4. Copy IDs and enum values (WP1, T1.1, D2.3, MS1, [C6.1], ...) verbatim as they appear in the source text, EXCEPT where rule 6 below says to normalize or shorten a cell's raw value.\n5. Respond ONLY by calling the provided tool with arguments matching its input_schema. Do not add any prose before or after the tool call.\n6. The source markdown was extracted page-by-page from a PDF (pdfplumber), so expect and correct for these artifacts:\n   - A table's real column headers sometimes appear as the FIRST DATA ROW, below a placeholder header row of literal \"Column 2\", \"Column 3\", .... If a table's own markdown header row is generic like this and the first body row instead contains recognizable field names (e.g. \"Deliverable No | Deliverable Name | ...\"), treat that first body row as the real header and everything after it as data.\n   - A table spanning a page break becomes two or more separate tables. The continuation table may repeat the real header row (safe to just concatenate with the first part) or may start directly with data rows and no header at all — reconstruct the single logical table by matching column order/count, not by assuming a header is always present. This especially affects the Data Sheet's \"List of participants\" table.\n   - A continuation row may show up with blank leading cells and only the last column(s) filled (content that overflowed from the row above, e.g. extra deliverables spilling out of a work package's \"Deliverables\" column) — merge it into the immediately preceding row instead of treating it as a new item.\n   - Participant/beneficiary-reference cells (e.g. a \"Lead Beneficiary\" column) are formatted as \"<consortium number> - <short name>\" (e.g. \"5 - VILABS\", \"1 - AUTH\") — extract only the short name after the dash.\n   - \"Type\" and \"Dissemination Level\" cells contain a short code plus a verbose label (e.g. \"R — Document, report\", \"PU - Public\", \"DEC —Websites, patent filings, videos, etc\", \"DMP — Data Management Plan\") — extract only the leading short code (R, DEC, DMP, ETHICS, OTHER / PU, SEN, ...), not the full cell text.\n\nFIELD-SPECIFIC GUIDANCE:\n- ownEntity is NOT given to you — you must find it yourself. Scan the Preamble and the Data Sheet §2 \"List of participants\" table for the participant whose legal name or short name contains \"VILABS\" (case-insensitive), regardless of country or legal suffix (it may appear as \"VILABS (CY) LTD\", \"VILABS OE\", a Bulgarian entity, etc.). Use that row's PIC, country and role (COO/BEN). If no such participant exists in this Grant Agreement, set every ownEntity sub-field to \"tbd\".\n- coordinator is the participant with role \"COO\" in the same participants table (this is a different entity from ownEntity unless VILABS itself is the coordinator).\n- website / socialMedia / repository / mailingLists never appear in a Grant Agreement — check the text anyway, but expect \"tbd\" for all of them.\n- duration and reportingPeriods come from Data Sheet §1 (General data) and §4.2 (Periodic reporting and payments schedule table).\n- workPackages come from Annex 1 Part A \"List of work packages\" (id, name, leadBeneficiary, month range).\n- Each task's inline annotation states its own leader and month range directly after the task's name, in a consistent format, e.g. \"T1.1. Drivers and Barriers for the development of innovations [M1-M4, M19-M24] | Leader: Sploro | Partners involved: ALL\". Always extract the short name after \"Leader:\" into tasks[].leader — this is frequently a DIFFERENT beneficiary than the WP's own leadBeneficiary, do not default to the WP's leader. Do not leave leader as \"tbd\" when this annotation is present in the text. If the bracketed month range lists multiple comma-separated spans (e.g. \"[M1-M4, M19-M24]\"), this schema has no per-task phases array (unlike the Gantt schema) — set monthFrom to the first span's start and monthTo to the last span's end, spanning the whole active period, rather than dropping the field or using only the first span.\n- ownEffortSummary: 1-3 sentences, written from ownEntity's perspective, summarizing which WPs/tasks ownEntity leads or is assigned to (mirror the style of \"<short name> leads WPx and is assigned to all WPs and Tasks of the Project, except WPy\"). \"tbd\" if the text gives no WP-level detail for ownEntity specifically.\n- roles: only include named individuals if the Grant Agreement's consortium/coordinator description (Annex 1 Part B, typically §3.2.1 \"Coordinator\" and/or advisory board) explicitly names people affiliated with ownEntity. Do NOT attribute another beneficiary's named staff (e.g. the coordinator's Project Manager) to ownEntity. If nobody is named for ownEntity, return an empty array.",
+  "system": "You are the extraction engine for VILABS' GA Exporter tool. You receive the full text of an EU Horizon Europe/Euratom Grant Agreement (Preamble, Terms & Conditions, Data Sheet, Annex 1 Part A and Part B), already converted from PDF to Markdown, and must extract the fields needed to fill VILABS' internal \"INFO\" project document.\n\nRULES (apply to every field):\n1. Use only information explicitly present in the Grant Agreement text below. Never infer, guess, or use outside/general knowledge about this project.\n2. Any field you cannot find a value for in the text must be set to the literal string \"tbd\" (for arrays with nothing found, return an empty array [] — not an array containing \"tbd\"). Do not fabricate a plausible-looking value under any circumstance.\n3. Express all schedules/durations as month numbers relative to project start (M1, M2, ...) exactly as the Grant Agreement does. Never invent or convert to calendar dates yourself.\n4. Copy IDs and enum values (WP1, T1.1, D2.3, MS1, [C6.1], ...) verbatim as they appear in the source text, EXCEPT where rule 6 below says to normalize or shorten a cell's raw value.\n5. Respond ONLY by calling the provided tool with arguments matching its input_schema. Do not add any prose before or after the tool call.\n6. The source markdown was extracted page-by-page from a PDF (pdfplumber), so expect and correct for these artifacts:\n   - A table's real column headers sometimes appear as the FIRST DATA ROW, below a placeholder header row of literal \"Column 2\", \"Column 3\", .... If a table's own markdown header row is generic like this and the first body row instead contains recognizable field names (e.g. \"Deliverable No | Deliverable Name | ...\"), treat that first body row as the real header and everything after it as data.\n   - A table spanning a page break becomes two or more separate tables. The continuation table may repeat the real header row (safe to just concatenate with the first part) or may start directly with data rows and no header at all — reconstruct the single logical table by matching column order/count, not by assuming a header is always present. This especially affects the Data Sheet's \"List of participants\" table.\n   - A continuation row may show up with blank leading cells and only the last column(s) filled (content that overflowed from the row above, e.g. extra deliverables spilling out of a work package's \"Deliverables\" column) — merge it into the immediately preceding row instead of treating it as a new item.\n   - Participant/beneficiary-reference cells (e.g. a \"Lead Beneficiary\" column) are formatted as \"<consortium number> - <short name>\" (e.g. \"5 - VILABS\", \"1 - AUTH\") — extract only the short name after the dash.\n   - \"Type\" and \"Dissemination Level\" cells contain a short code plus a verbose label (e.g. \"R — Document, report\", \"PU - Public\", \"DEC —Websites, patent filings, videos, etc\", \"DMP — Data Management Plan\") — extract only the leading short code (R, DEC, DMP, ETHICS, OTHER / PU, SEN, ...), not the full cell text.\n\nFIELD-SPECIFIC GUIDANCE:\n- ownEntity is NOT given to you — you must find it yourself. Scan the Preamble and the Data Sheet §2 \"List of participants\" table for the participant whose legal name or short name contains \"VILABS\" (case-insensitive), regardless of country or legal suffix (it may appear as \"VILABS (CY) LTD\", \"VILABS OE\", a Bulgarian entity, etc.). Use that row's PIC, country and role (COO/BEN). If no such participant exists in this Grant Agreement, set every ownEntity sub-field to \"tbd\".\n- coordinator is the participant with role \"COO\" in the same participants table (this is a different entity from ownEntity unless VILABS itself is the coordinator).\n- duration and reportingPeriods come from Data Sheet §1 (General data) and §4.2 (Periodic reporting and payments schedule table).\n- workPackages come from Annex 1 Part A \"List of work packages\" (id, name, leadBeneficiary, month range) — include every WP and every task of the project, not only the ones ownEntity leads or participates in; ownEntity's involvement is marked via tasks[].participants (see below), not by filtering what's included.\n- Each task's inline annotation states its own leader, month range and partners directly after the task's name, in a consistent format, e.g. \"T1.1. Drivers and Barriers for the development of innovations [M1-M4, M19-M24] | Leader: Sploro | Partners involved: ALL\". Always extract the short name after \"Leader:\" into tasks[].leader — this is frequently a DIFFERENT beneficiary than the WP's own leadBeneficiary, do not default to the WP's leader. Do not leave leader as \"tbd\" when this annotation is present in the text. If the bracketed month range lists multiple comma-separated spans (e.g. \"[M1-M4, M19-M24]\"), this schema has no per-task phases array (unlike the Gantt schema) — set monthFrom to the first span's start and monthTo to the last span's end, spanning the whole active period, rather than dropping the field or using only the first span.\n- tasks[].participants: extract the short names listed after \"Partners involved:\" in that same annotation, verbatim — if it literally says \"ALL\", return `[\"ALL\"]`; otherwise return the exact list of short names given (they may or may not repeat the leader). This drives which WPs/tasks get bold emphasis for ownEntity downstream, so accuracy here matters — do not guess participants from context if this annotation is missing for a task; return an empty array in that case instead.\n- ownEntityTotalPersonMonths and workPackages[].ownEntityPersonMonths come from Annex 1 Part A's \"Staff effort per participant\" table — a matrix with one row per participant short name, one column per WP, and a \"Total Person-Months\" column. Find ownEntity's row (same short name as ownEntity.shortName) and copy its per-WP cells into the matching workPackages[].ownEntityPersonMonths, and its Total Person-Months cell into the top-level ownEntityTotalPersonMonths. 0 (not \"tbd\") for any WP cell that is blank/zero for ownEntity, or for the whole field if ownEntity has no row in this table at all.\n- ownEffortSummary: one short intro sentence only (e.g. \"VILABS leads WP4.\") — the detailed per-WP/per-task breakdown is carried by the structured fields above, not by this sentence.",
   "tools": [
     {
       "name": "generate_info_json",
@@ -19,8 +19,8 @@
           "typeOfAction",
           "duration",
           "reportingPeriods",
-          "workPackages",
-          "roles"
+          "ownEntityTotalPersonMonths",
+          "workPackages"
         ],
         "properties": {
           "gaNumber": {
@@ -99,6 +99,12 @@
               "country"
             ]
           },
+          "ownEntityTotalPersonMonths": {
+            "type": "number",
+            "minimum": 0,
+            "default": 0,
+            "description": "ownEntity's total person-months across the whole project. Source: the 'Total Person-Months' value for ownEntity's row in Annex 1 Part A's 'Staff effort per participant' table (a WP-by-participant matrix). 0 if ownEntity isn't a participant in this GA at all (see ownEntity), not if it simply has low effort — a genuinely low but nonzero value must be copied as-is, not rounded to 0."
+          },
           "callTopic": {
             "type": "string",
             "default": "tbd",
@@ -162,55 +168,10 @@
               }
             }
           },
-          "website": {
-            "type": "string",
-            "default": "tbd",
-            "description": "Not present in the Grant Agreement text. Always 'tbd' unless supplied from another source."
-          },
-          "socialMedia": {
-            "type": "object",
-            "description": "Not present in the Grant Agreement text. Every sub-field defaults to 'tbd' unless supplied from another source.",
-            "properties": {
-              "facebook": {
-                "type": "string",
-                "default": "tbd"
-              },
-              "linkedin": {
-                "type": "string",
-                "default": "tbd"
-              },
-              "youtube": {
-                "type": "string",
-                "default": "tbd"
-              },
-              "twitter": {
-                "type": "string",
-                "default": "tbd"
-              },
-              "instagram": {
-                "type": "string",
-                "default": "tbd"
-              }
-            },
-            "required": [
-              "facebook",
-              "linkedin",
-              "youtube"
-            ],
-            "additionalProperties": false
-          },
-          "repository": {
-            "type": "string",
-            "default": "tbd"
-          },
-          "mailingLists": {
-            "type": "string",
-            "default": "tbd"
-          },
           "ownEffortSummary": {
             "type": "string",
             "default": "tbd",
-            "description": "Free-text summary of which WPs/tasks ownEntity is assigned to (source: 'VIL Efforts' block). 'tbd' if the GA text gives no WP-level detail for ownEntity."
+            "description": "One short free-text intro sentence for the 'VIL Efforts' section, e.g. 'VILABS leads WP4.' The detailed, renderable effort breakdown is the structured ownEntityTotalPersonMonths / workPackages[].ownEntityPersonMonths / workPackages[].tasks[].participants fields below, not this sentence — this is flavor text only, never the primary data source for rendering."
           },
           "workPackages": {
             "type": "array",
@@ -249,13 +210,20 @@
                   "type": "number",
                   "minimum": 0
                 },
+                "ownEntityPersonMonths": {
+                  "type": "number",
+                  "minimum": 0,
+                  "default": 0,
+                  "description": "ownEntity's own person-months for this specific WP, read from its column/row in the same 'Staff effort per participant' matrix as ownEntityTotalPersonMonths. 0 if ownEntity has no effort recorded against this WP."
+                },
                 "tasks": {
                   "type": "array",
                   "items": {
                     "type": "object",
                     "required": [
                       "id",
-                      "name"
+                      "name",
+                      "participants"
                     ],
                     "properties": {
                       "id": {
@@ -276,54 +244,12 @@
                       "monthTo": {
                         "type": "integer",
                         "minimum": 1
+                      },
+                      "participants": {
+                        "type": "array",
+                        "description": "Short names from this task's own 'Partners involved: ...' annotation in its Annex 1 Part A description (e.g. 'T1.1. ... | Leader: Sploro | Partners involved: ALL'). Copy verbatim: either the literal single-element list [\"ALL\"] when the text says 'ALL', or the exact short names listed (which may or may not include the leader again). Empty array only if this task's description truly has no 'Partners involved' annotation at all — do not default to just [leader]."
                       }
                     }
-                  }
-                }
-              }
-            }
-          },
-          "roles": {
-            "type": "array",
-            "description": "Named personnel of ownEntity and their responsibilities. Only extractable when the GA's DoA §3.2 consortium description names individuals for ownEntity specifically (common for the coordinator, not guaranteed for other beneficiaries) — return an empty array rather than inventing names.",
-            "items": {
-              "type": "object",
-              "required": [
-                "name",
-                "title",
-                "periodFrom"
-              ],
-              "properties": {
-                "name": {
-                  "type": "string",
-                  "default": "tbd"
-                },
-                "title": {
-                  "type": "string",
-                  "description": "e.g. 'Project Manager', 'Financial Manager'.",
-                  "default": "tbd"
-                },
-                "periodFrom": {
-                  "type": "string",
-                  "description": "e.g. 'M1'.",
-                  "default": "tbd"
-                },
-                "periodTo": {
-                  "type": "string",
-                  "description": "e.g. 'Present' or 'M24'.",
-                  "default": "Present"
-                },
-                "responsibilities": {
-                  "type": "array",
-                  "items": {
-                    "type": "string"
-                  }
-                },
-                "deliverableAuthorship": {
-                  "type": "array",
-                  "description": "Deliverable IDs + titles this person leads, e.g. 'D4.1 - ... (M4)'.",
-                  "items": {
-                    "type": "string"
                   }
                 }
               }

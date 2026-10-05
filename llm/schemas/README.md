@@ -36,20 +36,22 @@ on the backend, and the template-filling engine (docxtemplater / exceljs).
 4. **`target` is a string, not a number**, because real GA targets are compound/qualitative
    (`"Y1: >1500 entries"`, `">1000 followers"`, `"1 Rollup"`). Forcing a numeric type would
    lose information or require lossy parsing that the LLM would get wrong.
-5. **INFO `roles` and `ownEntity`** exist because the INFO document is written from the
+5. **INFO's `ownEntity`** exists because the INFO document is written from the
    perspective of *one* beneficiary — VILABS — even though the GA describes the whole
    consortium. `ownEntity` is **not an external parameter**: VILABS' legal form/country
    varies per grant (e.g. `VILABS (CY) LTD`, `VILABS OE`, a Bulgarian entity...), so the
    LLM itself must scan the GA's own Preamble/Data Sheet §2 participants list for a
    legal or short name containing "VILABS" and use that row.
 6. **Missing information → literal `"tbd"`, never invented.** Every field that is
-   plausibly absent from a given Grant Agreement's text (website, social media,
-   repository, mailing lists, named personnel, a deliverable's dissemination level, a
-   KPI's target, ...) has `"default": "tbd"` in the schema and is documented as such.
-   The LLM must return `"tbd"` rather than fabricate a plausible-looking value — this
-   keeps the extraction auditable and lets a human fill the gap later. Array fields with
-   nothing found (e.g. no named `roles` in the GA) should be returned as an empty array,
-   not an array of `"tbd"` placeholders.
+   plausibly absent from a given Grant Agreement's text (named personnel, a deliverable's
+   dissemination level, a KPI's target, ...) has `"default": "tbd"` in the schema and is
+   documented as such. The LLM must return `"tbd"` rather than fabricate a
+   plausible-looking value — this keeps the extraction auditable and lets a human fill
+   the gap later. Array fields with nothing found should be returned as an empty array,
+   not an array of `"tbd"` placeholders. (Fields that are *never* present in a Grant
+   Agreement at all — `website`, `socialMedia`, `repository`, `mailingLists`, named
+   per-beneficiary `roles` — have been removed from `info.schema.json` entirely rather
+   than kept as permanent `"tbd"` fields; see decision 11.)
 7. **Retry is a backend concern, schemas just need to make retries meaningful.**
    Per implementation-plan.md §5.D, the backend retries a Zod-failed LLM call 1-2 times.
    Because unknown values now serialize to `"tbd"` (a valid string) instead of causing a
@@ -72,6 +74,28 @@ on the backend, and the template-filling engine (docxtemplater / exceljs).
     `label` for it. A category with no natural sub-grouping (most Expected-Outcome-style
     blocks) still gets exactly one group, just with no `label` — so the shape is uniform
     even though real GAs vary in how deep their indicator sections nest.
+11. **INFO has no sections with no GA source — removed, not left as permanent `"tbd"`.**
+    Per a 2026-10 rendering-requirements note, the INFO document no longer has a
+    links/socials section or a Roles section at all, so `website`, `socialMedia`,
+    `repository`, `mailingLists` and `roles` were deleted from `info.schema.json` outright
+    (they always resolved to `"tbd"`/`[]` anyway, since none of that information is ever in
+    a Grant Agreement's own text). In their place: `ownEntityTotalPersonMonths` and
+    `workPackages[].ownEntityPersonMonths` (from Annex 1 Part A's "Staff effort per
+    participant" matrix, ownEntity's row) drive a hierarchical Total → per-WP → per-task
+    "VIL Efforts" section instead of one free-text paragraph; `ownEffortSummary` is now
+    just a one-line intro. `workPackages[].tasks[].participants` (verbatim from each
+    task's own "Partners involved: ..." annotation, e.g. `["ALL"]`) is what the rendered
+    document uses to bold exactly the WPs/tasks ownEntity is actually involved in — every
+    WP and task is still included regardless of involvement, only the emphasis differs.
+12. **Gantt `deliverables[].taskId` went from "best-effort, omit if unsure" to "set it
+    whenever the WP has tasks".** A rendering requirement that the Gantt Overview sheet
+    only ever shows deliverables on task rows (never a WP row) means an absent `taskId`
+    is no longer a safe, equally-valid fallback — it's now a rendering gap. The guidance
+    is now two-tier: textual/thematic match first (as before), then a deterministic
+    temporal fallback (the task in that WP whose `phases[]` cover the deliverable's
+    `dueMonth`, lowest task id breaking ties) so a confident placement exists even when
+    the text gives no explicit textual link. `taskId` stays optional in the schema only
+    for the genuine edge case of a WP with zero tasks (e.g. an Ethics-requirements WP).
 
 ## Template and extraction follow-ups
 

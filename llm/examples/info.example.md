@@ -62,9 +62,18 @@ Project duration: 24 months
 ### Work package WP4 — EVOLVE2CARE's People-Centric Experimentation Ecosystem Outreach, Sustainability and Clustering
 Lead Beneficiary: VILABS. Start Month 1, End Month 24.
 
-T4.1. EVOLVE2CARE Dissemination, Communication and Outreach for the Open Calls [M1-M24] Leader: VILABS
-T4.2. Exploitation and IPR of AccelUP [M1-M24] Task leader: VILABS
-T4.3. Clustering with EIT KICs [M12-M24] Leader: ENOLL
+T4.1. EVOLVE2CARE Dissemination, Communication and Outreach for the Open Calls [M1-M24] | Leader: VILABS | Partners involved: ALL
+T4.2. Exploitation and IPR of AccelUP [M1-M24] | Task leader: VILABS | Partners involved: ALL
+T4.3. Clustering with EIT KICs [M12-M24] | Leader: ENOLL | Partners involved: ALL
+
+### Staff effort per participant
+| Participant | WP1 | WP2 | WP3 | WP4 | WP5 | WP6 | Total Person-Months |
+|---|---|---|---|---|---|---|---|
+| 1 - AUTH | 11.00 | 27.00 | 17.50 | 7.00 | 11.00 | | 73.50 |
+| 2 - ENoLL IVZW | 1.00 | 4.00 | 6.00 | 4.00 | 2.00 | | 17.00 |
+| 3 - AV | 9.50 | 14.50 | 27.50 | 17.80 | 3.00 | | 72.30 |
+| 4 - SPLORO | 2.00 | 19.00 | 2.00 | 2.00 | 2.00 | | 27.00 |
+| 5 - VILABS | 1.00 | 2.00 | 1.50 | 60.00 | 7.60 | | 72.10 |
 
 ### 3.2.1.1 Coordinator
 Dr. Evdokimos Konstantinidis has over 15 years of work experience... [coordinator bio for AUTH,
@@ -102,65 +111,77 @@ no VILABS personnel named anywhere in this Grant Agreement]
     { "id": "RP1", "monthFrom": 1, "monthTo": 12 },
     { "id": "RP2", "monthFrom": 13, "monthTo": 24 }
   ],
-  "website": "tbd",
-  "socialMedia": { "facebook": "tbd", "linkedin": "tbd", "youtube": "tbd" },
-  "repository": "tbd",
-  "mailingLists": "tbd",
-  "ownEffortSummary": "VILABS leads WP4 and contributes tasks T4.1 and T4.2, with ENoLL leading T4.3 within the same WP.",
+  "ownEntityTotalPersonMonths": 72.10,
+  "ownEffortSummary": "VILABS leads WP4.",
   "workPackages": [
     {
       "id": "WP1", "name": "EVOLVE2CARE experimentation space framework",
       "leadBeneficiary": "AUTH", "monthFrom": 1, "monthTo": 24, "personMonths": 24.50,
+      "ownEntityPersonMonths": 1.00,
       "tasks": []
     },
     {
       "id": "WP2", "name": "Matching AccelUP Experimentation Space and Services with Innovators and Researchers",
       "leadBeneficiary": "AUTH", "monthFrom": 2, "monthTo": 24, "personMonths": 66.50,
+      "ownEntityPersonMonths": 2.00,
       "tasks": []
     },
     {
       "id": "WP3", "name": "Set Up of AccelUP experimentation Space and Services Execution, Lessons Learnt and Best practices",
       "leadBeneficiary": "AV", "monthFrom": 12, "monthTo": 24, "personMonths": 54.50,
+      "ownEntityPersonMonths": 1.50,
       "tasks": []
     },
     {
       "id": "WP4", "name": "EVOLVE2CARE's People-Centric Experimentation Ecosystem Outreach, Sustainability and Clustering",
       "leadBeneficiary": "VILABS", "monthFrom": 1, "monthTo": 24, "personMonths": 90.80,
+      "ownEntityPersonMonths": 60.00,
       "tasks": [
-        { "id": "T4.1", "name": "EVOLVE2CARE Dissemination, Communication and Outreach for the Open Calls", "leader": "VILABS", "monthFrom": 1, "monthTo": 24 },
-        { "id": "T4.2", "name": "Exploitation and IPR of AccelUP", "leader": "VILABS", "monthFrom": 1, "monthTo": 24 },
-        { "id": "T4.3", "name": "Clustering with EIT KICs", "leader": "ENOLL", "monthFrom": 12, "monthTo": 24 }
+        { "id": "T4.1", "name": "EVOLVE2CARE Dissemination, Communication and Outreach for the Open Calls", "leader": "VILABS", "monthFrom": 1, "monthTo": 24, "participants": ["ALL"] },
+        { "id": "T4.2", "name": "Exploitation and IPR of AccelUP", "leader": "VILABS", "monthFrom": 1, "monthTo": 24, "participants": ["ALL"] },
+        { "id": "T4.3", "name": "Clustering with EIT KICs", "leader": "ENOLL", "monthFrom": 12, "monthTo": 24, "participants": ["ALL"] }
       ]
     },
     {
       "id": "WP5", "name": "Project Coordination and Management",
       "leadBeneficiary": "AUTH", "monthFrom": 1, "monthTo": 24, "personMonths": 25.60,
+      "ownEntityPersonMonths": 7.60,
       "tasks": []
     },
     {
       "id": "WP6", "name": "Ethics requirements",
       "leadBeneficiary": "AUTH", "monthFrom": 1, "monthTo": 24, "personMonths": 0,
+      "ownEntityPersonMonths": 0,
       "tasks": []
     }
-  ],
-  "roles": []
+  ]
 }
 ```
 
 ## Why this example is worth keeping
 
-- **`roles: []` is the correct answer here, not an extraction failure.** A human-curated
-  document exists elsewhere (`docs/Παραδείγματα/evolve2care info tab (2).pdf`) that names
-  VILABS' Project Manager, Financial Manager, etc. — but those names never appear in the
-  Grant Agreement PDF itself (only the coordinator's bio is named, in Annex 1 Part B
-  §3.2.1.1). An LLM extracting strictly from the GA text must return an empty array, not
-  reach for that outside knowledge. This is the exact failure mode the "no invention" rule
-  in the system prompt exists to prevent.
-- `website` / `socialMedia` / `repository` / `mailingLists` are `"tbd"` for the same reason:
-  they are real, correct values in the info-tab sample, but absent from the GA text.
+- **`roles` and the links fields (`website`/`socialMedia`/`repository`/`mailingLists`) no
+  longer exist in the schema at all** (removed per the 2026-10 notes doc requesting their
+  sections be dropped from the rendered INFO document entirely) — they used to always
+  resolve to `"tbd"`/`[]` anyway since none of that information is ever present in a Grant
+  Agreement's own text (only in the separate, human-curated
+  `docs/Παραδείγματα/evolve2care info tab (2).pdf`). Removing them from the schema instead
+  of extracting-then-discarding them is simpler and matches the new INFO document, which no
+  longer has those sections to fill.
+- **`ownEntityTotalPersonMonths` / `workPackages[].ownEntityPersonMonths`** come straight
+  from VILABS' own row (`5 - VILABS`) in the real "Staff effort per participant" matrix —
+  this is what drives the new hierarchical "VIL Efforts" section (Total → per-WP → per-task)
+  instead of the old one-paragraph `ownEffortSummary`, which is now just a one-line intro.
+- **`tasks[].participants: ["ALL"]`** on every WP4 task, copied verbatim from each task's own
+  "Partners involved: ALL" annotation — this is what lets the renderer bold WP4 and its tasks
+  (VILABS is in `participants`) while leaving WP1/WP2/WP3/WP5's tasks un-bolded in this
+  trimmed excerpt (not shown here, but would also carry their own `participants`, which may
+  or may not include "VILABS" depending on what each task's own annotation states — bolding
+  must never be inferred from `ownEffortSummary`'s prose).
 - `projectSummary` is `"tbd"` in this excerpt only because the Data Sheet's actual summary
   paragraph was trimmed out of the excerpt above for brevity — in the full GA it is present
   and should be extracted.
 - Tasks are only spelled out for WP4 (ownEntity's own WP) in the excerpt to keep this
   example short; a real run over the full Annex 1 Part A would populate every WP's `tasks`
-  the same way.
+  the same way — the schema/prompt require **all** WPs and tasks to be present, not just
+  the ones ownEntity is involved in.
