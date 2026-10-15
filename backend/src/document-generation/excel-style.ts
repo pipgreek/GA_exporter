@@ -12,8 +12,6 @@ export const HEADER_BAND_FILL = 'FFA4EDF5';
 export const YEAR_BAND_COLORS = ['FFD0FDFF', 'FFA4EDF5', 'FF7DDCE8', 'FF56CBDB'];
 
 export const WP_FILL = 'FFA5A5A5';
-export const MILESTONE_FILL = 'FF595959';
-export const MILESTONE_FONT_COLOR = 'FFFFFFFF';
 export const TASK_ACTIVE_FILL = 'FFF2F2F2';
 
 // Excel's built-in "Green Fill with Dark Green Text" / "Yellow Fill with
@@ -23,6 +21,11 @@ export const DELIVERABLE_PUBLIC_FILL = 'FFC6EFCE';
 export const DELIVERABLE_PUBLIC_FONT = 'FF006100';
 export const DELIVERABLE_SENSITIVE_FILL = 'FFFFEB9C';
 export const DELIVERABLE_SENSITIVE_FONT = 'FF9C5700';
+
+// Milestone markers reuse the "Sensitive" swatch (2026-10-15 request: make
+// MS cells match the Sensitive legend color instead of plain dark gray).
+export const MILESTONE_FILL = DELIVERABLE_SENSITIVE_FILL;
+export const MILESTONE_FONT_COLOR = DELIVERABLE_SENSITIVE_FONT;
 // Fallback for dissemination levels beyond Public/Sensitive (EU-R/EU-C/EU-S/tbd).
 export const DELIVERABLE_OTHER_FILL = 'FFD9D9D9';
 export const DELIVERABLE_OTHER_FONT = 'FF000000';
