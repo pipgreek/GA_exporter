@@ -8,6 +8,7 @@ import { GA_EXPORT_QUEUE } from '../infrastructure/queue/queue.constants';
 import { SupabaseStorageService } from '../infrastructure/storage/storage.service';
 import { PreviewResponse } from '../document-generation/preview.types';
 import { DownloadFileType, OUTPUT_FILES, isDownloadFileType, outputStoragePath, previewStoragePath } from './output-files';
+import { ORPHANED_JOB_REASON } from './orphaned-jobs.recovery';
 import { PROCESSING_STATUSES, PdfProcessingJobData, ProcessingStatus } from './processing.types';
 
 @Injectable()
@@ -54,7 +55,8 @@ export class ProcessingService {
       };
     }
     if (state === 'failed') {
-      return { status: 'error', progress: 100, message: 'PDF processing failed.' };
+      const message = job.failedReason === ORPHANED_JOB_REASON ? ORPHANED_JOB_REASON : 'PDF processing failed.';
+      return { status: 'error', progress: 100, message };
     }
     if (typeof progress === 'object' && progress !== null) {
       const current = progress as Record<string, unknown>;
