@@ -69,7 +69,7 @@ function buildDeliverablesSheet(gantt: GanttJson): PreviewSheet {
       d.leadBeneficiary,
       d.type,
       d.disseminationLevel,
-      d.dueMonth,
+      `M${d.dueMonth}`,
     ]),
   };
 }
@@ -78,6 +78,13 @@ function buildMilestonesSheet(gantt: GanttJson): PreviewSheet {
   return {
     name: "Milestones' List",
     headers: ['Mil No', 'Name', 'WP', 'Leader', 'Means of verification', 'Due Date'],
-    rows: gantt.milestones.map((m) => [m.id, m.name, m.wp, m.leadBeneficiary, m.meansOfVerification ?? null, m.dueMonth]),
+    rows: gantt.milestones.map((m) => [
+      m.id,
+      m.name,
+      m.wp,
+      m.leadBeneficiary,
+      m.meansOfVerification ?? null,
+      `M${m.dueMonth}`,
+    ]),
   };
 }

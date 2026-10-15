@@ -52,6 +52,10 @@ function normalizeInfo(info: InfoJson) {
     ...info,
     coordinator: info.coordinator ?? { shortName: 'tbd', legalName: 'tbd', country: 'tbd' },
     ownEntity: info.ownEntity ?? { shortName: 'tbd', legalName: 'tbd', pic: 'tbd', role: 'tbd', country: 'tbd' },
+    // Flat copy for simple {ownEntityShortNameLabel} interpolation in the
+    // "Across the entire ... project" sentence — the template doesn't use
+    // dot-notation nested access, only {#section}...{/section} blocks.
+    ownEntityShortNameLabel: ownEntityShortName ?? 'tbd',
     projectSummary: info.projectSummary ?? 'tbd',
     ownEntityTotalPersonMonths: formatPersonMonths(info.ownEntityTotalPersonMonths),
     ownEffortSummary: info.ownEffortSummary ?? 'tbd',
@@ -78,5 +82,5 @@ function formatDuration(monthFrom: number, monthTo: number): string {
 }
 
 function formatPersonMonths(value: number): string {
-  return Number.isInteger(value) ? value.toString() : value.toFixed(2).replace(/0+$/, '').replace(/\.$/, '');
+  return Number.isInteger(value) ? value.toString() : value.toFixed(2);
 }
