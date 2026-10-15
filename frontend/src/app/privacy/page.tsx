@@ -90,10 +90,10 @@ export default function PrivacyPage() {
 
       <Section title="2. Access, Accounts and History">
         <p>
-          Access to the Application is restricted: you sign in with your company email address and a
-          password shared by the team. The Application does not create individual user accounts and
-          does not keep a history of your requests. Your data is kept only temporarily, for as long as
-          needed to produce your files and let you download them (see section 7).
+          Access to the Application is restricted: you sign in with a username (an email address) and
+          a password that are shared by the team. The Application does not create individual user
+          accounts and does not keep a history of your requests. Your data is kept only temporarily,
+          for as long as needed to produce your files and let you download them (see section 7).
         </p>
       </Section>
 
@@ -101,9 +101,9 @@ export default function PrivacyPage() {
         <p>For each request, we process and temporarily store:</p>
         <List>
           <li>
-            <Term>Sign-in details.</Term> The email address you type is only checked against the
-            allowed company domain; it is not stored. After a successful sign-in, your browser keeps
-            a session cookie that is needed to keep you signed in (see section 8).
+            <Term>Sign-in details.</Term> The username and password you type are only checked
+            against the shared credentials; they are not stored. After a successful sign-in, your
+            browser keeps a session cookie that is needed to keep you signed in (see section 8).
           </li>
           <li>
             <Term>The Grant Agreement PDF you upload.</Term> It is stored as received, under a random

@@ -12,21 +12,21 @@ const encoder = new TextEncoder();
 export const SESSION_COOKIE = "ga_session";
 export const SESSION_MAX_AGE_SECONDS = 8 * 60 * 60;
 const TOKEN_VERSION = "v1";
-const DEFAULT_EMAIL_DOMAIN = "vilabs.eu";
+const DEFAULT_EMAIL = "info@vilabs.eu";
 
 export interface AuthConfig {
   /** null when AUTH_PASSWORD is missing/empty → nobody can log in. */
   password: string | null;
-  /** Only emails of this domain are accepted, e.g. "vilabs.eu". */
-  emailDomain: string;
+  /** The one username (email) that can log in, lower-case, e.g. "info@vilabs.eu". */
+  email: string;
 }
 
 export function getAuthConfig(): AuthConfig {
   const password = process.env.AUTH_PASSWORD;
-  const domain = (process.env.AUTH_EMAIL_DOMAIN ?? "").trim().replace(/^@/, "").toLowerCase();
+  const email = (process.env.AUTH_EMAIL ?? "").trim().toLowerCase();
   return {
     password: password ? password : null,
-    emailDomain: domain || DEFAULT_EMAIL_DOMAIN,
+    email: email || DEFAULT_EMAIL,
   };
 }
 
@@ -59,7 +59,11 @@ function toBase64Url(bytes: Uint8Array): string {
   return btoa(binary).replace(/\+/g, "-").replace(/\//g, "_").replace(/=+$/, "");
 }
 
-/** Company email (exact domain) + the shared password. Both checks always run. */
+/**
+ * The shared username (AUTH_EMAIL, case-insensitive) + the shared password.
+ * Both checks always run, in constant time, so a failure does not reveal which
+ * of the two was wrong.
+ */
 export async function credentialsValid(
   email: string,
   password: string,
@@ -67,7 +71,7 @@ export async function credentialsValid(
 ): Promise<boolean> {
   if (!config.password) return false;
   const normalized = email.trim().toLowerCase();
-  const emailOk = /^[^\s@]+@[^\s@]+$/.test(normalized) && normalized.endsWith(`@${config.emailDomain}`);
+  const emailOk = equalBytes(await sha256(normalized), await sha256(config.email));
   const passwordOk = equalBytes(await sha256(password), await sha256(config.password));
   return emailOk && passwordOk;
 }

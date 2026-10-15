@@ -169,7 +169,7 @@ Upload PDF
 - [x] Link «Privacy Policy» στο footer (με confirm modal όταν υπάρχει εργασία σε εξέλιξη)
 
 #### G. Login (προστέθηκε 2026-10-15 — μόνο frontend, βλ. απόφαση 8 στο `docs/frontend-notes.md`)
-- [x] Σελίδα `/login`: email (εταιρικό domain) + password (bullets, «ματάκι» για εμφάνιση) + κουμπί Login, μήνυμα λάθους
+- [x] Σελίδα `/login`: email (το κοινό username `info@vilabs.eu`) + password (bullets, «ματάκι» για εμφάνιση) + κουμπί Login, μήνυμα λάθους
 - [x] Κοινός κωδικός στο `.env` του frontend (`AUTH_PASSWORD`, μόνο server-side), έλεγχος στον server του Next.js, signed httpOnly cookie
 - [x] Φύλακας (`src/proxy.ts`): όλες οι σελίδες χρειάζονται login εκτός από `/login` και `/privacy`
 - [x] Κουμπί «Log out»

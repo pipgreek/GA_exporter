@@ -65,11 +65,11 @@ NEXT_PUBLIC_API_URL=http://localhost:3000/api/mock
 
 ## Login
 
-Η εφαρμογή ανοίγει μόνο με login: **εταιρικό email** (domain `AUTH_EMAIL_DOMAIN`, default `vilabs.eu`) και **έναν κοινό κωδικό**. Ο κωδικός ορίζεται στο `frontend/.env.local` (δεν ανεβαίνει ποτέ στο git) και διαβάζεται μόνο στον server — δεν φτάνει στον browser:
+Η εφαρμογή ανοίγει μόνο με login: **ένα κοινό username** (`AUTH_EMAIL`, default `info@vilabs.eu`, χωρίς διάκριση πεζών-κεφαλαίων) και **έναν κοινό κωδικό**. Ο κωδικός ορίζεται στο `frontend/.env.local` (δεν ανεβαίνει ποτέ στο git) και διαβάζεται μόνο στον server — δεν φτάνει στον browser:
 
 ```
 AUTH_PASSWORD=ο-κωδικός-που-θα-επιλέξεις
-AUTH_EMAIL_DOMAIN=vilabs.eu
+AUTH_EMAIL=info@vilabs.eu
 ```
 
 - **Αν το `AUTH_PASSWORD` λείπει ή είναι κενό, κανείς δεν μπορεί να μπει** (η σελίδα login το αναφέρει).
