@@ -63,12 +63,30 @@ NEXT_PUBLIC_API_URL=http://localhost:3000/api/mock
 
 Τα downloads του mock (`/download/{id}/{type}`, `/download-all/{id}`) είναι πραγματικά αρχεία .docx / .xlsx / .zip που ανοίγουν σε Word/Excel, με το ίδιο περιεχόμενο με τα previews ([`src/mocks/mockFiles.ts`](src/mocks/mockFiles.ts)).
 
+## Login
+
+Η εφαρμογή ανοίγει μόνο με login: **ένα κοινό username** (`AUTH_EMAIL`, default `info@vilabs.eu`, χωρίς διάκριση πεζών-κεφαλαίων) και **έναν κοινό κωδικό**. Ο κωδικός ορίζεται στο `frontend/.env.local` (δεν ανεβαίνει ποτέ στο git) και διαβάζεται μόνο στον server — δεν φτάνει στον browser:
+
+```
+AUTH_PASSWORD=ο-κωδικός-που-θα-επιλέξεις
+AUTH_EMAIL=info@vilabs.eu
+```
+
+- **Αν το `AUTH_PASSWORD` λείπει ή είναι κενό, κανείς δεν μπορεί να μπει** (η σελίδα login το αναφέρει).
+- Αλλαγή του κωδικού = αποσύνδεση όλων. Το session διαρκεί 8 ώρες.
+- Αφού αλλάξεις το `.env.local` με το dev server να τρέχει, το Next.js το ξαναφορτώνει μόνο του. Σε production, οι ρυθμίσεις ορίζονται στο hosting (Vercel → Environment Variables).
+- Δημόσιες σελίδες: `/login` και `/privacy`. Όλα τα άλλα περνούν από τον φύλακα [`src/proxy.ts`](src/proxy.ts).
+- ⚠️ Το login προστατεύει μόνο την ιστοσελίδα, **όχι** το backend API.
+
 ## Δομή
 
 ```
 src/
+  proxy.ts              # φύλακας login (Next.js 16: το middleware λέγεται proxy)
   app/
     page.tsx            # / — όλη η ροή: upload → progress → αρχεία (download + προαιρετικό preview)
+    login/page.tsx      # /login
+    api/auth/...        # login / logout
     privacy/page.tsx    # /privacy — Privacy Policy
     api/mock/...        # mock backend (ίδια endpoints με το contract)
   components/
@@ -78,9 +96,11 @@ src/
     results/            # ResultsSection, FileCard
     preview/            # PreviewModal, WordViewer, ExcelViewer (καρτέλες sheets)
     ui/                 # ConfirmDialog, Toaster
+    auth/               # LoginForm, LogoutButton
     layout/             # header, footer, background, NavigationGuard (confirm πριν χαθεί δουλειά)
   hooks/                # useProcessingStatus (polling)
   lib/api/              # API client + types (contract)
+  lib/auth/             # έλεγχος credentials + signed session cookie
   lib/files.ts          # ορισμός των 3 παραγόμενων αρχείων
   mocks/                # δεδομένα/λογική του mock backend
 ```

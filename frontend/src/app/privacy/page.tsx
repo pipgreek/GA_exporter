@@ -11,7 +11,7 @@ export const metadata: Metadata = {
 // backend/src/llm, backend/src/pdf-parsing) and docs/api-contract.md, 2026-09-30.
 // Items that must be confirmed or implemented before publishing are listed in
 // docs/frontend-notes.md ("Privacy Policy — προς επιβεβαίωση").
-const LAST_UPDATED = "30/09/2026";
+const LAST_UPDATED = "15/10/2026";
 const RETENTION_HOURS = 24;
 
 const PROCESSORS = [
@@ -88,17 +88,23 @@ export default function PrivacyPage() {
         </address>
       </Section>
 
-      <Section title="2. No Accounts, No History">
+      <Section title="2. Access, Accounts and History">
         <p>
-          The Application does not require an account or login, and it does not keep a history of
-          your requests. Your data is kept only temporarily, for as long as needed to produce your
-          files and let you download them (see section 7).
+          Access to the Application is restricted: you sign in with a username (an email address) and
+          a password that are shared by the team. The Application does not create individual user
+          accounts and does not keep a history of your requests. Your data is kept only temporarily,
+          for as long as needed to produce your files and let you download them (see section 7).
         </p>
       </Section>
 
       <Section title="3. What Data We Process">
         <p>For each request, we process and temporarily store:</p>
         <List>
+          <li>
+            <Term>Sign-in details.</Term> The username and password you type are only checked
+            against the shared credentials; they are not stored. After a successful sign-in, your
+            browser keeps a session cookie that is needed to keep you signed in (see section 8).
+          </li>
           <li>
             <Term>The Grant Agreement PDF you upload.</Term> It is stored as received, under a random
             request identifier. Your file name is not stored. Grant Agreements may contain personal
@@ -193,8 +199,13 @@ export default function PrivacyPage() {
 
       <Section title="8. Cookies and Tracking">
         <p>
-          The Application does not use cookies, analytics or advertising trackers, and it does not store
-          any data in your browser.
+          The Application uses a single, strictly necessary cookie: a session cookie that keeps you
+          signed in. It is not accessible to scripts on the page, contains no personal data, and
+          expires after 8 hours or when you log out. It is not used for tracking.
+        </p>
+        <p>
+          The Application does not use analytics or advertising trackers, and it does not store any
+          other data in your browser.
         </p>
       </Section>
 
@@ -232,7 +243,9 @@ export default function PrivacyPage() {
           </li>
           <li>Data is stored only temporarily and deleted automatically.</li>
           <li>
-            There is no login. The download links of a request contain a random, hard-to-guess
+            Opening the Application requires signing in with the shared password, which is stored
+            only on our server and never sent to your browser. However, the download links of a
+            request are not protected by the sign-in: they contain a random, hard-to-guess
             identifier, and anyone who obtains a link can download that request&rsquo;s files until
             they are deleted. Please do not share your download links.
           </li>
