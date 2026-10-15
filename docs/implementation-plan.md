@@ -168,6 +168,13 @@ Upload PDF
 - [x] Σελίδα **Privacy Policy** (περιεχόμενο από το mockup `docs/frontend UI UX/index.html`)
 - [x] Link «Privacy Policy» στο footer (με confirm modal όταν υπάρχει εργασία σε εξέλιξη)
 
+#### G. Login (προστέθηκε 2026-10-15 — μόνο frontend, βλ. απόφαση 8 στο `docs/frontend-notes.md`)
+- [x] Σελίδα `/login`: email (εταιρικό domain) + password (bullets, «ματάκι» για εμφάνιση) + κουμπί Login, μήνυμα λάθους
+- [x] Κοινός κωδικός στο `.env` του frontend (`AUTH_PASSWORD`, μόνο server-side), έλεγχος στον server του Next.js, signed httpOnly cookie
+- [x] Φύλακας (`src/proxy.ts`): όλες οι σελίδες χρειάζονται login εκτός από `/login` και `/privacy`
+- [x] Κουμπί «Log out»
+- [ ] ⚠️ Το backend API **δεν** προστατεύεται (καλείται απευθείας από τον browser): όποιος ξέρει τη διεύθυνσή του μπορεί να το χρησιμοποιήσει χωρίς login. Η προστασία του backend (π.χ. token) είναι ανοιχτό θέμα για την ομάδα backend.
+
 **Dependency:** χρειάζεται το API contract (§6 παρακάτω) νωρίς για να δουλέψει με mock data πριν είναι έτοιμο το πραγματικό backend.
 
 ---

@@ -37,6 +37,7 @@ Logo ViLabs (επιστροφή στην αρχική), animated background, toa
 | 3 | Result page | ~~Ξεχωριστό route `/result?requestId=...`~~ → **αντικαταστάθηκε από την απόφαση 6** (δεν υπάρχει πια `/result`). |
 | 4 | Logo | **Μετονομάστηκε σε `vilabs-logo.png`** (lowercase, ταιριάζει με το mockup, ασφαλές σε case-sensitive hosting όπως το Vercel). |
 | 5 | Excel previews με πολλά sheets | **Συμφωνήθηκε με το backend:** `gantt`/`kpi` = `{ sheets: [{ name, headers, rows }] }`, με τη σειρά του workbook. Το `ExcelViewer` δείχνει μία καρτέλα ανά sheet. |
+| 8 | Login (2026-10-15) | **Απλό login μόνο στο frontend.** Username = εταιρικό email (μόνο το domain `AUTH_EMAIL_DOMAIN`, default `vilabs.eu`), password = **ένας κοινός κωδικός** που ορίζεται στο `.env` (`AUTH_PASSWORD`, χωρίς `NEXT_PUBLIC_` → δεν φτάνει ποτέ στον browser). Ο έλεγχος γίνεται στον server του Next.js· σε επιτυχία δίνεται signed httpOnly cookie (8 ώρες). Λάθος στοιχεία → «Incorrect email or password.». Αν λείπει/είναι κενός ο κωδικός, **κανείς** δεν μπαίνει. Η εφαρμογή μένει όπως ήταν μετά το login. |
 | 7 | Σύνδεση με backend (2026-09-30) | **Χωρίς demo mode.** Η εφαρμογή συνδέεται μόνο με το backend του `NEXT_PUBLIC_API_URL`. Στο άνοιγμα της αρχικής γίνεται `GET /health`· αν αποτύχει (ή λείπει η ρύθμιση, ή περάσουν 60") εμφανίζεται σελίδα «Service unavailable» με «Try again», σαν να έχει πέσει το σύστημα. Το mock μένει μόνο ως εργαλείο ανάπτυξης, με ρητή ρύθμιση. |
 | 6 | Ροή αποτελεσμάτων (επιλογή **B**) | Αφού δεν υπάρχει edit, το Confirm δεν προσέφερε κάτι. Μόλις έρθει `done`, τα 3 αρχεία εμφανίζονται **κατευθείαν στην αρχική** ως κάρτες με **Download** + **προαιρετικό Preview**. Καταργήθηκαν το Confirm και η σελίδα `/result`· το «Return to Home Page» γίνεται «Process another Grant Agreement». |
 
@@ -107,6 +108,17 @@ Logo ViLabs (επιστροφή στην αρχική), animated background, toa
 ## Ημερολόγιο προόδου
 
 Νεότερα πάνω. Ενημερώνεται μετά από κάθε ολοκληρωμένο βήμα.
+
+### 2026-10-15 — Login με κοινό κωδικό ✅ (απόφαση 8)
+- **Σελίδα `/login`** (`LoginForm`): πεδίο email, πεδίο password με bullets και «ματάκι» (Eye/EyeOff) για εμφάνιση του κωδικού, κουμπί Login (ανενεργό μέχρι να συμπληρωθούν και τα δύο), μήνυμα λάθους. Ίδιο μήνυμα για λάθος email και λάθος κωδικό.
+- **Server-side**: `lib/auth/session.ts` (έλεγχος credentials με constant-time σύγκριση, signed session token με HMAC-SHA256 που χρησιμοποιεί τον κωδικό ως κλειδί — αλλαγή κωδικού = αποσύνδεση όλων), `POST /api/auth/login` (αργοπορία 800ms σε αποτυχία), `POST /api/auth/logout`.
+- **Φύλακας `src/proxy.ts`** (στο Next.js 16 το middleware λέγεται proxy): χωρίς έγκυρο cookie → ανακατεύθυνση στο `/login` (ή 401 για `/api/*`). Δημόσια: `/login`, `/privacy`, `/api/auth/*`, στατικά αρχεία.
+- **Κουμπί «Log out»** πάνω δεξιά στην αρχική (μικρό, διακριτικό) — προσθήκη μου, δεν είχε ζητηθεί· αφαιρείται εύκολα.
+- **Ρύθμιση:** στο `frontend/.env.local` το `AUTH_PASSWORD=` (προστέθηκε **κενό** — ο κωδικός ορίζεται από τη Θεοδώρα) και `AUTH_EMAIL_DOMAIN=vilabs.eu`. Πρότυπο στο `.env.example`. Στο deploy: ίδιες μεταβλητές στο Vercel (Environment Variables).
+- **Privacy Policy** ενημερώθηκε (ενότητες 2, 3, 8, 10): υπάρχει login, ένα απαραίτητο session cookie, το email δεν αποθηκεύεται, τα download links δεν προστατεύονται από το login.
+- Δοκιμασμένα (προσωρινός τυχαίος κωδικός δοκιμής, που αφαιρέθηκε μετά): χωρίς session → ανακατεύθυνση/401· λάθος κωδικός, λάθος domain, κόλπο υποτομέα (`a@evil.vilabs.eu`), email χωρίς `@`, κακό JSON → 401/400· σωστά στοιχεία (και με κεφαλαία) → 200 + cookie httpOnly· πλαστό cookie, πλαστή λήξη, σκουπίδια → απορρίπτονται· logout → κλειδώνει· η φόρμα στον browser (bullets, ματάκι, μήνυμα λάθους, είσοδος, αποσύνδεση, mobile). Lint + TypeScript καθαρά.
+- ⚠️ **Γνωστό όριο:** το login προστατεύει μόνο την ιστοσελίδα. Το backend API καλείται απευθείας από τον browser και **δεν** έχει έλεγχο ταυτότητας· όποιος ξέρει τη διεύθυνσή του (π.χ. μέσα από τα Network του browser) μπορεί να στείλει PDF και να χρεώσει το Anthropic χωρίς login. Για πλήρη προστασία χρειάζεται αλλαγή στο backend (θέμα για pipgreek/Γιώργο).
+- **Επόμενο βήμα:** ο κωδικός να οριστεί στο `frontend/.env.local` και, στο deploy, στο Vercel.
 
 ### 2026-10-01 — Προειδοποίηση για πιθανά λάθη ✅
 - Νέο `ResultsDisclaimer` στα αποτελέσματα, ακριβώς κάτω από τις 3 κάρτες αρχείων, πάνω από το «Download all»: μικρά γράμματα (12px, γκρι) με εικονίδιο πληροφορίας — «This application can make mistakes. Please review and validate the results before using them.»
