@@ -10,8 +10,6 @@ export const metadata: Metadata = {
 export const dynamic = "force-dynamic";
 
 export default function LoginPage() {
-  const { password, email } = getAuthConfig();
-  // Only the domain is used as a hint; the username itself is never sent to the page.
-  const emailDomain = email.split("@")[1] ?? "vilabs.eu";
-  return <LoginForm emailDomain={emailDomain} configured={password !== null} />;
+  const { password } = getAuthConfig();
+  return <LoginForm configured={password !== null} />;
 }

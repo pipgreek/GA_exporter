@@ -5,16 +5,14 @@ import { useRouter } from "next/navigation";
 import { useRef, useState, type FormEvent } from "react";
 
 interface LoginFormProps {
-  /** Only emails of this domain are accepted (shown as the placeholder). */
-  emailDomain: string;
   /** false when AUTH_PASSWORD is not set on the server → login cannot work. */
   configured: boolean;
 }
 
 const INPUT_CLASSES =
-  "w-full rounded-xl border border-slate-300 bg-white px-3 py-2.5 text-sm text-slate-900 placeholder:text-slate-400 focus:border-sky-500 focus:outline-none focus:ring-2 focus:ring-sky-200 disabled:opacity-60";
+  "w-full rounded-xl border border-slate-300 bg-white px-3 py-2.5 text-sm text-slate-900 focus:border-sky-500 focus:outline-none focus:ring-2 focus:ring-sky-200 disabled:opacity-60";
 
-export function LoginForm({ emailDomain, configured }: LoginFormProps) {
+export function LoginForm({ configured }: LoginFormProps) {
   const router = useRouter();
   const passwordRef = useRef<HTMLInputElement>(null);
   const [email, setEmail] = useState("");
@@ -71,20 +69,28 @@ export function LoginForm({ emailDomain, configured }: LoginFormProps) {
       <h1 className="text-center text-2xl font-extrabold tracking-tight text-slate-900">Login</h1>
 
       <div className="flex flex-col gap-1.5">
-        <label htmlFor="login-email" className="text-sm font-semibold text-slate-700">
+        <label htmlFor="login-user" className="text-sm font-semibold text-slate-700">
           Email
         </label>
+        {/*
+          No placeholder, and no hints for the browser to offer a saved/typed email:
+          a plain text field with a neutral name (type="email" / name="email" make
+          browsers suggest addresses), autocomplete off, no spellcheck/autocorrect.
+          The mobile keyboard still gets the email layout through inputMode.
+        */}
         <input
-          id="login-email"
-          type="email"
-          name="email"
-          autoComplete="username"
+          id="login-user"
+          type="text"
+          name="login-user"
+          autoComplete="off"
           inputMode="email"
+          autoCapitalize="none"
+          autoCorrect="off"
+          spellCheck={false}
           autoFocus
           required
           value={email}
           onChange={(e) => setEmail(e.target.value)}
-          placeholder={`name@${emailDomain}`}
           disabled={submitting || !configured}
           className={INPUT_CLASSES}
         />

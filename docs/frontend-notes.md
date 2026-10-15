@@ -109,6 +109,12 @@ Logo ViLabs (επιστροφή στην αρχική), animated background, toa
 
 Νεότερα πάνω. Ενημερώνεται μετά από κάθε ολοκληρωμένο βήμα.
 
+### 2026-10-15 — Πεδίο email χωρίς υπόδειγμα και χωρίς προτάσεις του browser ✅
+- Αφαιρέθηκε το αχνό υπόδειγμα `name@vilabs.eu` από το πεδίο email (και το σχετικό prop `emailDomain` του `LoginForm`).
+- Το πεδίο email δεν προσφέρει πια στον browser στοιχεία για πρόταση συμπλήρωσης: `type="text"` (το `type="email"`/`name="email"` ωθούν τους browsers να προτείνουν διευθύνσεις), ουδέτερο όνομα `login-user`, `autoComplete="off"`, χωρίς ορθογραφικό έλεγχο/autocorrect· το πληκτρολόγιο κινητού παραμένει σε διάταξη email (`inputMode="email"`).
+- Το πεδίο κωδικού κρατά `autoComplete="current-password"` ώστε να λειτουργούν οι password managers.
+- ⚠️ Όριο: οι προτάσεις προέρχονται από το προφίλ/τους αποθηκευμένους κωδικούς του ίδιου του browser και η σελίδα μπορεί μόνο να το αποθαρρύνει· ο Chrome μπορεί ακόμα να προτείνει αποθηκευμένο login. Αν συμβεί, αφαιρείται από τον browser (chrome://settings/passwords ή Shift+Delete πάνω στην πρόταση).
+
 ### 2026-10-15 — Login με κοινό κωδικό ✅ (απόφαση 8)
 - **Σελίδα `/login`** (`LoginForm`): πεδίο email, πεδίο password με bullets και «ματάκι» (Eye/EyeOff) για εμφάνιση του κωδικού, κουμπί Login (ανενεργό μέχρι να συμπληρωθούν και τα δύο), μήνυμα λάθους. Ίδιο μήνυμα για λάθος email και λάθος κωδικό.
 - **Server-side**: `lib/auth/session.ts` (έλεγχος credentials με constant-time σύγκριση, signed session token με HMAC-SHA256 που χρησιμοποιεί τον κωδικό ως κλειδί — αλλαγή κωδικού = αποσύνδεση όλων), `POST /api/auth/login` (αργοπορία 800ms σε αποτυχία), `POST /api/auth/logout`.
