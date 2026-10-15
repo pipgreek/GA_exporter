@@ -8,7 +8,10 @@ import { DocumentGenerationService } from '../document-generation/document-gener
 import { OUTPUT_FILES, outputStoragePath, previewStoragePath as previewPath } from './output-files';
 import { PdfProcessingJobData, PdfProcessingResult, ProcessingProgress } from './processing.types';
 
-@Processor(GA_EXPORT_QUEUE, { concurrency: 1 })
+// lockDuration is generous on purpose: on a throttled host (Render free, ~0.1 vCPU)
+// the event loop can stall for tens of seconds during PDF parsing, and the default
+// 30s lock then expires ("could not renew lock") and the job is marked stalled.
+@Processor(GA_EXPORT_QUEUE, { concurrency: 1, lockDuration: 300_000, stalledInterval: 300_000, maxStalledCount: 2 })
 export class PdfProcessingProcessor extends WorkerHost {
   constructor(
     private readonly storage: SupabaseStorageService,
