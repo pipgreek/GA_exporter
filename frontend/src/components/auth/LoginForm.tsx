@@ -1,6 +1,7 @@
 "use client";
 
 import { Eye, EyeOff, LoaderCircle, LogIn } from "lucide-react";
+import Image from "next/image";
 import { useRouter } from "next/navigation";
 import { useRef, useState, type FormEvent } from "react";
 
@@ -61,89 +62,100 @@ export function LoginForm({ configured }: LoginFormProps) {
   }
 
   return (
-    <form
-      onSubmit={onSubmit}
-      noValidate
-      className="fade-in mt-32 flex w-full max-w-sm flex-col gap-5 rounded-2xl border border-slate-200 bg-white px-6 py-8 shadow-sm"
-    >
-      <h1 className="text-center text-2xl font-extrabold tracking-tight text-slate-900">Login</h1>
-
-      <div className="flex flex-col gap-1.5">
-        <label htmlFor="login-user" className="text-sm font-semibold text-slate-700">
-          Email
-        </label>
-        {/*
-          No placeholder, and no hints for the browser to offer a saved/typed email:
-          a plain text field with a neutral name (type="email" / name="email" make
-          browsers suggest addresses), autocomplete off, no spellcheck/autocorrect.
-          The mobile keyboard still gets the email layout through inputMode.
-        */}
-        <input
-          id="login-user"
-          type="text"
-          name="login-user"
-          autoComplete="off"
-          inputMode="email"
-          autoCapitalize="none"
-          autoCorrect="off"
-          spellCheck={false}
-          autoFocus
-          required
-          value={email}
-          onChange={(e) => setEmail(e.target.value)}
-          disabled={submitting || !configured}
-          className={INPUT_CLASSES}
-        />
-      </div>
-
-      <div className="flex flex-col gap-1.5">
-        <label htmlFor="login-password" className="text-sm font-semibold text-slate-700">
-          Password
-        </label>
-        <div className="relative">
-          <input
-            ref={passwordRef}
-            id="login-password"
-            type={showPassword ? "text" : "password"}
-            name="password"
-            autoComplete="current-password"
-            required
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-            disabled={submitting || !configured}
-            className={`${INPUT_CLASSES} pr-11`}
-          />
-          <button
-            type="button"
-            onClick={() => setShowPassword((shown) => !shown)}
-            aria-label={showPassword ? "Hide password" : "Show password"}
-            aria-pressed={showPassword}
-            title={showPassword ? "Hide password" : "Show password"}
-            className="absolute inset-y-0 right-0 flex w-11 items-center justify-center rounded-r-xl text-slate-400 transition hover:text-slate-700 focus:outline-none focus-visible:ring-2 focus-visible:ring-sky-300"
-          >
-            {showPassword ? <EyeOff className="size-5" aria-hidden /> : <Eye className="size-5" aria-hidden />}
-          </button>
-        </div>
-      </div>
-
-      {error && (
-        <p role="alert" className="rounded-xl border border-rose-200 bg-rose-50 px-3 py-2 text-sm text-rose-700">
-          {error}
-        </p>
-      )}
-
-      <button
-        type="submit"
-        disabled={submitting || !configured || email.trim() === "" || password === ""}
-        className="flex items-center justify-center gap-2 rounded-xl bg-sky-600 px-6 py-2.5 font-semibold text-white shadow-lg shadow-sky-600/20 transition-all hover:bg-sky-700 disabled:cursor-not-allowed disabled:opacity-40 disabled:shadow-none"
+    <div className="fade-in mt-28 flex w-full max-w-sm flex-col items-center gap-6 sm:mt-8">
+      {/* Product logo: shown on the login page only, right above the form. */}
+      <Image
+        src="/ga-exporter-logo.png"
+        alt="GA Exporter"
+        width={265}
+        height={190}
+        priority
+        className="h-auto w-44"
+      />
+      <form
+        onSubmit={onSubmit}
+        noValidate
+        className="flex w-full flex-col gap-5 rounded-2xl border border-slate-200 bg-white px-6 py-8 shadow-sm"
       >
-        {submitting ? (
-          <LoaderCircle className="size-4 animate-spin" aria-hidden />
-        ) : (
-          <LogIn className="size-4" aria-hidden />
+        <h1 className="text-center text-2xl font-extrabold tracking-tight text-slate-900">Login</h1>
+
+        <div className="flex flex-col gap-1.5">
+          <label htmlFor="login-user" className="text-sm font-semibold text-slate-700">
+            Email
+          </label>
+          {/*
+            No placeholder, and no hints for the browser to offer a saved/typed email:
+            a plain text field with a neutral name (type="email" / name="email" make
+            browsers suggest addresses), autocomplete off, no spellcheck/autocorrect.
+            The mobile keyboard still gets the email layout through inputMode.
+          */}
+          <input
+            id="login-user"
+            type="text"
+            name="login-user"
+            autoComplete="off"
+            inputMode="email"
+            autoCapitalize="none"
+            autoCorrect="off"
+            spellCheck={false}
+            autoFocus
+            required
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+            disabled={submitting || !configured}
+            className={INPUT_CLASSES}
+          />
+        </div>
+
+        <div className="flex flex-col gap-1.5">
+          <label htmlFor="login-password" className="text-sm font-semibold text-slate-700">
+            Password
+          </label>
+          <div className="relative">
+            <input
+              ref={passwordRef}
+              id="login-password"
+              type={showPassword ? "text" : "password"}
+              name="password"
+              autoComplete="current-password"
+              required
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+              disabled={submitting || !configured}
+              className={`${INPUT_CLASSES} pr-11`}
+            />
+            <button
+              type="button"
+              onClick={() => setShowPassword((shown) => !shown)}
+              aria-label={showPassword ? "Hide password" : "Show password"}
+              aria-pressed={showPassword}
+              title={showPassword ? "Hide password" : "Show password"}
+              className="absolute inset-y-0 right-0 flex w-11 items-center justify-center rounded-r-xl text-slate-400 transition hover:text-slate-700 focus:outline-none focus-visible:ring-2 focus-visible:ring-sky-300"
+            >
+              {showPassword ? <EyeOff className="size-5" aria-hidden /> : <Eye className="size-5" aria-hidden />}
+            </button>
+          </div>
+        </div>
+
+        {error && (
+          <p role="alert" className="rounded-xl border border-rose-200 bg-rose-50 px-3 py-2 text-sm text-rose-700">
+            {error}
+          </p>
         )}
-        Login
-      </button>
-    </form>
+
+        <button
+          type="submit"
+          disabled={submitting || !configured || email.trim() === "" || password === ""}
+          className="flex items-center justify-center gap-2 rounded-xl bg-sky-600 px-6 py-2.5 font-semibold text-white shadow-lg shadow-sky-600/20 transition-all hover:bg-sky-700 disabled:cursor-not-allowed disabled:opacity-40 disabled:shadow-none"
+        >
+          {submitting ? (
+            <LoaderCircle className="size-4 animate-spin" aria-hidden />
+          ) : (
+            <LogIn className="size-4" aria-hidden />
+          )}
+          Login
+        </button>
+      </form>
+    </div>
   );
 }
