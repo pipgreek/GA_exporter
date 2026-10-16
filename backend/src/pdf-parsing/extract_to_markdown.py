@@ -1,8 +1,10 @@
 from __future__ import annotations
 
+import os
 import re
+import subprocess
 import sys
-from io import BytesIO
+import tempfile
 
 import pdfplumber
 from pdfplumber.utils import extract_text
@@ -35,43 +37,82 @@ def table_to_markdown(rows: list[list[object]]) -> str:
     return "\n".join(lines)
 
 
+PAGE_SEPARATOR = "\n\n---\n\n"
+# Pages per worker process. pdfminer/pdfplumber memory grows with every page parsed and is
+# not released within a process, so on a 512MB host a whole 130-page GA in one process
+# exceeds the limit. Each batch runs in a short-lived child process whose memory is
+# returned to the OS when it exits.
+BATCH_PAGES = 12
+
+
+def _page_markdown(page, page_number: int) -> str:
+    tables = sorted(page.find_tables(), key=lambda table: (table.bbox[1], table.bbox[0]))
+    table_boxes = [table.bbox for table in tables]
+
+    # Keep text outside detected table boxes, then emit table cells once as Markdown.
+    text_chars = []
+    for char in page.chars:
+        center_x = (char["x0"] + char["x1"]) / 2
+        center_y = (char["top"] + char["bottom"]) / 2
+        inside_table = any(
+            x0 <= center_x <= x1 and top <= center_y <= bottom
+            for x0, top, x1, bottom in table_boxes
+        )
+        if not inside_table:
+            text_chars.append(char)
+
+    page_text = extract_text(text_chars, x_tolerance=2, y_tolerance=3) or ""
+    page_parts = [f"## Page {page_number}"]
+    if page_text.strip():
+        page_parts.append(page_text.strip())
+
+    for table_number, table in enumerate(tables, start=1):
+        markdown_table = table_to_markdown(table.extract() or [])
+        if markdown_table:
+            page_parts.extend([f"### Table {table_number}", markdown_table])
+
+    if len(page_parts) == 1:
+        page_parts.append("[No extractable text or tables on this page.]")
+    return "\n\n".join(page_parts)
+
+
+def extract_pages(pdf_path: str, first: int, last: int) -> str:
+    """Markdown for pages first..last (1-based, inclusive), joined like the full document."""
+    sections: list[str] = []
+    with pdfplumber.open(pdf_path) as document:
+        for page_number in range(first, min(last, len(document.pages)) + 1):
+            page = document.pages[page_number - 1]
+            sections.append(_page_markdown(page, page_number))
+            page.flush_cache()
+    return PAGE_SEPARATOR.join(sections)
+
+
+def _run_child(*args: str) -> str:
+    result = subprocess.run(
+        [sys.executable, os.path.abspath(__file__), *args],
+        capture_output=True,
+        encoding="utf-8",
+        errors="replace",
+    )
+    if result.returncode != 0:
+        raise RuntimeError(f"worker failed ({result.returncode}): {result.stderr.strip()[:200]}")
+    return result.stdout
+
+
 def extract_document(pdf_bytes: bytes) -> str:
-    pages_markdown: list[str] = []
-    with pdfplumber.open(BytesIO(pdf_bytes)) as document:
-        page_count = len(document.pages)
-        pages_markdown.append(f"# Grant Agreement\n\nPages: {page_count}")
+    with tempfile.TemporaryDirectory() as folder:
+        pdf_path = os.path.join(folder, "input.pdf")
+        with open(pdf_path, "wb") as handle:
+            handle.write(pdf_bytes)
 
-        for page_number, page in enumerate(document.pages, start=1):
-            tables = sorted(page.find_tables(), key=lambda table: (table.bbox[1], table.bbox[0]))
-            table_boxes = [table.bbox for table in tables]
+        page_count = int(_run_child("--count", pdf_path).strip())
+        sections = [f"# Grant Agreement\n\nPages: {page_count}"]
+        for first in range(1, page_count + 1, BATCH_PAGES):
+            batch = _run_child("--pages", str(first), str(first + BATCH_PAGES - 1), pdf_path)
+            if batch.strip():
+                sections.append(batch.strip("\n"))
 
-            # Keep text outside detected table boxes, then emit table cells once as Markdown.
-            text_chars = []
-            for char in page.chars:
-                center_x = (char["x0"] + char["x1"]) / 2
-                center_y = (char["top"] + char["bottom"]) / 2
-                inside_table = any(
-                    x0 <= center_x <= x1 and top <= center_y <= bottom
-                    for x0, top, x1, bottom in table_boxes
-                )
-                if not inside_table:
-                    text_chars.append(char)
-
-            page_text = extract_text(text_chars, x_tolerance=2, y_tolerance=3) or ""
-            page_parts = [f"## Page {page_number}"]
-            if page_text.strip():
-                page_parts.append(page_text.strip())
-
-            for table_number, table in enumerate(tables, start=1):
-                markdown_table = table_to_markdown(table.extract() or [])
-                if markdown_table:
-                    page_parts.extend([f"### Table {table_number}", markdown_table])
-
-            if len(page_parts) == 1:
-                page_parts.append("[No extractable text or tables on this page.]")
-            pages_markdown.append("\n\n".join(page_parts))
-
-    return "\n\n---\n\n".join(pages_markdown) + "\n"
+    return PAGE_SEPARATOR.join(sections) + "\n"
 
 
 _ARTICLE1_HEADING = re.compile(r"^ARTICLE\s*1\s*—\s*SUBJECT OF THE AGREEMENT$", re.IGNORECASE)
@@ -126,6 +167,17 @@ def trim_boilerplate(markdown: str) -> str:
     return "\n".join(kept_lines)
 
 
+def worker_main(argv: list[str]) -> int:
+    if hasattr(sys.stdout, "reconfigure"):
+        sys.stdout.reconfigure(encoding="utf-8", errors="replace")
+    if argv[0] == "--count":
+        with pdfplumber.open(argv[1]) as document:
+            print(len(document.pages))
+        return 0
+    sys.stdout.write(extract_pages(argv[3], int(argv[1]), int(argv[2])))
+    return 0
+
+
 def main() -> int:
     if hasattr(sys.stdout, "reconfigure"):
         sys.stdout.reconfigure(encoding="utf-8", errors="replace")
@@ -153,4 +205,6 @@ def main() -> int:
 
 
 if __name__ == "__main__":
+    if len(sys.argv) > 1 and sys.argv[1] in ("--count", "--pages"):
+        raise SystemExit(worker_main(sys.argv[1:]))
     raise SystemExit(main())

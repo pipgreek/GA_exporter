@@ -1,0 +1,8 @@
+**/node_modules
+**/.next
+backend/dist
+backend/tsconfig.build.tsbuildinfo
+**/.env
+**/.env.*
+.git
+docs
