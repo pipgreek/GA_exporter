@@ -99,8 +99,8 @@ Logo ViLabs (επιστροφή στην αρχική), animated background, toa
 
 - ⚠️ **Το cleanup των αρχείων ΔΕΝ είναι υλοποιημένο στο backend.** Το `JOB_RETENTION_SECONDS=86400` λήγει μόνο τις εγγραφές του Redis (μετά από 24 ώρες το `/status` δίνει 404). Τα αρχεία στο Supabase (PDF, εξαγόμενο κείμενο, παραγόμενα) **δεν διαγράφονται πουθενά στον κώδικα** (plan §5.I: «Cron/job που διαγράφει αρχεία» είναι ακόμα ανοιχτό). Το κείμενο της ενότητας 7 υπόσχεται διαγραφή σε 24 ώρες — **πρέπει να υλοποιηθεί πριν δημοσιευτεί η Policy**, αλλιώς η δήλωση δεν ισχύει. Θέμα για τον pipgreek.
 - **Το bucket του Supabase να είναι private** (δεν φαίνεται από τον κώδικα)· η ενότητα 10 λέει ότι μόνο ο server έχει πρόσβαση.
-- **Ενότητα 10 / πρόσβαση:** το API δεν έχει authentication (contract v1) — όποιος έχει το download link (με τυχαίο UUID) κατεβάζει τα αρχεία. Η Policy το δηλώνει ρητά. Αν θέλετε αυστηρότερη προστασία, χρειάζεται αλλαγή στο backend.
-- **Περιοχές (regions) των παρόχων** (Vercel, Render, Supabase, Upstash, Anthropic) και αν υπάρχουν συμβάσεις επεξεργασίας (DPA) / Standard Contractual Clauses — η ενότητα 5 λέει ότι οι μεταφορές εκτός ΕΟΧ καλύπτονται από SCCs.
+- **Ενότητα 10 / πρόσβαση:** ⚠️ το κείμενο (από 2026-10-16) λέει ότι **τα links για κατέβασμα απαιτούν login**. Αυτό ισχύει **μόνο** στο deploy του branch `deploy/single-container` (web app + backend στο ίδιο container στο Render, backend προσβάσιμο μόνο μέσω της διαδρομής `/backend/*` που καλύπτει ο φύλακας του login, `src/proxy.ts`). Στηρίζεται σε **ανάγνωση κώδικα, όχι σε δοκιμή**: μόλις γίνει το πραγματικό deploy πρέπει να επιβεβαιωθεί ότι (α) ένα link `/backend/download/...` χωρίς login ανακατευθύνει στο login ή δίνει 401 και (β) το backend δεν είναι προσβάσιμο από το internet απευθείας. Αν το deploy γίνει αλλιώς (π.χ. ξεχωριστό backend και Vercel), το κείμενο πρέπει να γυρίσει στην προηγούμενη διατύπωση («τα links δεν προστατεύονται από το login»).
+- **Περιοχές (regions) των παρόχων** (Render, Supabase, Upstash, Anthropic — το Vercel δεν χρησιμοποιείται στο single-container deploy) και αν υπάρχουν συμβάσεις επεξεργασίας (DPA) / Standard Contractual Clauses — η ενότητα 5 λέει ότι οι μεταφορές εκτός ΕΟΧ καλύπτονται από SCCs.
 - **Όροι του Anthropic API** για χρήση/διατήρηση των δεδομένων που στέλνονται (η Policy λέει γενικά «may include keeping it for a limited period»).
 - **Νομικός έλεγχος** από υπεύθυνο της VILABS (δεν είναι νομικό κείμενο εγκεκριμένο από νομικό).
 - Αν στο μέλλον προστεθούν cookies/analytics (π.χ. Vercel Analytics) ή αλλάξουν τα δεδομένα που αποθηκεύονται, να ενημερωθεί το κείμενο (ενότητες 3, 5, 7, 8).
@@ -108,6 +108,13 @@ Logo ViLabs (επιστροφή στην αρχική), animated background, toa
 ## Ημερολόγιο προόδου
 
 Νεότερα πάνω. Ενημερώνεται μετά από κάθε ολοκληρωμένο βήμα.
+
+### 2026-10-16 — Privacy Policy για το deploy σε ένα container ✅
+- Βάση: το branch `deploy/single-container` του pipgreek (Dockerfile + `start.sh`: Next.js δημόσια, backend μόνο εσωτερικά, `next.config.ts` με rewrite `/backend/*`).
+- **Ενότητα 5 (πάροχοι):** αφαιρέθηκε το **Vercel** και η Render περιγράφεται πλέον ως φιλοξενία ολόκληρης της εφαρμογής (σελίδες, login, server επεξεργασίας). Αφαιρέθηκε η πρόταση «ο browser στέλνει τα έγγραφα απευθείας στον server επεξεργασίας»· τώρα δηλώνει ότι τα έγγραφα δεν περνούν από άλλον πάροχο.
+- **Ενότητα 10 (ασφάλεια):** το «τα links δεν προστατεύονται από το login» αντικαταστάθηκε από «όλα (σελίδες, upload, preview, download) περνούν από το ίδιο login, άρα ένα link λειτουργεί μόνο για συνδεδεμένο χρήστη» + «όποιος ξέρει τον κοινό κωδικό μπορεί να χρησιμοποιήσει την εφαρμογή».
+- Ημερομηνία κειμένου: 16/10/2026.
+- ⚠️ Οι δηλώσεις για την προστασία των links στηρίζονται σε ανάγνωση κώδικα, όχι σε δοκιμή με πραγματικό deploy — βλ. «Privacy Policy — προς επιβεβαίωση», ενότητα 10. Αν το deploy δεν γίνει τελικά έτσι, το κείμενο πρέπει να γυρίσει πίσω.
 
 ### 2026-10-16 — Τίτλος καρτέλας της σελίδας login ✅
 - Ο τίτλος της καρτέλας στη σελίδα `/login` άλλαξε από «Login — ViLabs» σε **«Login — GA Exporter»** (`src/app/login/page.tsx`).
@@ -179,7 +186,7 @@ Logo ViLabs (επιστροφή στην αρχική), animated background, toa
 - **Error/retry UX σε αποτυχία LLM** (plan §7): απόφαση ομάδας· αν χρειαστεί retry χωρίς νέο upload → endpoint στο backend + μικρή αλλαγή στο frontend.
 - **Privacy Policy**: έλεγχος με τον pipgreek (βλ. «Privacy Policy — προς επιβεβαίωση»).
 - **Αυτόματα tests**: αναβλήθηκαν. Πρόταση όταν γίνει deploy: λίστα χειροκίνητου ελέγχου και/ή 1–2 end-to-end tests (Playwright) για τη βασική ροή.
-- **Deploy**: χωρίς ημερομηνία. Σειρά: backend στο Render → frontend στο Vercel (`NEXT_PUBLIC_API_URL`) → `CORS_ORIGINS` στο backend με τη διεύθυνση του Vercel.
+- **Deploy**: χωρίς ημερομηνία. ~~Σειρά: backend στο Render → frontend στο Vercel (`NEXT_PUBLIC_API_URL`) → `CORS_ORIGINS` στο backend με τη διεύθυνση του Vercel.~~ **Ενημέρωση 2026-10-16:** ο pipgreek ετοιμάζει deploy σε **ένα container στο Render** (branch `deploy/single-container`): frontend και backend μαζί, `NEXT_PUBLIC_API_URL=/backend`, χωρίς Vercel και χωρίς CORS ανάμεσά τους.
 - **KPIs** (στοιχεία από τον Βασίλη): αλλαγές σε backend/LLM· το frontend δεν αναμένεται να αλλάξει.
 
 ### 2026-09-30 — Χωρίς demo mode, έλεγχος backend στο άνοιγμα ✅ (απόφαση 7)

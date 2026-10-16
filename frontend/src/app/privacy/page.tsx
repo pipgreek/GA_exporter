@@ -8,20 +8,19 @@ export const metadata: Metadata = {
 };
 
 // Written from the actual backend implementation (backend/src/processing,
-// backend/src/llm, backend/src/pdf-parsing) and docs/api-contract.md, 2026-09-30.
+// backend/src/llm, backend/src/pdf-parsing) and docs/api-contract.md, 2026-09-30,
+// and updated 2026-10-16 for the single-container deployment on Render
+// (branch deploy/single-container: web app + backend in one container, the
+// backend reachable only through the login-protected /backend/* path).
 // Items that must be confirmed or implemented before publishing are listed in
 // docs/frontend-notes.md ("Privacy Policy — προς επιβεβαίωση").
-const LAST_UPDATED = "15/10/2026";
+const LAST_UPDATED = "16/10/2026";
 const RETENTION_HOURS = 24;
 
 const PROCESSORS = [
   {
-    name: "Vercel",
-    role: "Hosts the web pages of the Application. Your documents are not sent through Vercel: your browser sends them directly to our processing server.",
-  },
-  {
     name: "Render",
-    role: "Runs our processing server, which receives your PDF, extracts its text and generates the files.",
+    role: "Hosts the Application: the web pages, the sign-in and the processing server that receives your PDF, extracts its text and generates the files. Your documents are uploaded to this server and are not sent through any other hosting provider.",
   },
   {
     name: "Supabase",
@@ -243,11 +242,15 @@ export default function PrivacyPage() {
           </li>
           <li>Data is stored only temporarily and deleted automatically.</li>
           <li>
-            Opening the Application requires signing in with the shared password, which is stored
-            only on our server and never sent to your browser. However, the download links of a
-            request are not protected by the sign-in: they contain a random, hard-to-guess
-            identifier, and anyone who obtains a link can download that request&rsquo;s files until
-            they are deleted. Please do not share your download links.
+            Using the Application requires signing in with the shared password, which is stored only
+            on our server and never sent to your browser. This applies to everything: opening the
+            pages, uploading a PDF, viewing previews and downloading files all go through the same
+            sign-in, so a download link only works for someone who is signed in. Download links also
+            contain a random, hard-to-guess identifier.
+          </li>
+          <li>
+            Anyone who knows the shared password can use the Application. Please keep it within the
+            team and do not share it outside it.
           </li>
         </List>
       </Section>
