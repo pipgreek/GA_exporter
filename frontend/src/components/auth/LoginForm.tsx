@@ -65,7 +65,7 @@ export function LoginForm({ configured }: LoginFormProps) {
     <div className="fade-in mt-28 flex w-full max-w-sm flex-col items-center gap-6 sm:mt-8">
       {/* Product logo: shown on the login page only, right above the form. */}
       <Image
-        src="/ga-exporter-logo.png"
+        src="/ga-exporter-logo-v2.png"
         alt="GA Exporter"
         width={265}
         height={190}
