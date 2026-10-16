@@ -3,7 +3,7 @@ import { LoginForm } from "@/components/auth/LoginForm";
 import { getAuthConfig } from "@/lib/auth/session";
 
 export const metadata: Metadata = {
-  title: "Login — ViLabs",
+  title: "Login — GA Exporter",
 };
 
 // Read AUTH_* at request time (not baked in at build time).
