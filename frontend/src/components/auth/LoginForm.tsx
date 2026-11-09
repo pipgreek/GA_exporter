@@ -3,6 +3,7 @@
 import { Eye, EyeOff, LoaderCircle, LogIn } from "lucide-react";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
+import { safeNextPath } from "@/lib/auth/redirect";
 import { useRef, useState, type FormEvent } from "react";
 
 interface LoginFormProps {
@@ -38,7 +39,7 @@ export function LoginForm({ configured }: LoginFormProps) {
       });
 
       if (res.ok) {
-        router.replace("/");
+        router.replace(safeNextPath(new URLSearchParams(window.location.search).get("next")));
         router.refresh();
         return; // keep the button busy while the page changes
       }

@@ -1,4 +1,5 @@
 import { NextResponse, type NextRequest } from "next/server";
+import { safeNextPath } from "@/lib/auth/redirect";
 import { getAuthConfig, SESSION_COOKIE, verifySessionToken } from "@/lib/auth/session";
 
 /** Reachable without logging in (Next.js 16 "proxy", formerly middleware). */
@@ -22,7 +23,7 @@ export async function proxy(request: NextRequest) {
   const authenticated = await verifySessionToken(request.cookies.get(SESSION_COOKIE)?.value, password);
 
   if (pathname === "/login" && authenticated) {
-    return NextResponse.redirect(new URL("/", request.url));
+    return NextResponse.redirect(new URL(safeNextPath(request.nextUrl.searchParams.get("next")), request.url));
   }
   if (isPublic(pathname) || authenticated) {
     return NextResponse.next();
@@ -30,7 +31,11 @@ export async function proxy(request: NextRequest) {
   if (pathname.startsWith("/api/")) {
     return NextResponse.json({ message: "Authentication required." }, { status: 401 });
   }
-  return NextResponse.redirect(new URL("/login", request.url));
+  // Remember the page the visitor asked for, so the login can send them back to it.
+  const loginUrl = new URL("/login", request.url);
+  const target = pathname + request.nextUrl.search;
+  if (target !== "/") loginUrl.searchParams.set("next", target);
+  return NextResponse.redirect(loginUrl);
 }
 
 export const config = {
