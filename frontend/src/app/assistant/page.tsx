@@ -1,4 +1,3 @@
-import { LogoutButton } from "@/components/auth/LogoutButton";
 import { AssistantView } from "@/components/assistant/AssistantView";
 import { BackendGate } from "@/components/home/BackendGate";
 
@@ -7,7 +6,6 @@ import { BackendGate } from "@/components/home/BackendGate";
 export default function AssistantPage() {
   return (
     <>
-      <LogoutButton />
       <BackendGate>
         <AssistantView />
       </BackendGate>
