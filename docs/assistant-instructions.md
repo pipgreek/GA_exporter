@@ -87,7 +87,8 @@ Call render_documents with the code and the three JSON objects. If it reports a 
 and call it again.
 
 STEP 6 - TELL THE USER WHAT TO DO WITH THE RESULT
-Give the links exactly as returned and explain them:
+Give the links exactly as returned, each as the full plain URL on its own line (never shortened,
+never replaced by "..."), and explain them:
   - INFO (Word): the project information document
   - Gantt (Excel): work packages, tasks, deliverables and milestones over time
   - KPI (Excel): the monitoring indicators
