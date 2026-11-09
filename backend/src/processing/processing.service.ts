@@ -29,9 +29,24 @@ export class ProcessingService {
     return { requestId };
   }
 
-  async enqueuePdf(pdfStoragePath: string, requestId = randomUUID()): Promise<{ requestId: string }> {
+  /** Assistant flow: parse only (no LLM); the returned requestId is the code the user hands to the assistant. */
+  async submitPdfForAssistant(pdf: Buffer): Promise<{ requestId: string }> {
+    if (pdf.length < 5 || pdf.subarray(0, 5).toString('ascii') !== '%PDF-') {
+      throw new BadRequestException('The uploaded file is not a valid PDF.');
+    }
+    const requestId = randomUUID();
+    const pdfStoragePath = await this.storageUpload(requestId, pdf);
+    await this.enqueuePdf(pdfStoragePath, requestId, 'extract-only');
+    return { requestId };
+  }
+
+  async enqueuePdf(
+    pdfStoragePath: string,
+    requestId = randomUUID(),
+    mode?: PdfProcessingJobData['mode'],
+  ): Promise<{ requestId: string }> {
     const retentionSeconds = this.config.getOrThrow<number>('JOB_RETENTION_SECONDS');
-    await this.queue.add('extract-pdf', { requestId, pdfStoragePath }, {
+    await this.queue.add('extract-pdf', { requestId, pdfStoragePath, ...(mode ? { mode } : {}) }, {
       jobId: requestId,
       removeOnComplete: { age: retentionSeconds, count: 1000 },
       removeOnFail: { age: retentionSeconds, count: 1000 },

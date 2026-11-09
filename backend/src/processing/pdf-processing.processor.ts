@@ -6,7 +6,7 @@ import { PdfParserService } from '../pdf-parsing/pdf-parser.service';
 import { LlmService } from '../llm/llm.service';
 import { DocumentGenerationService } from '../document-generation/document-generation.service';
 import { OUTPUT_FILES, outputStoragePath, previewStoragePath as previewPath } from './output-files';
-import { PdfProcessingJobData, PdfProcessingResult, ProcessingProgress } from './processing.types';
+import { ExtractOnlyResult, PdfProcessingJobData, PdfProcessingResult, ProcessingProgress } from './processing.types';
 
 // lockDuration is generous on purpose: on a throttled host (Render free, ~0.1 vCPU)
 // the event loop can stall for tens of seconds during PDF parsing, and the default
@@ -22,7 +22,8 @@ export class PdfProcessingProcessor extends WorkerHost {
     super();
   }
 
-  async process(job: Job<PdfProcessingJobData>): Promise<PdfProcessingResult> {
+  async process(job: Job<PdfProcessingJobData>): Promise<PdfProcessingResult | ExtractOnlyResult> {
+    if (job.data.mode === 'extract-only') return this.extractOnly(job);
     try {
       await this.setProgress(job, { status: 'scanning', progress: 5, message: 'Loading PDF from storage.' });
       const pdf = await this.storage.download(job.data.pdfStoragePath);
@@ -92,6 +93,35 @@ export class PdfProcessingProcessor extends WorkerHost {
         markdownStoragePath,
       });
       return result;
+    } catch (error) {
+      await this.setProgress(job, { status: 'error', progress: 100, message: 'PDF processing failed.' });
+      throw error;
+    }
+  }
+
+  /** Assistant flow: PDF -> markdown only. No LLM calls, no documents. */
+  private async extractOnly(job: Job<PdfProcessingJobData>): Promise<ExtractOnlyResult> {
+    try {
+      await this.setProgress(job, { status: 'scanning', progress: 10, message: 'Loading PDF from storage.' });
+      const pdf = await this.storage.download(job.data.pdfStoragePath);
+
+      await this.setProgress(job, { status: 'extracting', progress: 30, message: 'Extracting text and tables.' });
+      const markdown = await this.parser.extractToMarkdown(pdf);
+      const markdownStoragePath = `${job.data.requestId}/intermediate/grant-agreement.md`;
+      await this.storage.upload(markdownStoragePath, Buffer.from(markdown, 'utf8'), 'text/markdown; charset=utf-8');
+
+      await this.setProgress(job, {
+        status: 'done',
+        progress: 100,
+        message: 'Text extracted. Your code is ready.',
+        markdownStoragePath,
+      });
+      return {
+        markdownStoragePath,
+        pageCount: (markdown.match(/^## Page/gm) ?? []).length,
+        tableCount: (markdown.match(/^### Table/gm) ?? []).length,
+        characterCount: markdown.length,
+      };
     } catch (error) {
       await this.setProgress(job, { status: 'error', progress: 100, message: 'PDF processing failed.' });
       throw error;

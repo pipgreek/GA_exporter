@@ -8,12 +8,12 @@ export class SupabaseStorageService {
 
   constructor(private readonly config: ConfigService) {}
 
-  async upload(path: string, file: Buffer, contentType: string): Promise<string> {
+  async upload(path: string, file: Buffer, contentType: string, overwrite = false): Promise<string> {
     const bucket = this.config.getOrThrow<string>('SUPABASE_BUCKET');
     const { data, error } = await this.getClient()
       .storage
       .from(bucket)
-      .upload(path, file, { contentType, upsert: false });
+      .upload(path, file, { contentType, upsert: overwrite });
 
     if (error) {
       throw new ServiceUnavailableException('File storage upload failed.');

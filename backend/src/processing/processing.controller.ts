@@ -31,6 +31,17 @@ export class ProcessingController {
     return this.processing.submitPdf(file.buffer);
   }
 
+  /** Assistant flow: parse only; the returned requestId is the code for the external assistant. */
+  @Post('assistant/upload')
+  @HttpCode(HttpStatus.ACCEPTED)
+  @UseInterceptors(FileInterceptor('file', { limits: { fileSize: MAX_PDF_UPLOAD_BYTES } }))
+  uploadPdfForAssistant(@UploadedFile() file?: Express.Multer.File): Promise<{ requestId: string }> {
+    if (!file) {
+      throw new BadRequestException('A PDF file is required in the "file" form field.');
+    }
+    return this.processing.submitPdfForAssistant(file.buffer);
+  }
+
   @Get('status/:requestId')
   getStatus(@Param('requestId', new ParseUUIDPipe({ version: '4' })) requestId: string) {
     return this.processing.getStatus(requestId);

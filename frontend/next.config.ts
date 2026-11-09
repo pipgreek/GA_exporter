@@ -12,7 +12,11 @@ const nextConfig: NextConfig = {
     proxyClientMaxBodySize: "30mb",
   },
   async rewrites() {
-    return [{ source: "/backend/:path*", destination: `${BACKEND_INTERNAL_URL}/:path*` }];
+    return [
+      { source: "/backend/:path*", destination: `${BACKEND_INTERNAL_URL}/:path*` },
+      // MCP endpoint for external assistants; the backend checks its bearer token.
+      { source: "/mcp", destination: `${BACKEND_INTERNAL_URL}/mcp` },
+    ];
   },
 };
 
