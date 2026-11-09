@@ -1,10 +1,15 @@
 "use client";
 
 import { ChevronUp } from "lucide-react";
+import { usePathname } from "next/navigation";
 import { useNavigationGuard } from "./NavigationGuard";
 
 export function SiteFooter() {
   const { openPrivacy } = useNavigationGuard();
+  const pathname = usePathname();
+
+  // The assistant page is standalone: no footer, so nothing on it leads to another page.
+  if (pathname.startsWith("/assistant")) return null;
 
   return (
     <footer className="relative z-10 mt-20 flex w-full items-center justify-between gap-4 border-t border-slate-800 bg-slate-900 px-6 py-6 text-sm text-slate-400 sm:px-12">
