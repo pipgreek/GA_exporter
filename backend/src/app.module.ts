@@ -8,6 +8,7 @@ import { QueueModule } from './infrastructure/queue/queue.module';
 import { StorageModule } from './infrastructure/storage/storage.module';
 import { ProcessingModule } from './processing/processing.module';
 import { LlmModule } from './llm/llm.module';
+import { McpModule } from './mcp/mcp.module';
 import { DocumentGenerationModule } from './document-generation/document-generation.module';
 import { parseRedisConnection } from './infrastructure/queue/redis-connection';
 
@@ -23,6 +24,10 @@ const validationSchema = Joi.object({
   LLM_PROMPTS_DIR: Joi.string().allow('').optional(),
   LLM_MAX_RETRIES: Joi.number().integer().min(0).max(5).default(2),
   PDF_PYTHON_EXECUTABLE: Joi.string().default(process.platform === 'win32' ? 'python' : 'python3'),
+  // MCP endpoint for external assistants. Unset = the /mcp route is disabled.
+  MCP_AUTH_TOKEN: Joi.string().min(24).allow('').optional(),
+  // Public base URL of the app (e.g. https://ga-exporter.onrender.com), used for download links.
+  PUBLIC_BASE_URL: Joi.string().uri().allow('').optional(),
   JOB_RETENTION_SECONDS: Joi.number().integer().min(3600).default(86400),
 });
 
@@ -45,6 +50,7 @@ const validationOptions = { abortEarly: false };
     LlmModule,
     DocumentGenerationModule,
     ProcessingModule,
+    McpModule,
   ],
 })
 export class AppModule {}

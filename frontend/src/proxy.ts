@@ -3,7 +3,8 @@ import { safeNextPath } from "@/lib/auth/redirect";
 import { getAuthConfig, SESSION_COOKIE, verifySessionToken } from "@/lib/auth/session";
 
 /** Reachable without logging in (Next.js 16 "proxy", formerly middleware). */
-const PUBLIC_PATHS = ["/login", "/privacy"];
+// /mcp has no login cookie by design: the backend requires its own bearer token there.
+const PUBLIC_PATHS = ["/login", "/privacy", "/mcp"];
 
 function isPublic(pathname: string): boolean {
   return PUBLIC_PATHS.includes(pathname) || pathname.startsWith("/api/auth/");
