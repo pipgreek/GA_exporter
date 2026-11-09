@@ -60,6 +60,13 @@ export function uploadGrantAgreement(file: File): Promise<UploadResponse> {
   return request<UploadResponse>("/upload", { method: "POST", body: formData });
 }
 
+/** POST /assistant/upload — parse only; the returned requestId is the code for the AI assistant. */
+export function uploadGrantAgreementForAssistant(file: File): Promise<UploadResponse> {
+  const formData = new FormData();
+  formData.append("file", file);
+  return request<UploadResponse>("/assistant/upload", { method: "POST", body: formData });
+}
+
 /** GET /status/{requestId} */
 export function getStatus(requestId: string): Promise<StatusResponse> {
   return request<StatusResponse>(`/status/${encodeURIComponent(requestId)}`);
