@@ -179,8 +179,10 @@ function writeLegendRows(ws: Worksheet): void {
   setFill(sensitiveCell, sensitiveStyle.fill);
   sensitiveCell.font = { bold: true, color: { argb: sensitiveStyle.font } };
 
-  ws.getCell(2, 1).value = 'MS=MILESTONE';
-  ws.getCell(2, 1).font = { bold: true };
+  const milestoneLegendCell = ws.getCell(2, 1);
+  milestoneLegendCell.value = 'MS=MILESTONE';
+  setFill(milestoneLegendCell, MILESTONE_FILL);
+  milestoneLegendCell.font = { bold: true, color: { argb: MILESTONE_FONT_COLOR } };
 }
 
 function writeYearAndMonthHeaders(ws: Worksheet, totalMonths: number, projectStartDate?: string): void {
