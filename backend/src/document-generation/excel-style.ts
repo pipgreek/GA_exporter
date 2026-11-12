@@ -22,12 +22,11 @@ export const DELIVERABLE_PUBLIC_FONT = 'FF006100';
 export const DELIVERABLE_SENSITIVE_FILL = 'FFFFEB9C';
 export const DELIVERABLE_SENSITIVE_FONT = 'FF9C5700';
 
-// Excel's built-in "Light Red Fill with Dark Red Text" cell style. Milestones
-// briefly reused the Sensitive swatch (2026-10-15) but that made MS cells
-// indistinguishable from Sensitive deliverables in the same column
-// (2026-11-12 report) — they now get their own distinct standard color.
-export const MILESTONE_FILL = 'FFFFC7CE';
-export const MILESTONE_FONT_COLOR = 'FF9C0006';
+// Dark gray with white text — the original milestone color, restored
+// 2026-11-12 after briefly trying red/the Sensitive swatch; this is the
+// color VILABS actually wants (confirmed against a real workbook screenshot).
+export const MILESTONE_FILL = 'FF595959';
+export const MILESTONE_FONT_COLOR = 'FFFFFFFF';
 // Fallback for dissemination levels beyond Public/Sensitive (EU-R/EU-C/EU-S/tbd).
 export const DELIVERABLE_OTHER_FILL = 'FFD9D9D9';
 export const DELIVERABLE_OTHER_FONT = 'FF000000';
